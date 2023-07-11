@@ -13,7 +13,7 @@ import os
 from pathlib import Path
 
 try:
-    from private_settings import *
+    from portfolio.private_settings import *
 except ImportError:
     print("Error: make a local version of private_settings.py from the template")
 
@@ -27,7 +27,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['kankawabata.com', 'localhost']
+ALLOWED_HOSTS = ['kankawabata.com', 'localhost', '127.0.0.1']
 
 
 # Application definition
