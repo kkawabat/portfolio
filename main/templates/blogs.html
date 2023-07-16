@@ -1,0 +1,21 @@
+{% extends "_accordion_item_base.html" %}
+
+{% block item_content %}
+{%with accordion_section=section section_title=section_title %}
+{{ block.super }}
+    <div class="accordion nested-accordion">
+        {% for blog in blogs %}
+            <div class="accordion-item accordion-content" onclick="show_blog({{blog}})">{{blog.title}}</div>
+        {% empty %}
+            <div class="accordion-item accordion-content">I have no thoughts atm...</div>
+        {% endfor %}
+    </div>
+
+
+    <script>
+        function show_blog(blog) {
+            console.log('test')
+        }
+    </script>
+{% endwith%}
+{% endblock item_content %}

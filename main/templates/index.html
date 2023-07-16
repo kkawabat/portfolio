@@ -1,44 +1,29 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Kan Kawabata Portfolio</title>
-    <link rel="shortcut icon" href="{% static 'images/favicon.png' %}">
-    <link rel="icon" href="{% static 'images/favicon.png' %}">
-    <style>
-        .under {
-            position: absolute;
-            left: 10px;
-            top: 0px;
-            z-index: -1;
-        }
+{% extends "_base.html" %}
 
-        .over {
-            position: absolute;
-            left: 5px;
-            top: 0px;
-            z-index: -1;
-        }
+{% block ref %}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css"/>
+{% endblock ref %}
 
-        #main_div {
-            position: relative;
-        }
-    </style>
-</head>
-<body>
-    <div id="main_div">
-        <img src="{% static 'images/zach_faceless.png' %}" class="under">
-        <img src="{% static 'images/zach_face.png' %}" onclick="shrinkFace()" class="over" id="face">
-        <h1 style="position: absolute; left: 200px;">Do not COM</h1>
+
+{% block content %}
+<div class="accordion" id="tableOfContent">
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="rootTitle">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#rootContent" aria-expanded="false" aria-controls="rootContent">  Hello, I'm Kan Kawabata...
+      </button></h2>
+    <div id="rootContent" class="accordion-collapse collapse" aria-labelledby="rootTitle" data-bs-parent="#tableOfContent">
+      <div class="accordion nested-accordion">
+        {% include 'about.html' with section='about' section_title='I am a...' %}
+        {% include 'projects.html' with section='projects' section_title='here are some of my projects...' %}
+        {% include 'blogs.html' with section='blogs' section_title='here are some collection of thoughts...' %}
+        {% include 'socials.html' with section='socials' section_title='here are some of my socials...' %}
+        {% include 'cv.html' with section='cv' section_title='here is my cv' %}
+      </div>
     </div>
-<script>
-    img = document.getElementById("face")
-    cur_scale = 1
-    function shrinkFace() {
-        cur_scale = cur_scale *.9
-        img.style.transform = "scale(" + String(cur_scale) + ")";
-    }
-</script>
-</body>
-</html>
+  </div>
+</div>
+
+<div id="contentDiv"></div>
+{% endblock content %}

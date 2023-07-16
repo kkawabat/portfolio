@@ -1,0 +1,14 @@
+{% extends "_accordion_item_base.html" %}
+
+{% block item_content %}
+{%with accordion_section=section section_title=section_title %}
+{{ block.super }}
+    <div class="accordion nested-accordion">
+        {% for project in projects %}
+            {% include 'accordion_post.html' with post=project %}
+        {% empty %}
+            <div class="accordion-item accordion-content">coming soon!</div>
+        {% endfor %}
+    </div>
+{% endwith%}
+{% endblock item_content %}
