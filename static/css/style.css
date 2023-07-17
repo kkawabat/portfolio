@@ -1,0 +1,35 @@
+.nested-accordion{
+  padding-left: 1rem;
+}
+
+.accordion-content{
+  padding: 1rem 1.25rem;
+}
+
+.accordion-button::before {
+    flex-shrink: 0;
+    width: 1.25rem;
+    height: 1.25rem;
+    margin-right: 1rem;
+    content: "";
+    background-image: var(--bs-accordion-btn-active-icon);
+    background-repeat: no-repeat;
+    background-size: 1.25rem;
+    transition: transform .2s ease-in-out;
+    transform: rotate(-90deg)
+}
+
+.accordion-button::after {
+    display: none !important;
+}
+
+.accordion-button:not(.collapsed)::before {
+    background-image: var(--bs-accordion-btn-active-icon);
+    transform: rotate(-0deg);
+}
+
+.Social-media{
+  display: flex;
+  justify-content: center;
+  gap: 10%
+}
