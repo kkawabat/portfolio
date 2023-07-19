@@ -26,6 +26,10 @@
   padding: 1rem 1.25rem;
 }
 
+.accordion-content:hover {
+  background-color: #CCC;
+}
+
 .accordion-button::before {
     flex-shrink: 0;
     width: 1.25rem;
