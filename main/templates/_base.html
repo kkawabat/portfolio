@@ -7,9 +7,12 @@
     <link rel="shortcut icon" href="{% static 'images/favicon.png' %}">
     <link rel="icon" href="{% static 'images/favicon.png' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+
     {% block ref %}{% endblock ref %}
 </head>
 <body>
+    <button onclick="topFunction()" id="jumpToTopBtn" title="Go to top">Top</button>
     {% block content %}{% endblock content %}
+    <script src="{% static 'js/jump_to_top_button.js' %}"></script>
 </body>
 </html>
