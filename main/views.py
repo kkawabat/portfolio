@@ -7,8 +7,8 @@ from main.models import Post
 
 
 def main_view(request):
-    blog_list = Post.objects.filter(status=1, type=0).order_by('-created_on')
-    project_list = Post.objects.filter(status=1, type=1).order_by('-created_on')
+    blog_list = Post.objects.filter(status=1, content_type=0).order_by('-created_on')
+    project_list = Post.objects.filter(status=1, content_type=1).order_by('-created_on')
     return render(request, 'index.html', context={'blogs': blog_list,
                                                   'projects': project_list})
 

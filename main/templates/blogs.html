@@ -5,17 +5,10 @@
 {{ block.super }}
     <div class="accordion nested-accordion">
         {% for blog in blogs %}
-            <div class="accordion-item accordion-content" onclick="show_blog({{blog}})">{{blog.title}}</div>
+            {% include 'accordion_post.html' with slug=blog.slug title=blog.title created_on=blog.created_on %}
         {% empty %}
             <div class="accordion-item accordion-content">I have no thoughts atm...</div>
         {% endfor %}
     </div>
-
-
-    <script>
-        function show_blog(blog) {
-            console.log('test')
-        }
-    </script>
 {% endwith%}
 {% endblock item_content %}

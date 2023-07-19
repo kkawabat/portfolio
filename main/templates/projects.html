@@ -5,7 +5,7 @@
 {{ block.super }}
     <div class="accordion nested-accordion">
         {% for project in projects %}
-            {% include 'accordion_post.html' with post=project %}
+            {% include 'accordion_post.html' with slug=project.slug title=project.title created_on=project.created_on %}
         {% empty %}
             <div class="accordion-item accordion-content">coming soon!</div>
         {% endfor %}

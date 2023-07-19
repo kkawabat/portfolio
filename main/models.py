@@ -1,5 +1,7 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.urls import reverse
+from django.utils.crypto import get_random_string
+from django.utils.text import slugify
 
 STATUS = (
     (0, "Draft"),
@@ -13,16 +15,20 @@ TYPE = (
 )
 
 
-class Post(models.Model):
-    title = models.CharField(max_length=200, unique=True)
-    slug = models.SlugField(max_length=200, unique=True)
-    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='posts')
-    updated_on = models.DateTimeField(auto_now=True)
-    content = models.TextField()
-    created_on = models.DateTimeField(auto_now_add=True)
-    status = models.IntegerField(choices=STATUS, default=0)
-    type = models.IntegerField(choices=TYPE)
+def generate_id():
+    return get_random_string(6)
 
+
+class Post(models.Model):
+    id = models.CharField(primary_key=True, unique=True, max_length=6, default=generate_id)
+    title = models.CharField(max_length=200, unique=True,)
+    slug = models.SlugField(unique=True, max_length=200)
+    updated_on = models.DateTimeField(auto_now=True)
+    created_on = models.DateTimeField(auto_now_add=True)
+    raw_content = models.TextField()
+    content = models.TextField(blank=True, null=True)
+    content_type = models.IntegerField(choices=TYPE)
+    status = models.IntegerField(choices=STATUS)
     objects = models.Manager()
 
     class Meta:
@@ -30,3 +36,10 @@ class Post(models.Model):
 
     def __str__(self):
         return self.title
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.title)
+        super().save(*args, **kwargs)
+
+    def get_absolute_url(self):
+        return reverse('post', kwargs={'slug': self.slug, 'pk': self.id})
