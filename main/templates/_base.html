@@ -3,16 +3,18 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Kan Kawabata Portfolio</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
     <link rel="shortcut icon" href="{% static 'images/favicon.png' %}">
     <link rel="icon" href="{% static 'images/favicon.png' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
 
     {% block ref %}{% endblock ref %}
 </head>
 <body>
-    <button onclick="topFunction()" id="jumpToTopBtn" title="Go to top">Top</button>
     {% block content %}{% endblock content %}
+    <button onclick="topFunction()" id="jumpToTopBtn" title="Go to top">Top</button>
     <script src="{% static 'js/jump_to_top_button.js' %}"></script>
 </body>
 </html>

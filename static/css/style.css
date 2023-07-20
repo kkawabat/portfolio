@@ -27,7 +27,8 @@
 }
 
 .accordion-content:hover {
-  background-color: #CCC;
+    background-color: #CCC;
+    cursor: pointer;
 }
 
 .accordion-button::before {

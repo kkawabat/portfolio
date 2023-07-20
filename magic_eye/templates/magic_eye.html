@@ -1,0 +1,40 @@
+{% extends "_base.html" %}
+{% load static %}
+{% block ref %}
+<link rel="stylesheet" type="text/css" href="{% static 'magic_eye_style.css' %}">
+{% endblock ref %}
+
+{% block content %}
+<a href="{% url 'main' %}">Back to main</a>
+
+<div class="wrapper">
+    <h3>Magic Eye Generator</h3>
+    <form action="">
+        <div id="texturedropzone" class="drop-zone">
+        <span class="drop-zone__prompt">Drop texture file here or click to upload</span>
+        <input type="file" name="textureFile" class="drop-zone__input" accept="image/*">
+        </div>
+        <p><b>+</b></p>
+        <div id='depthmapdropzone' class="drop-zone">
+        <span class="drop-zone__prompt">Drop depth map here or click to upload</span>
+        <input type="file" name="depthMapFile" class="drop-zone__input" accept="image/*">
+        </div>
+
+        <button>Generate Magic Eye</button>
+    </form>
+</div>
+<script src="{% static 'js/dragzone.js' %}"></script>
+
+<div style="display: flex; gap: 10%;">
+    <div>
+        <p>sample texture files</p>
+        <img class='sample-img' src="{% static 'images/flower.png' %}">
+    </div>
+    <div>
+        <p>sample depth map files</p>
+        <img class='sample-img' src="{% static 'images/squirrel.png' %}">
+    </div>
+</div>
+{% endblock content %}
+
+
