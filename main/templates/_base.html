@@ -9,12 +9,10 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
     <link rel="shortcut icon" href="{% static 'images/favicon.png' %}">
     <link rel="icon" href="{% static 'images/favicon.png' %}">
-
+    <script src="{% static 'js/jquery-3.7.0.slim.min.js' %}"></script>
     {% block ref %}{% endblock ref %}
 </head>
 <body>
     {% block content %}{% endblock content %}
-    <button onclick="topFunction()" id="jumpToTopBtn" title="Go to top">Top</button>
-    <script src="{% static 'js/jump_to_top_button.js' %}"></script>
 </body>
 </html>
