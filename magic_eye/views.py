@@ -32,9 +32,9 @@ def magic_eye_generate_view(request):
     try:
         t_file = request.FILES.get('texture')
         d_file = request.FILES.get('depth_map')
-        if t_file is not None:
+        if t_file is None:
             raise Exception("No texture file uploaded")
-        if d_file is not None:
+        if d_file is None:
             raise Exception("No depth map file uploaded")
 
         t_img = Image.open(io.BytesIO(t_file.read()))
