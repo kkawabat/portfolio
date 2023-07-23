@@ -39,7 +39,7 @@ def magic_eye_generate_view(request):
 
         t_img = Image.open(io.BytesIO(t_file.read()))
         d_img = Image.open(io.BytesIO(d_file.read()))
-        magic_eye_img = generate_magic_eye(d_img, t_img)
+        magic_eye_img = generate_magic_eye(d_img, t_img, depth_factor=.3)
         img_uri = f'data:image/jpeg;base64,{pillow_image_to_base64_string(magic_eye_img.convert("RGB"))}'
         return JsonResponse({'image_url': img_uri})
 
