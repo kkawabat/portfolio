@@ -1,7 +1,7 @@
 {% extends "_base.html" %}
 {% load static %}
 {% block ref %}
-<link rel="stylesheet" type="text/css" href="{% static 'magic_eye_style.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/magic_eye_style.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'css/tab_logic.css' %}">
 {% endblock ref %}
 
@@ -87,7 +87,7 @@ $('#genForm').on( "submit", function( event ) {
     formData.append('depth_map', depth_image);
 
     $.ajax({
-        url: 'magic_eye_generate',
+        url: url,
         type: 'POST',
         dataType: "json",
         data: formData,
@@ -123,7 +123,7 @@ $('#decodeForm').on( "submit", function( event ) {
     formData.append('input_image', input_image);
 
     $.ajax({
-        url: 'magic_eye_decode',
+        url: url,
         type: 'POST',
         dataType: "json",
         data: formData,

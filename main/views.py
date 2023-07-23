@@ -25,7 +25,7 @@ def post_request_view(request):
     post_slug = request.GET.get('post_slug', None)
     post = Post.objects.get(slug=post_slug)
     if post_slug == "magic-eye-generator":
-        html = render_to_string('magic_eye.html', context={'post': post}, request=request)
+        html = render_to_string('whistle_detector.html', context={'post': post}, request=request)
     else:
         html = render_to_string('post.html', context={'post': post}, request=request)
     return JsonResponse(html, safe=False)

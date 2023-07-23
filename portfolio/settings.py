@@ -36,7 +36,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'main',
-    'magic_eye'
+    'magic_eye',
+    'app_whistle_detector'
 ]
 
 MIDDLEWARE = [

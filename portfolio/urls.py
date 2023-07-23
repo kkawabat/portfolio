@@ -24,5 +24,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('main.urls')),
     path('', include('magic_eye.urls')),
+    path('', include('app_whistle_detector.urls'))
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 

@@ -12,7 +12,7 @@ from main.models import Post
 
 def magic_eye_view(request):
     magic_eye_proj = Post.objects.get(slug="magic-eye-generator")
-    return render(request, 'magic_eye.html', context={"post": magic_eye_proj})
+    return render(request, 'whistle_detector.html', context={"post": magic_eye_proj})
 
 
 def magic_eye_decode_view(request):

@@ -1,0 +1,66 @@
+{% extends "_base.html" %}
+{% load static %}
+{% block ref %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/app_whistle_detector_style.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/tab_logic.css' %}">
+{% endblock ref %}
+
+{% block content %}
+
+<div class="tab">
+    <button class="tablinks" onclick="openTab(event, 'Detail')" id="defaultOpen">Info</button>
+    <button class="tablinks" onclick="openTab(event, 'Whistle')">Whistle</button>
+</div>
+
+<div id="Detail" class="tabcontent">
+    {% include 'post.html' with post=post %}
+</div>
+
+<div id="Whistle" class="tabcontent">
+    <div class="wrapper">
+        <h3>Whistle detector</h3>
+        <form id="whistleForm" action="whistle_connect">
+            {% csrf_token %}
+            <input type="submit" value="Record">
+        </form>
+    </div>
+</div>
+
+<script src="{% static 'js/tab_logic.js' %}"></script>
+<script>
+
+$('#whistleForm').on( "submit", function( event ) {
+    event.preventDefault();
+    var $form = $( this ),
+    url = $form.attr( "action" );
+
+    var formData = new FormData();
+    formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+
+    $.ajax({
+        url: url,
+        type: 'POST',
+        dataType: "json",
+        data: formData,
+        enctype: 'multipart/form-data',
+        cache: false,
+        processData: false,
+        contentType: false,
+        success: function(response){
+            if('error' in response){
+                alert(response['error'])
+            }
+            else{
+            }
+        },
+        error: function (request, status, error) {
+            console.log('failed')
+        }
+    });
+});
+</script>
+
+
+{% endblock content %}
+
+
