@@ -16,27 +16,35 @@ def magic_eye_view(request):
 
 
 def magic_eye_decode_view(request):
-    file = request.FILES.get('input_image')
-    if file is not None:
+    try:
+        file = request.FILES.get('input_image')
+        if file is None:
+            raise Exception("No file uploaded")
         magic_eye_img = Image.open(io.BytesIO(file.read()))
         decoded_img = decode_magic_eye(magic_eye_img)
-        img_uri = f'data:image/png;base64,{pillow_image_to_base64_string(decoded_img)}'
+        img_uri = f'data:image/jpeg;base64,{pillow_image_to_base64_string(decoded_img.convert("RGB"))}'
         return JsonResponse({'image_url': img_uri})
-    else:
-        return JsonResponse({'image_url': None})
+    except Exception as e:
+        return JsonResponse({'error': f"Image failed to decode: {e}"})
 
 
 def magic_eye_generate_view(request):
-    t_file = request.FILES.get('texture')
-    d_file = request.FILES.get('depth_map')
-    if t_file is not None and d_file is not None:
+    try:
+        t_file = request.FILES.get('texture')
+        d_file = request.FILES.get('depth_map')
+        if t_file is not None:
+            raise Exception("No texture file uploaded")
+        if d_file is not None:
+            raise Exception("No depth map file uploaded")
+
         t_img = Image.open(io.BytesIO(t_file.read()))
         d_img = Image.open(io.BytesIO(d_file.read()))
         magic_eye_img = generate_magic_eye(d_img, t_img)
-        img_uri = f'data:image/png;base64,{pillow_image_to_base64_string(magic_eye_img)}'
+        img_uri = f'data:image/jpeg;base64,{pillow_image_to_base64_string(magic_eye_img.convert("RGB"))}'
         return JsonResponse({'image_url': img_uri})
-    else:
-        return JsonResponse({'image_url': None})
+
+    except Exception as e:
+        return JsonResponse({'error': f"Image failed to generate: {e}"})
 
 
 def pillow_image_to_base64_string(img):

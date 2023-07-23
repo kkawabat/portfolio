@@ -60,7 +60,7 @@
         <div id="decoded_image"></div>
     </div>
 
-    <p>Drag a magic eye image to test it out!</p>
+    <p>Drag a magic eye image to test it out! Note decoder is not always successful, it really depends on how the magic eye is generated.</p>
     <p>sample magic eye (open in a new tab to view in full)</p>
     <div style="display: flex; gap: 10%;">
         <img class='sample-img' src="{% static 'images/squirrel_magic_eye.png' %}">
@@ -94,8 +94,12 @@ $('#genForm').on( "submit", function( event ) {
         processData: false,
         contentType: false,
         success: function(response){
-            console.log('succeeded')
-            $('#generated_image').empty().append('<img style="max-width: 100%;" src="'+response['image_url']+'" />')
+            if('error' in response){
+                alert(response['error'])
+            }
+            else{
+                $('#generated_image').empty().append('<img style="max-width: 100%;" src="'+response['image_url']+'" />')
+            }
         },
         error: function (request, status, error) {
             console.log('failed')
@@ -106,8 +110,7 @@ $('#genForm').on( "submit", function( event ) {
 $('#decodeForm').on( "submit", function( event ) {
     event.preventDefault();
 
-    $("#decodeSubmitBtn").prop("value", "Decoding in progress...");
-    $("#decodeSubmitBtn").addClass("button--loading")
+    $("#decodeSubmitBtn").prop("value", "Decoding in progress (this might take a moment)...");
 
     var $form = $( this ),
     url = $form.attr( "action" );
@@ -127,10 +130,14 @@ $('#decodeForm').on( "submit", function( event ) {
         processData: false,
         contentType: false,
         success: function(response){
-            console.log('succeeded');
-            $('#decoded_image').empty().append('<img style="max-width: 100%;" src="'+response['image_url']+'" />');
             $("#decodeSubmitBtn").prop("value", "Decode Magic Eye");
-            $("#decodeSubmitBtn").removeClass("button--loading");
+            if('error' in response){
+                alert(response['error'])
+            }
+            else{
+                $('#decoded_image').empty().append('<img style="max-width: 100%;" src="'+response['image_url']+'" />');
+            }
+
         },
         error: function (request, status, error) {
             console.log('failed')
