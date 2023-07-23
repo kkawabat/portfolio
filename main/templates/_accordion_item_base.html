@@ -1,6 +1,6 @@
 {% block item_content %}
 <div class="accordion-item">
-    <h2 class="accordion-header" id="{{accordion_section}}Title"><button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#{{accordion_section}}Content" aria-expanded="true" aria-controls="rootContent"> {{section_title}} </button></h2>
+    <h2 class="accordion-header" id="{{accordion_section}}Title"><button id="{{accordion_section}}Btn" class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#{{accordion_section}}Content" aria-expanded="true" aria-controls="rootContent"> {{section_title}} </button></h2>
     <div id="{{accordion_section}}Content" class="accordion-collapse collapse" aria-labelledby="{{accordion_section}}Title" data-bs-parent="#rootContent">
 
 {% endblock item_content %}

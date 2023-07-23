@@ -24,7 +24,10 @@ def cv_view(_):
 def post_request_view(request):
     post_slug = request.GET.get('post_slug', None)
     post = Post.objects.get(slug=post_slug)
-    html = render_to_string('post.html', {'post': post})
+    if post_slug == "magic-eye-generator":
+        html = render_to_string('magic_eye.html', {'post': post})
+    else:
+        html = render_to_string('post.html', {'post': post})
     return JsonResponse(html, safe=False)
 
 

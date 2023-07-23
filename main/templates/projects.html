@@ -3,7 +3,7 @@
 {% block item_content %}
 {%with accordion_section=section section_title=section_title %}
 {{ block.super }}
-    <div class="accordion nested-accordion">
+    <div id="projectAccordion" class="accordion nested-accordion">
         {% for project in projects %}
             {% include 'accordion_post.html' with slug=project.slug title=project.title created_on=project.created_on %}
         {% empty %}
@@ -11,4 +11,21 @@
         {% endfor %}
     </div>
 {% endwith%}
+
+<script type="text/javascript">
+$(function () {
+    $("#projectsBtn").click(function () {
+        if($("#projectsBtn").text()=='{{section_title}}' + " click sections below for details 👇"){
+            $("#projectsBtn").text('{{section_title}}');
+        }
+        else if($("#projectsBtn").text()=='{{section_title}}'){
+            $("#projectsBtn").text('{{section_title}}' + " click sections below for details 👇");
+        }
+        else {
+            $("#projectsBtn").text('{{section_title}}' + " click sections below for details 👇");
+
+        }
+    });
+});
+</script>
 {% endblock item_content %}

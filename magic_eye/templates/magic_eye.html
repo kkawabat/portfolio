@@ -7,11 +7,14 @@
 
 {% block content %}
 
-<a href="{% url 'main' %}">Back to main</a>
-
 <div class="tab">
-  <button class="tablinks" onclick="openTab(event, 'Generate')" id="defaultOpen">Generate</button>
-  <button class="tablinks" onclick="openTab(event, 'Decode')">Decode</button>
+    <button class="tablinks" onclick="openTab(event, 'Detail')" id="defaultOpen">Info</button>
+    <button class="tablinks" onclick="openTab(event, 'Generate')">Generate</button>
+    <button class="tablinks" onclick="openTab(event, 'Decode')">Decode</button>
+</div>
+
+<div id="Detail" class="tabcontent">
+    {% include 'post.html' with post=post %}
 </div>
 
 <div id="Generate" class="tabcontent">
@@ -52,7 +55,7 @@
             <span class="drop-zone__prompt">Drop Magic eye image here or click to upload</span>
             <input type="file" id="decodableFile" name="decodableFile" class="drop-zone__input" accept="image/*">
             </div>
-            <input class='magic-eye-submit-button' type="submit" value="Decode Magic Eye">
+            <input id="decodeSubmitBtn" class='magic-eye-submit-button' type="submit" value="Decode Magic Eye">
         </form>
         <div id="decoded_image"></div>
     </div>
@@ -68,6 +71,7 @@
 <script src="{% static 'js/dragzone.js' %}"></script>
 <script src="{% static 'js/tab_logic.js' %}"></script>
 <script>
+
 $('#genForm').on( "submit", function( event ) {
     event.preventDefault();
     var $form = $( this ),
@@ -91,7 +95,7 @@ $('#genForm').on( "submit", function( event ) {
         contentType: false,
         success: function(response){
             console.log('succeeded')
-            $('#generated_image').empty().append('<img src="'+response['image_url']+'" />')
+            $('#generated_image').empty().append('<img style="max-width: 100%;" src="'+response['image_url']+'" />')
         },
         error: function (request, status, error) {
             console.log('failed')
@@ -101,6 +105,10 @@ $('#genForm').on( "submit", function( event ) {
 
 $('#decodeForm').on( "submit", function( event ) {
     event.preventDefault();
+
+    $("#decodeSubmitBtn").prop("value", "Decoding in progress...");
+    $("#decodeSubmitBtn").addClass("button--loading")
+
     var $form = $( this ),
     url = $form.attr( "action" );
     input_image = $form.find( "input[name='decodableFile']" )[0].files[0]
@@ -119,8 +127,10 @@ $('#decodeForm').on( "submit", function( event ) {
         processData: false,
         contentType: false,
         success: function(response){
-            console.log('succeeded')
-            $('#decoded_image').empty().append('<img src="'+response['image_url']+'" />')
+            console.log('succeeded');
+            $('#decoded_image').empty().append('<img style="max-width: 100%;" src="'+response['image_url']+'" />');
+            $("#decodeSubmitBtn").prop("value", "Decode Magic Eye");
+            $("#decodeSubmitBtn").removeClass("button--loading");
         },
         error: function (request, status, error) {
             console.log('failed')
