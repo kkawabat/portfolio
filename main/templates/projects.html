@@ -13,19 +13,12 @@
 {% endwith%}
 
 <script type="text/javascript">
-$(function () {
-    $("#projectsBtn").click(function () {
-        if($("#projectsBtn").text()=='{{section_title}}' + " click sections below for details 👇"){
-            $("#projectsBtn").text('{{section_title}}');
-        }
-        else if($("#projectsBtn").text()=='{{section_title}}'){
-            $("#projectsBtn").text('{{section_title}}' + " click sections below for details 👇");
-        }
-        else {
-            $("#projectsBtn").text('{{section_title}}' + " click sections below for details 👇");
-
-        }
-    });
+var content_div = document.getElementById('projectsContent')
+content_div.addEventListener('hidden.bs.collapse', function () {
+  $("#projectsBtn").text('{{section_title}}');
+});
+content_div.addEventListener('shown.bs.collapse', function () {
+  $("#projectsBtn").text('{{section_title}}' + " click sections below for details 👇");
 });
 </script>
 {% endblock item_content %}

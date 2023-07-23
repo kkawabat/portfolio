@@ -13,19 +13,12 @@
 {% endwith%}
 
 <script type="text/javascript">
-$(function () {
-    $("#blogsBtn").click(function () {
-        if($("#blogsBtn").text()=='{{section_title}}' + " click sections below for details 👇"){
-            $("#blogsBtn").text('{{section_title}}');
-        }
-        else if($("#blogsBtn").text()=='{{section_title}}'){
-            $("#blogsBtn").text('{{section_title}}' + " click sections below for details 👇");
-        }
-        else {
-            $("#blogsBtn").text('{{section_title}}' + " click sections below for details 👇");
-
-        }
-    });
+var content_div = document.getElementById('blogsContent')
+content_div.addEventListener('hidden.bs.collapse', function () {
+  $("#blogsBtn").text('{{section_title}}');
+});
+content_div.addEventListener('shown.bs.collapse', function () {
+  $("#blogsBtn").text('{{section_title}}' + " click sections below for details 👇");
 });
 </script>
 {% endblock item_content %}
