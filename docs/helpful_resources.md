@@ -13,3 +13,6 @@ https://towardsdatascience.com/create-your-custom-python-package-that-you-can-pi
 https://blog.ionelmc.ro/2014/05/25/python-packaging/#the-structure
 https://kiwidamien.github.io/making-a-python-package.html 
 https://codepen.io/dcode-software/pen/abZPmRb  # button with loading spinner
+
+
+https://ralzohairi.medium.com/audio-recording-in-javascript-96eed45b75ee  # audio recording js
