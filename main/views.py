@@ -33,5 +33,5 @@ def post_request_view(request):
     return JsonResponse(html, safe=False)
 
 
-def zach_view(request):
-    return render(request, 'donot.html')
+def not_found_view(request, exception):
+    return render(request, '404.html')

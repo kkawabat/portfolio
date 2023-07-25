@@ -27,3 +27,4 @@ urlpatterns = [
     path('', include('app_whistle_detector.urls'))
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
+handler404 = 'main.views.not_found_view'
