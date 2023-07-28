@@ -5,6 +5,7 @@
 
 <link rel="stylesheet" type="text/css" href="{% static 'css/app_whistle_detector_style.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'css/tab_logic.css' %}">
+<script src="https://cdn.jsdelivr.net/combine/npm/tone@14.7.58,npm/@magenta/music@1.23.1/es6/core.js,npm/focus-visible@5,npm/html-midi-player@1.5.0"></script>
 {% endblock ref %}
 
 {% block content %}
@@ -36,10 +37,17 @@
             </div>
         </form>
         <div id="playbackDiv" hidden>
-            <h4>view audio here</h4>
+            <h4>Original Audio</h4>
             <audio id="audioControl" controls>
                  <source id="audioSrc" src="" type="audio/*" />
+                 <midi-player sound-font></midi-player>
             </audio>
+        </div>
+        <div id="midiDiv" hidden>
+            <h2>Midified Whistle</h2>
+            <midi-visualizer id="midiViz1" type="piano-roll"></midi-visualizer>
+            <midi-visualizer id="midiViz2" type="staff"></midi-visualizer>
+            <midi-player id="midiPlayer" sound-font visualizer="#midiDiv midi-visualizer"></midi-player>
         </div>
     </div>
 </div>

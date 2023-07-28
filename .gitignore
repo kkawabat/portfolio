@@ -1,3 +1,6 @@
 /venv/
 /.idea/
 /staticfiles/
+/portfolio/.env
+/app_whistle_detector/templates/midi_player.html
+/temp/

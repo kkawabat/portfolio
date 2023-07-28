@@ -10,7 +10,6 @@ var audioRecorder = {
         return navigator.mediaDevices.getUserMedia({ audio: true })
             .then(stream => {
                 audioRecorder.streamBeingCaptured = stream;
-
                 audioRecorder.mediaRecorder = new MediaRecorder(stream);
                 audioRecorder.audioBlobs = [];
 
