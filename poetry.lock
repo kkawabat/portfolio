@@ -612,6 +612,20 @@ files = [
 ]
 
 [[package]]
+name = "pygments"
+version = "2.15.1"
+description = "Pygments is a syntax highlighting package written in Python."
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "Pygments-2.15.1-py3-none-any.whl", hash = "sha256:db2db3deb4b4179f399a09054b023b6a586b76499d36965813c71aa8ed7b5fd1"},
+    {file = "Pygments-2.15.1.tar.gz", hash = "sha256:8ace4d3c1dd481894b2005f560ead0f9f19ee64fe983366be1a21e171d12775c"},
+]
+
+[package.extras]
+plugins = ["importlib-metadata"]
+
+[[package]]
 name = "pyparsing"
 version = "3.0.9"
 description = "pyparsing module - Classes and methods to define and execute parsing grammars"
@@ -788,4 +802,4 @@ resolved_reference = "b703819c3162f6a59f227a80597fdc42c206c0f7"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "94a5e68e3ba3f6ecfbf5e8154ffe3d84b5858bf07d9ce7263dc6e9654b132363"
+content-hash = "cd8de32b36b65a72a1d68e5c429c9ac8cb601e456d374575be1392e77b7ce4d6"
