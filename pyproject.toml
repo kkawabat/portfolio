@@ -12,6 +12,7 @@ whistle-detector = {git = "https://github.com/kkawabat/WhistleDetector.git"}
 django = "^4.2.3"
 pillow = "^10.0.0"
 python-dotenv = "^1.0.0"
+mistune = "^3.0.1"
 
 
 [build-system]
