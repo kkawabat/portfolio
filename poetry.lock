@@ -819,7 +819,21 @@ url = "https://github.com/kkawabat/WhistleDetector.git"
 reference = "HEAD"
 resolved_reference = "b703819c3162f6a59f227a80597fdc42c206c0f7"
 
+[[package]]
+name = "whitenoise"
+version = "6.5.0"
+description = "Radically simplified static file serving for WSGI applications"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "whitenoise-6.5.0-py3-none-any.whl", hash = "sha256:16468e9ad2189f09f4a8c635a9031cc9bb2cdbc8e5e53365407acf99f7ade9ec"},
+    {file = "whitenoise-6.5.0.tar.gz", hash = "sha256:15fe60546ac975b58e357ccaeb165a4ca2d0ab697e48450b8f0307ca368195a8"},
+]
+
+[package.extras]
+brotli = ["Brotli"]
+
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "810ed1949e10d212fa7660a5913b23dbd7a6a2b6ad4e5307269bd42136bed040"
+content-hash = "bb387463133e04e5c20cc4b8f39ae25ed8d8386e4590f64db2c06518ad5d509a"
