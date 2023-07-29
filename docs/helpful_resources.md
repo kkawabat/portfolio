@@ -1,4 +1,4 @@
-# just a collection of websites that I found insightful when making the app.
+# unorganized list of resources I found useful while working on this project will probably orangize this later if I'm not lazy. 
 
 # followed this guide to get app accessible to internet
 https://www.digitalocean.com/community/tutorials/how-to-set-up-django-with-postgres-nginx-and-gunicorn-on-ubuntu-18-04#step-6-testing-gunicorn-s-ability-to-serve-the-project
@@ -16,3 +16,4 @@ https://codepen.io/dcode-software/pen/abZPmRb  # button with loading spinner
 
 
 https://ralzohairi.medium.com/audio-recording-in-javascript-96eed45b75ee  # audio recording js
+http://www.learningaboutelectronics.com/Articles/How-to-create-a-gunicorn-service-file-in-linux.php
