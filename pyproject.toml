@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "portfolio"
+version = "0.1.0"
+description = ""
+authors = ["kan kawabata <kkawabat@asu.edu>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+magic-eye-util = {git = "https://github.com/kkawabat/MagicEyeUtil.git"}
+whistle-detector = {git = "https://github.com/kkawabat/WhistleDetector.git"}
+django = "^4.2.3"
+pillow = "^10.0.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
