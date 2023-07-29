@@ -80,11 +80,10 @@ function submitWhistleBlob(audioBlob){
                 alert(response['error'])
             }
             else{
-                $("#midiDiv$").attr("hidden", false);
-                const blob_url URL.createObjectURL(response['midi_blob'])
-                $("#midiViz1").src = blob_url
-                $("#midiViz2").src = blob_url
-                $("#midiPlayer").src = blob_url
+                $("#midiDiv").attr("hidden", false);
+                $("#midiViz1")[0].src = response['midi_blob_url']
+                $("#midiViz2")[0].src = response['midi_blob_url']
+                $("#midiPlayer")[0].src = response['midi_blob_url']
             }
 
         },

@@ -1,0 +1,20 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/combine/npm/tone@14.7.58,npm/@magenta/music@1.23.1/es6/core.js,npm/focus-visible@5,npm/html-midi-player@1.5.0"></script>
+</head>
+<body>
+    <img id="testImg">
+    <midi-visualizer id="midiViz2" type="staff"></midi-visualizer>
+    <midi-player id="midiPlayer"></midi-player>
+    <script>
+    window.addEventListener("DOMContentLoaded", (event) => {
+       $('#testImg')[0].src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAAIGNIUk0AAHolAACAgwAA+f8AAIDpAAB1MAAA6mAAADqYAAAXb5JfxUYAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAICSURBVEhLxZbPahNRGMUn/5MpuAiBEAIufQGfzr5E40YptBXajYzudCEuGqS+gGlrFwquDGRTutBdYfydzJ3LzeQmJGZue+Dw/Z17Mnfmu5Pof9Hr9Z61Wq0bWZMKj263O6xWq99wU9lOpzPMKgEhEcRucNOcioOK+0RzBhNvt9tPV4nmVF19+OWhVqt9xXgFXZq+8lCv119UKpUJ7iX2FmvFTKz8RH34YdBsNk8wVtjE4fGYwm8wrrDi3WBG5oKXZGRSS9hGuNFojLTe2lFz5xThWZIktayyiE2FdT3rzXBXz7krKiL8c17wAKFDjCus2AvW+YGZ9y2JF0VFRuMPfI//rsCE/C+s26s4gQu9ul7r4NteKx7H8XOC724xNNGbaNu++IrBqbOV7Tj3FgMRvc/YKOr3+3sE47wgEt/Bl/gaK5cHbNU11vYSXylfpK7XOvjuumPp4Wcoipu30Qsez2uMXYz4lfI+mOmwothY+SLiXJy7mKVpWs3Si0CoOMfeI9Od43Wic+jO+ZVv+crsm9QSNhUW9LXSeoPBYLXopthGuFQgdIxxhY+UDwlt1x5CZ1hX+NTUdt/OIvjKaDSmuOJfaIVNPKX+W18j/PLA2/kR44p5Sd8HbHngT/yTfNRWUXX14ZcL3wmX0+TLf8YO7CGT8yFE5zB3/gney25/OETRP9CtPDFe5jShAAAAAElFTkSuQmCC"
+       $('#midiViz2')[0].src = "data:audio/midi;base64,VFZSb1pBQUFBQVlBQVFBQ0E4Qk5WSEpyQUFBQUN3RC9VUU1QUWtBQS95OEFUVlJ5YXdBQUFGdUNCNUJPZUlGVmdFNTRnejJRVEgyQ0FZQk1mWUZ3a0V4bWdqYVFTRmdKZ0V4bVRZQklXSU1va0V0K2dWT0FTMzZDQkpCTmY0RnVnRTEvZ1RLUVMyOW5nRXR2aEFTUVJsZUJVSUJHVjRKSmtFZDFnVmlBUjNVQS95OEE="
+       $('#midiPlayer')[0].src = "data:audio/midi;base64,VFZSb1pBQUFBQVlBQVFBQ0E4Qk5WSEpyQUFBQUN3RC9VUU1QUWtBQS95OEFUVlJ5YXdBQUFGdUNCNUJPZUlGVmdFNTRnejJRVEgyQ0FZQk1mWUZ3a0V4bWdqYVFTRmdKZ0V4bVRZQklXSU1va0V0K2dWT0FTMzZDQkpCTmY0RnVnRTEvZ1RLUVMyOW5nRXR2aEFTUVJsZUJVSUJHVjRKSmtFZDFnVmlBUjNVQS95OEE="
+    });
+    </script>
+</body>
+</html>
