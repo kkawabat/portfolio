@@ -19,8 +19,8 @@ markdown = mistune.create_markdown(renderer=HighlightRenderer())
 
 
 class PostAdmin(admin.ModelAdmin):
-    list_display = ('title', 'slug', 'status', 'created_on')
-    list_filter = ("status",)
+    list_display = ('title', 'slug', 'status', 'content_type', 'created_on')
+    list_filter = ("status", 'content_type')
     search_fields = ['title', 'raw_content']
     prepopulated_fields = {'slug': ('title',)}
     exclude = ('content',)
