@@ -1,0 +1,42 @@
+{% extends "_base.html" %}
+{% load static %}
+{% block ref %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/app_morse_code.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/tab_logic.css' %}">
+{% endblock ref %}
+
+{% block content %}
+
+<div class="tab">
+    <button class="tablinks" onclick="openTab(event, 'Detail')" id="defaultOpen">Info</button>
+    <button class="tablinks" onclick="openTab(event, 'Decoder')">Decode morse code</button>
+</div>
+
+<div id="Detail" class="tabcontent">
+    {% include 'post.html' with post=post %}
+</div>
+
+<div id="Decoder" class="tabcontent">
+    <div class="wrapper">
+        <div>
+            <h3>Decode morse code</h3>
+            <h4>Instruction</h4>
+            <p>Click record</p>
+        </div>
+        <form id="DecoderForm">
+            {% csrf_token %}
+            <input type='hidden' name='csrf_token' id='csrf_token' value='{{csrf_token}}'>
+            <div id="button-controls">
+                <button id="startBtn" class='whistle-button' type="button" onclick="startMorseRecording()">Decode Morse Code</button>
+                <i id="recordingIcon" class="fa fa-circle text-danger Blink" style="display: none;"></i>
+                <button id="stopBtn" class='whistle-button' type="button" onclick="stopMorseRecording()" style="display: none;">Stop Decoding</button>
+            </div>
+        </form>
+        <div id="decoded" hidden>
+        </div>
+    </div>
+</div>
+
+<script src="{% static 'js/tab_logic.js' %}"></script>
+<script src="{% static 'js/morse_decoder.js' %}"></script>
+{% endblock content %}

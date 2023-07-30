@@ -46,7 +46,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'main',
     'magic_eye',
-    'app_whistle_detector'
+    'app_whistle_detector',
+    'app_morse_code'
 ]
 
 MIDDLEWARE = [

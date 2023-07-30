@@ -23,8 +23,9 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('main.urls')),
-    path('', include('magic_eye.urls')),
-    path('', include('app_whistle_detector.urls'))
+    path('magic_eye/', include('magic_eye.urls')),
+    path('whistle_detector/', include('app_whistle_detector.urls')),
+    path('morse_code/', include('app_morse_code.urls'))
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 handler404 = 'main.views.not_found_view'
