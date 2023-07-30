@@ -817,7 +817,7 @@ sounddevice = "*"
 type = "git"
 url = "https://github.com/kkawabat/WhistleDetector.git"
 reference = "HEAD"
-resolved_reference = "b703819c3162f6a59f227a80597fdc42c206c0f7"
+resolved_reference = "2d3caf909c9620e167ab255c3027033f00642f52"
 
 [[package]]
 name = "whitenoise"
