@@ -1,0 +1,27 @@
+{% extends "_base.html" %}
+
+{% load static %}
+
+{% block ref %}
+<style>
+    .under { position: absolute; left: 10px; top: 0px; z-index: -1;}
+    .over { position: absolute; left: 5px; top: 0px; z-index: -1; }
+    #main_div { position: relative; }
+</style>
+{% endblock ref %}
+
+{% block content %}
+    <div id="main_div">
+        <img src="{% static 'images/zach_faceless.png' %}" class="under">
+        <img src="{% static 'images/zach_face.png' %}" onclick="shrinkFace()" class="over" id="face">
+        <h1 style="position: absolute; left: 200px;">502, sorry currently under Kanstruction</h1>
+    </div>
+    <script>
+        img = document.getElementById("face")
+        cur_scale = 1
+        function shrinkFace() {
+            cur_scale = cur_scale *.9
+            img.style.transform = "scale(" + String(cur_scale) + ")";
+        }
+    </script>
+{% endblock content %}
