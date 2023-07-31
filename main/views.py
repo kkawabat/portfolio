@@ -34,4 +34,6 @@ def post_request_view(request):
 
 
 def not_found_view(request, exception):
-    return render(request, '404.html')
+    response = render(request, '404.html')
+    response.status_code = 404  # see https://stackoverflow.com/a/35800356
+    return response
