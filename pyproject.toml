@@ -16,6 +16,7 @@ mistune = "^3.0.1"
 pygments = "^2.15.1"
 gunicorn = "^21.2.0"
 whitenoise = "^6.5.0"
+channels = {extras = ["daphne"], version = "^4.0.0"}
 
 
 [build-system]

@@ -1,8 +1,9 @@
 {% extends "_base.html" %}
 {% load static %}
 {% block ref %}
+<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
 <link rel="stylesheet" type="text/css" href="{% static 'css/app_morse_code.css' %}">
-<link rel="stylesheet" type="text/css" href="{% static 'css/tab_logic.css' %}">
+
 {% endblock ref %}
 
 {% block content %}
@@ -27,16 +28,16 @@
             {% csrf_token %}
             <input type='hidden' name='csrf_token' id='csrf_token' value='{{csrf_token}}'>
             <div id="button-controls">
-                <button id="startBtn" class='whistle-button' type="button" onclick="startMorseRecording()">Decode Morse Code</button>
+                <button id="startBtn" class='app-button' type="button" onclick="startMorseRecording()">Decode Morse Code</button>
                 <i id="recordingIcon" class="fa fa-circle text-danger Blink" style="display: none;"></i>
-                <button id="stopBtn" class='whistle-button' type="button" onclick="stopMorseRecording()" style="display: none;">Stop Decoding</button>
+                <button id="stopBtn" class='app-button' type="button" onclick="stopMorseRecording()" style="display: none;">Stop Decoding</button>
             </div>
         </form>
-        <div id="decoded" hidden>
-        </div>
+        <textarea id="decodedText"></textarea>
     </div>
 </div>
 
-<script src="{% static 'js/tab_logic.js' %}"></script>
 <script src="{% static 'js/morse_decoder.js' %}"></script>
+<link rel="stylesheet" type="text/css" href="{% static 'css/tab_logic.css' %}">
+<script src="{% static 'js/tab_logic.js' %}"></script>
 {% endblock content %}

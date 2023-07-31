@@ -25,6 +25,7 @@ function stopAudioRecording() {
     $('#stopBtn').hide()
     $('#cancelBtn').hide()
     audioRecorder.stop().then(audioBlob => {
+        $("#playbackDiv").attr("hidden", false);
         loadAudio(audioBlob);
         submitWhistleBlob(audioBlob);
     });
@@ -43,7 +44,6 @@ function loadAudio(audioBlob) {
 
     let reader = new FileReader();
     reader.onload = (e) => {
-        $("#playbackDiv").attr("hidden", false);
         let audioElement = $("#audioControl")[0];
         let audioElementSource = $("#audioSrc")[0];
         let base64URL = e.target.result;

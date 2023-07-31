@@ -17,3 +17,6 @@ https://codepen.io/dcode-software/pen/abZPmRb  # button with loading spinner
 
 https://ralzohairi.medium.com/audio-recording-in-javascript-96eed45b75ee  # audio recording js
 http://www.learningaboutelectronics.com/Articles/How-to-create-a-gunicorn-service-file-in-linux.php
+https://github.com/vsjakhar/Django-WebRtc/tree/master # real time chat example
+https://github.com/InfoDevkota/WebRTC-Django-Django-Channels-Video-Call/tree/main # webrtc video call example
+https://plainenglish.io/blog/how-deploy-an-asgi-django-application-with-nginx-gunicorn-daphne-and-supervisor-on-ubuntu-server # gunicorn + daphne server configuration help

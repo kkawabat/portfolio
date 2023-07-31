@@ -38,16 +38,17 @@ ALLOWED_HOSTS = ['kankawabata.com', 'localhost', '127.0.0.1', '0.0.0.0']
 # Application definition
 
 INSTALLED_APPS = [
+    'daphne',
+    'main',
+    'magic_eye',
+    'app_whistle_detector',
+    'app_morse_code',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'main',
-    'magic_eye',
-    'app_whistle_detector',
-    'app_morse_code'
 ]
 
 MIDDLEWARE = [
@@ -79,7 +80,18 @@ TEMPLATES = [
     },
 ]
 
+ASGI_APPLICATION = 'portfolio.asgi.application'
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer"
+    }
+}
+
 WSGI_APPLICATION = 'portfolio.wsgi.application'
+
+
+"channels.layers.InMemoryChannelLayer"
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
