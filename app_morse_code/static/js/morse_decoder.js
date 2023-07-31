@@ -18,7 +18,7 @@ function down_handler(e) {
     if (e.repeat) { return }
     if (e.key === " ") {
         down_time = Date.now()
-        morse_signal += Math.round((down_time - up_time)/100).toString() + 'U';
+        morse_signal += Math.round((down_time - up_time)/10).toString() + 'U';
         send_data(morse_signal)
     }
 };
@@ -26,7 +26,7 @@ function down_handler(e) {
 function up_handler(e) {
     if (e.key === " ") {
         up_time = Date.now()
-        morse_signal += Math.round((up_time - down_time)/100).toString() + 'D';
+        morse_signal += Math.round((up_time - down_time)/10).toString() + 'D';
         send_data(morse_signal)
     }
 };
