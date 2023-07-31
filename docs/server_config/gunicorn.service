@@ -1,0 +1,17 @@
+[Unit]
+Description=gunicorn daemon
+Requires=gunicorn.socket
+After=network.target
+
+[Service]
+User=kan
+Group=kan
+WorkingDirectory=/home/kan/projects/portfolio
+ExecStart=/home/kan/.cache/pypoetry/virtualenvs/portfolio-jNez2oBn-py3.10/bin/gunicorn \
+          --access-logfile - \
+          --workers 3 \
+          --bind unix:/run/gunicorn.sock \
+          portfolio.wsgi:application
+
+[Install]
+WantedBy=multi-user.target
