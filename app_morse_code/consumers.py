@@ -1,22 +1,20 @@
 import json
 
-from channels.generic.websocket import WebsocketConsumer
+from channels.generic.websocket import WebsocketConsumer, JsonWebsocketConsumer
+from morse_code_util.morse_engine import MorseEngine
 
 
-class MorseCoder(WebsocketConsumer):
+class MorseCoder(JsonWebsocketConsumer):
     def connect(self):
         self.accept()
 
     def disconnect(self, close_code):
-        pass
+        self.send_json({'disconnected': True})
 
-    def receive(self, text_data=None, bytes_data=None):
-        text_data_json = json.loads(text_data)
-        event_type = text_data_json['type']
+    def receive_json(self, text_data=None, bytes_data=None):
+        event_type = text_data['type']
 
         if event_type == 'decode':
-            decoded_text = self.decode_morse(text_data)
-            self.send(decoded_text)
-
-    def decode_morse(self, text_data):
-        return 'test'
+            morse = MorseEngine.signal_to_morse(text_data['data'])
+            text = MorseEngine.morse_to_text(morse)
+            self.send_json({'morse': morse, 'text': text})

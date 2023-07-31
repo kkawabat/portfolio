@@ -683,6 +683,21 @@ files = [
 ]
 
 [[package]]
+name = "morse-code-util"
+version = "0.1.0"
+description = ""
+optional = false
+python-versions = "^3.10"
+files = []
+develop = false
+
+[package.source]
+type = "git"
+url = "https://github.com/kkawabat/Morse-Code-Util.git"
+reference = "HEAD"
+resolved_reference = "0bf5cdabe1c66c59461e0877909bcd61919e955b"
+
+[[package]]
 name = "numpy"
 version = "1.25.1"
 description = "Fundamental package for array computing in Python"
@@ -1247,4 +1262,4 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "592aebc426978803b259e3f7ca855da6e4d28e8aaae915ddae8dffcb8d45d071"
+content-hash = "caf30e265008a381cc9a949311f5410313cb112a599e0482684c27b3f86d3a33"

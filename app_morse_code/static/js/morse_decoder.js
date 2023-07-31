@@ -56,7 +56,14 @@ function connectSocket() {
     );
 
     morseSocket.onmessage = (response) =>{
-        $('#decodedText').text(response.data)
+        result = JSON.parse(response.data)
+        if ('disconnected' in result){
+            stopMorseRecording()
+        }
+        else{
+            $('#decodedMorse').text(result['morse'])
+            $('#decodedText').text(result['text'])
+        }
     }
 }
 

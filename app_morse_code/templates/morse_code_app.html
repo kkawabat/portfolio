@@ -22,7 +22,7 @@
         <div>
             <h3>Decode morse code</h3>
             <h4>Instruction</h4>
-            <p>Click record</p>
+            <p>Click decode below then use spacebar to send morse code. short tap for dots and hold for dashes, short pause for next character and long pause for space.</p>
         </div>
         <form id="DecoderForm">
             {% csrf_token %}
@@ -33,7 +33,11 @@
                 <button id="stopBtn" class='app-button' type="button" onclick="stopMorseRecording()" style="display: none;">Stop Decoding</button>
             </div>
         </form>
-        <textarea id="decodedText"></textarea>
+        <br>
+        <h4>morse</h4>
+        <textarea id="decodedMorse" readonly></textarea>
+        <h4>text</h4>
+        <textarea id="decodedText" readonly></textarea>
     </div>
 </div>
 
