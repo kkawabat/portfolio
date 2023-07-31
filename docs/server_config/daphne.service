@@ -9,9 +9,8 @@ User=kan
 Group=kan
 WorkingDirectory=/home/kan/projects/portfolio
 ExecStart=/home/kan/.cache/pypoetry/virtualenvs/portfolio-jNez2oBn-py3.10/bin/daphne \
-          --access-logfile - \
-          -b 0.0.0.0
-          -p 8001
+          -b 0.0.0.0 \
+          -p 8001 \
           portfolio.asgi:application
 
 [Install]
