@@ -6,6 +6,9 @@ let up_time;
 function startMorseRecording() {
     $('#startBtn').hide();
     $('#recordingIcon').show();
+    $('#tapBtn').show();
+    $('#tapBtn').mousedown(btn_down_handler);
+    $('#tapBtn').mouseup(btn_up_handler);
     $('#stopBtn').show();
     connectSocket();
     morse_signal = "";
@@ -16,37 +19,54 @@ function startMorseRecording() {
 
 
 function stopMorseRecording() {
-    $('#startBtn').show()
-    $('#recordingIcon').hide()
-    $('#stopBtn').hide()
-    disconnectSocket()
-    document.removeEventListener('keydown', down_handler)
-    document.removeEventListener('keyup', up_handler)
-}
-
-
-function send_data(morse_signal){
-    morseSocket.send(JSON.stringify({type: 'decode', data: morse_signal}));
-//    console.log(morse_signal)
+    $('#startBtn').show();
+    $('#recordingIcon').hide();
+    $('#tapBtn').hide();
+    $('#tapBtn').removeAttribute("mousedown");
+    $('#tapBtn').removeAttribute("mouseup");
+    $('#stopBtn').hide();
+    disconnectSocket();
+    document.removeEventListener('keydown', down_handler);
+    document.removeEventListener('keyup', up_handler);
 }
 
 
 function down_handler(e) {
     if (e.repeat) { return }
     if (e.key === " ") {
-        down_time = Date.now()
+        down_time = Date.now();
         morse_signal += Math.round((down_time - up_time)/10).toString() + 'U';
-        send_data(morse_signal)
+        send_data(morse_signal);
     }
 };
 
 function up_handler(e) {
     if (e.key === " ") {
-        up_time = Date.now()
+        up_time = Date.now();
         morse_signal += Math.round((up_time - down_time)/10).toString() + 'D';
-        send_data(morse_signal)
+        send_data(morse_signal);
     }
 };
+
+function btn_down_handler(e) {
+    if (e.repeat) { return }
+    down_time = Date.now();
+    morse_signal += Math.round((down_time - up_time)/10).toString() + 'U';
+    send_data(morse_signal);
+};
+
+function btn_up_handler(e) {
+    up_time = Date.now();
+    morse_signal += Math.round((up_time - down_time)/10).toString() + 'D';
+    send_data(morse_signal);
+};
+
+
+function send_data(morse_signal){
+    morseSocket.send(JSON.stringify({type: 'decode', data: morse_signal}));
+//    console.log(morse_signal);
+}
+
 
 function connectSocket() {
     let ws_scheme = window.location.protocol == "https:" ? "wss://" : "ws://";
@@ -59,13 +79,13 @@ function connectSocket() {
     );
 
     morseSocket.onmessage = (response) =>{
-        result = JSON.parse(response.data)
+        result = JSON.parse(response.data);
         if ('disconnected' in result){
-            stopMorseRecording()
+            stopMorseRecording();
         }
         else{
-            $('#decodedMorse').text(result['morse'])
-            $('#decodedText').text(result['text'])
+            $('#decodedMorse').text(result['morse']);
+            $('#decodedText').text(result['text']);
         }
     }
 }
