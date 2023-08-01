@@ -14,6 +14,23 @@ function startMorseRecording() {
     document.addEventListener('keyup', up_handler);
 }
 
+
+function stopMorseRecording() {
+    $('#startBtn').show()
+    $('#recordingIcon').hide()
+    $('#stopBtn').hide()
+    disconnectSocket()
+    document.removeEventListener('keydown', down_handler)
+    document.removeEventListener('keyup', up_handler)
+}
+
+
+function send_data(morse_signal){
+    morseSocket.send(JSON.stringify({type: 'decode', data: morse_signal}));
+//    console.log(morse_signal)
+}
+
+
 function down_handler(e) {
     if (e.repeat) { return }
     if (e.key === " ") {
@@ -30,20 +47,6 @@ function up_handler(e) {
         send_data(morse_signal)
     }
 };
-
-function send_data(morse_signal){
-    morseSocket.send(JSON.stringify({type: 'decode', data: morse_signal}));
-//    console.log(morse_signal)
-}
-
-function stopMorseRecording() {
-    $('#startBtn').show()
-    $('#recordingIcon').hide()
-    $('#stopBtn').hide()
-    disconnectSocket()
-    document.removeEventListener('keydown', down_handler)
-    document.removeEventListener('keyup', up_handler)
-}
 
 function connectSocket() {
     let ws_scheme = window.location.protocol == "https:" ? "wss://" : "ws://";

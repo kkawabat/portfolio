@@ -20,7 +20,7 @@
 <div id="Generate" class="tabcontent">
     <div class="wrapper">
         <h3>Magic Eye Generator</h3>
-        <form id="genForm" action="magic_eye_generate">
+        <form id="genForm" action="{% url 'magic_eye_generate' %}">
             {% csrf_token %}
             <div id="textureDropzone" class="drop-zone">
             <span class="drop-zone__prompt">Drop texture image here or click to upload</span>
@@ -51,7 +51,7 @@
 <div id="Decode" class="tabcontent">
     <div class="wrapper">
         <h3>Magic Eye Decoder</h3>
-        <form id="decodeForm" action="magic_eye_decode">
+        <form id="decodeForm" action="{% url 'magic_eye_decode' %}">
             {% csrf_token %}
             <div id="decodableDropzone" class="drop-zone">
             <span class="drop-zone__prompt">Drop Magic eye image here or click to upload</span>
