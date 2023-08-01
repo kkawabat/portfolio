@@ -12,15 +12,19 @@
     border: 1px solid #c1c1c1;
 }
 
-.wrapper > * {
-  padding: 1em;
-}
-
 h3 {
   margin: 0;
   text-align: center;
 }
 
+h4 {
+    margin-bottom: 0px;
+    padding: 0;
+}
+
+textarea {
+    width: 100%;
+}
 
 form label {
   display: block;
@@ -62,6 +66,7 @@ form p {
 .Blink {
   animation: blinker 1.5s cubic-bezier(.5, 0, 1, 1) infinite alternate;
 }
+
 @keyframes blinker {
   from { opacity: 1; }
   to { opacity: 0; }

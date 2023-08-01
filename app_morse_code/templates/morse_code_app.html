@@ -23,16 +23,15 @@
             <h3>Decode morse code</h3>
             <h4>Instruction</h4>
             <p>Click decode below then use spacebar to send morse code. short tap for dots and hold for dashes, short pause for next character and long pause for space.</p>
+            {% include 'mnemonic_table.html' %}
         </div>
-        <form id="DecoderForm">
-            {% csrf_token %}
-            <input type='hidden' name='csrf_token' id='csrf_token' value='{{csrf_token}}'>
-            <div id="button-controls">
-                <button id="startBtn" class='app-button' type="button" onclick="startMorseRecording()">Decode Morse Code</button>
-                <i id="recordingIcon" class="fa fa-circle text-danger Blink" style="display: none;"></i>
-                <button id="stopBtn" class='app-button' type="button" onclick="stopMorseRecording()" style="display: none;">Stop Decoding</button>
-            </div>
-        </form>
+         <br>
+        <br>
+        <div id="button-controls">
+            <button id="startBtn" class='app-button' type="button" onclick="startMorseRecording()">Decode Morse Code</button>
+            <i id="recordingIcon" class="fa fa-circle text-danger Blink" style="display: none;"></i>
+            <button id="stopBtn" class='app-button' type="button" onclick="stopMorseRecording()" style="display: none;">Stop Decoding</button>
+        </div>
         <br>
         <h4>morse</h4>
         <textarea id="decodedMorse" readonly></textarea>
