@@ -120,8 +120,8 @@ function SpeedTestStopMorseRecording() {
     $('#Speedtap-stop-control').hide();
     resetTimer();
     disconnectSocket();
-    $('#STTapBtn')[0].removeAttribute("mousedown");
-    $('#STTapBtn')[0].removeAttribute("mouseup");
+    $('#STTapBtn').unbind("mousedown");
+    $('#STTapBtn').unbind("mouseup");
     document.removeEventListener('keydown', down_handler);
     document.removeEventListener('keyup', up_handler);
     $('#STMorse').text("");
@@ -149,8 +149,8 @@ function PracticeStartMorseRecording() {
 function PracticeStopMorseRecording() {
     $('#Practice-start-control').show();
     $('#Practice-stop-control').hide();
-    $('#PTapBtn').removeAttribute("mousedown");
-    $('#PTapBtn').removeAttribute("mouseup");
+    $('#STTapBtn').unbind("mousedown");
+    $('#STTapBtn').unbind("mouseup");
     disconnectSocket();
     document.removeEventListener('keydown', down_handler);
     document.removeEventListener('keyup', up_handler);
