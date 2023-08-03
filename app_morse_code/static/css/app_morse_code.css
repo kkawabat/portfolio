@@ -45,7 +45,7 @@ form p {
     display: grid;
 }
 
-#button-controls{
+.button-controls{
   display: flex;
   column-gap: 5%;
   grid-column: 2;
@@ -72,9 +72,30 @@ form p {
   to { opacity: 0; }
 }
 
-#decodedDiv{
-    display: flex;
+
+#Speedtap-stop-control {
     flex-direction: column;
+}
+
+#Speedtap-stop-control1 {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
     align-items: center;
-    justify-content: center;
+    width: 100%;
+}
+
+#Speedtap-stop-control2 {
+    flex-direction: column;
+    display: flex;
+    padding: 0;
+    align-items: flex-start;
+}
+
+.green {
+  color: green;
+}
+
+.red {
+  color: red;
 }

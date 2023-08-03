@@ -10,37 +10,18 @@
 
 <div class="tab">
     <button class="tablinks" onclick="openTab(event, 'Detail')" id="defaultOpen">Info</button>
-    <button class="tablinks" onclick="openTab(event, 'Decoder')">Decode morse code</button>
+    <button class="tablinks" onclick="openTab(event, 'Speedtap')">Speed tap morse code</button>
+    <button class="tablinks" onclick="openTab(event, 'Practice')">Practice morse code</button>
 </div>
 
 <div id="Detail" class="tabcontent">
     {% include 'post.html' with post=post %}
 </div>
 
-<div id="Decoder" class="tabcontent">
-    <div class="wrapper">
-        <div>
-            <h3>Decode morse code</h3>
-            <h4>Instruction</h4>
-            <p>Click decode below then use spacebar to send morse code. short tap for dots and hold for dashes, short pause for next character and long pause for space.</p>
-            {% include 'mnemonic_table.html' %}
-        </div>
-         <br>
-        <br>
-        <div id="button-controls">
-            <button id="startBtn" class='app-button' type="button" onclick="startMorseRecording()">Decode Morse Code</button>
-            <i id="recordingIcon" class="fa fa-circle text-danger Blink" style="display: none;"></i>
-            <button id="tapBtn" class='app-button' type="button"  style="display: none;">Tap Here (or use spacebar)</button>
-            <button id="stopBtn" class='app-button' type="button" onclick="stopMorseRecording()" style="display: none;">Stop Decoding</button>
-        </div>
-        <br>
-        <h4>morse</h4>
-        <textarea id="decodedMorse" readonly></textarea>
-        <h4>text</h4>
-        <textarea id="decodedText" readonly></textarea>
-    </div>
-</div>
+{% include 'practice_div.html' %}
+{% include 'speedtap_div.html' %}
 
+<script src="{% static 'js/timer.js' %}"></script>
 <script src="{% static 'js/morse_decoder.js' %}"></script>
 <link rel="stylesheet" type="text/css" href="{% static 'css/tab_logic.css' %}">
 <script src="{% static 'js/tab_logic.js' %}"></script>

@@ -26,3 +26,4 @@ Here is a list of resources I found useful while working on this project
 - https://ralzohairi.medium.com/audio-recording-in-javascript-96eed45b75ee  # audio recording js  
 - https://codepen.io/dcode-software/pen/xxwpLQo  # drag-dropzone  
 - https://www.w3schools.com/howto/tryit.asp?filename=tryhow_js_scroll_to_top  # scroll to top example  
+- https://codepen.io/cathydutton/pen/xxpOOw # stopwatch
