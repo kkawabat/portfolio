@@ -5,7 +5,7 @@ from morse_code_util.morse_engine import MorseEngine
 class MorseCoder(JsonWebsocketConsumer):
     def connect(self):
         self.accept()
-        self.morse_engine = MorseEngine(tapping_speed=.2)
+        self.morse_engine = MorseEngine(tapping_speed=.2, short_pause_multiple=1, long_pause_multiple=4)
 
     def disconnect(self, close_code):
         self.send_json({'disconnected': True})
