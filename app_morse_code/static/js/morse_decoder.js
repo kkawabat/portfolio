@@ -8,7 +8,7 @@ let prompt_list = ["I am counting my calories yet I really want dessert",
 "I was starting to worry that my pet turtle could tell what I was thinking",
 "Facing his greatest fear he ate his first marshmallow",
 "She looked at the masterpiece hanging in the museum but all she could think is that her five year old could do better",
-"Beach-combing replaced wine tasting as his new obsession",
+"Beach combing replaced wine tasting as his new obsession",
 "The truth is that you pay for your lifestyle in hours",
 "He wore the surgical mask in public not to keep from catching a virus but to keep people away from him",
 "When motorists sped in and out of traffic all she could think of was those in need of a transplant",
@@ -39,7 +39,7 @@ let prompt_list = ["I am counting my calories yet I really want dessert",
 "The delicious aroma from the kitchen was ruined by cigarette smoke",
 "Nobody questions who built the pyramids in Mexico",
 "Siri became confused when we reused to follow her directions",
-"The rusty nail stood erect angled at a 45 degree angle just waiting for the perfect barefoot to come along",
+"The rusty nail stood erect angled at a five degree angle just waiting for the perfect barefoot to come along",
 "A suit of armor provides excellent sun protection on hot days",
 "My dentist tells me that chewing bricks is very bad for your teeth",
 "I want to buy a onesie but know it won’t suit me",
@@ -48,7 +48,6 @@ let prompt_list = ["I am counting my calories yet I really want dessert",
 "The golden retriever loved the fireworks each Fourth of July"];
 let selected_prompt;
 let prompt_span = document.querySelector('#prompt');
-
 
 
 function speedtest_on_message_handler(){
@@ -98,9 +97,9 @@ function update_prompt(decoded_text){
 }
 
 function SpeedTestStartMorseRecording() {
-    window.scrollTo(0, document.body.scrollHeight);
     $('#Speedtap-start-control').hide();
     $('#Speedtap-stop-control').show();
+    $('#Speedtap-stop-control')[0].scrollIntoView(false);
     $('#STTapBtn').mousedown(btn_down_handler);
     $('#STTapBtn').mouseup(btn_up_handler);
     startTimer();
@@ -136,6 +135,7 @@ function practice_on_message_handler(){
 function PracticeStartMorseRecording() {
     $('#Practice-start-control').hide();
     $('#Practice-stop-control').show();
+    $('#Practice-stop-control')[0].scrollIntoView(false);
     $('#PTapBtn').mousedown(btn_down_handler);
     $('#PTapBtn').mouseup(btn_up_handler);
     connectSocket(practice_on_message_handler);
