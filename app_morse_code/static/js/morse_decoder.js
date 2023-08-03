@@ -61,10 +61,17 @@ function update_prompt(decoded_text){
     matched_str = "";
     unmatched_str = selected_prompt;
     err = false;
+    i = 0;
     while (i < decoded_text.length) {
         if (unmatched_str.length == 0){
             break;
         }
+
+        if (!!unmatched_str[0].match(/^[.,:!?']/)){
+            matched_str += unmatched_str[0];
+            unmatched_str = unmatched_str.slice(1);
+        }
+
         if (unmatched_str[0] === decoded_text[i]){
             matched_str += decoded_text[i];
             unmatched_str = unmatched_str.slice(1);
@@ -76,17 +83,18 @@ function update_prompt(decoded_text){
         i++;
     }
 
-    if (unmatched_str.length === 0){
-        stopTimer()
-        total_duration = (seconds + (tens/100)).toFixed(3));
-        alert("you did it! \n" +
-            "total time: " + total_duration + "\n" +
-            "tapping rate: " + selected_prompt.length + " characters per second\n")
-    }
     if (err){
-        prompt_span.innerHTML = '<span class="green">' matched_str '</span>' + '<span class="red">' + unmatched_str[0] + '</span>' + unmatched_str.slice(1);
+        prompt_span.innerHTML = '<span class="green">' + matched_str + '</span>' + '<span class="red">' + unmatched_str[0] + '</span>' + unmatched_str.slice(1);
     } else {
-        prompt_span.innerHTML = '<span class="green">' matched_str '</span>' + unmatched_str;
+        prompt_span.innerHTML = '<span class="green">' + matched_str + '</span>' + unmatched_str;
+    }
+
+    if (unmatched_str.length === 0){
+    stopTimer()
+    total_duration = (seconds + (tens/100)).toFixed(3);
+    alert("you did it! \n" +
+        "total time: " + total_duration + "\n" +
+        "tapping rate: " + selected_prompt.length + " characters per second\n")
     }
 
 }
@@ -99,8 +107,9 @@ function SpeedTestStartMorseRecording() {
     startTimer()
     connectSocket(speedtest_on_message_handler);
     morse_signal = "";
-    selected_prompt = prompt_list[(Math.floor(Math.random() * prompt_list.length))];
-    prompt_span.text(selected_prompt)
+    random_prompt_idx = Math.floor(Math.random() * prompt_list.length);
+    selected_prompt = prompt_list[random_prompt_idx].toLowerCase();
+    prompt_span.textContent = selected_prompt;
     up_time = Date.now();
     document.addEventListener('keydown', down_handler);
     document.addEventListener('keyup', up_handler);
