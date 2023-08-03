@@ -76,9 +76,15 @@ form p {
 
 #Speedtap-stop-control {
     flex-direction: column;
+    padding: 1em;
 }
 
-#Speedtap-stop-control1 {
+#Practice-stop-control {
+    flex-direction: column;
+    padding: 1em;
+}
+
+#stop-control {
     display: flex;
     flex-direction: row;
     gap: 10px;
@@ -86,7 +92,7 @@ form p {
     width: 100%;
 }
 
-#Speedtap-stop-control2 {
+.display-div {
     flex-direction: column;
     display: flex;
     padding: 0;
