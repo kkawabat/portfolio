@@ -77,9 +77,7 @@ function update_prompt(decoded_text){
             unmatched_str = unmatched_str.slice(1);
             err = false;
         } else {
-            err = true;
-        }
-
+            err = true; }
         i++;
     }
 
@@ -90,21 +88,22 @@ function update_prompt(decoded_text){
     }
 
     if (unmatched_str.length === 0){
-    stopTimer()
-    total_duration = (seconds + (tens/100)).toFixed(3);
-    alert("you did it! \n" +
-        "total time: " + total_duration + "\n" +
-        "tapping rate: " + selected_prompt.length + " characters per second\n")
+        stopTimer();
+        total_duration = (seconds + (tens/100)).toFixed(3);
+        alert("you did it! \n" +
+            "total time: " + total_duration + "\n" +
+            "tapping rate: " + (selected_prompt.length/total_duration).toFixed(3) + " characters per second\n" +
+            "error rate: " + (((decoded_text.length-selected_prompt.length)/selected_prompt.length)*100).toFixed(1)) + "%";
     }
-
 }
 
 function SpeedTestStartMorseRecording() {
+    window.scrollTo(0, document.body.scrollHeight);
     $('#Speedtap-start-control').hide();
     $('#Speedtap-stop-control').show();
     $('#STTapBtn').mousedown(btn_down_handler);
     $('#STTapBtn').mouseup(btn_up_handler);
-    startTimer()
+    startTimer();
     connectSocket(speedtest_on_message_handler);
     morse_signal = "";
     random_prompt_idx = Math.floor(Math.random() * prompt_list.length);
@@ -119,12 +118,14 @@ function SpeedTestStartMorseRecording() {
 function SpeedTestStopMorseRecording() {
     $('#Speedtap-start-control').show();
     $('#Speedtap-stop-control').hide();
-    resetTimer()
+    resetTimer();
     disconnectSocket();
     $('#STTapBtn')[0].removeAttribute("mousedown");
     $('#STTapBtn')[0].removeAttribute("mouseup");
     document.removeEventListener('keydown', down_handler);
     document.removeEventListener('keyup', up_handler);
+    $('#STMorse').text("");
+    $('#STText').text("");
 }
 
 function practice_on_message_handler(){
@@ -175,7 +176,7 @@ function up_handler(e) {
 
 function btn_down_handler(e) {
     e.preventDefault();
-    if (e.repeat) { return }
+    if (e.repeat) { return; }
     down_time = Date.now();
     morse_signal += Math.round((down_time - up_time)/10).toString() + 'U';
     send_data(morse_signal);
@@ -198,11 +199,7 @@ function connectSocket(on_message_handler) {
     let ws_scheme = window.location.protocol == "https:" ? "wss://" : "ws://";
     console.log(ws_scheme);
 
-    morseSocket = new WebSocket(
-        ws_scheme
-        + window.location.host
-        + '/ws/morse/'
-    );
+    morseSocket = new WebSocket( ws_scheme + window.location.host + '/ws/morse/' );
 
     morseSocket.onmessage = (response) =>{
         result = JSON.parse(response.data);
@@ -210,8 +207,7 @@ function connectSocket(on_message_handler) {
             stopMorseRecording();
         }
         else{
-            on_message_handler();
-        }
+            on_message_handler(); }
     }
 }
 
