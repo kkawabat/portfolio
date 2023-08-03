@@ -1,0 +1,126 @@
+* {
+  box-sizing: border-box;
+}
+
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 1em;
+    background: #f9f9f9;
+    border: 1px solid #c1c1c1;
+}
+
+h3 {
+  margin: 0;
+  text-align: center;
+}
+
+h4 {
+    margin-bottom: 0px;
+    padding: 0;
+}
+
+textarea {
+    width: 100%;
+}
+
+form label {
+  display: block;
+}
+
+form {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-gap: 20px;
+}
+
+form p {
+    grid-column: 2 / 3;
+    grid-row: 1 / 2;
+    align-items: center;
+    justify-items: center;
+    font-size: 4rem;
+    display: grid;
+}
+
+.button-controls{
+  display: flex;
+  column-gap: 5%;
+  grid-column: 2;
+  align-items: center;
+}
+
+.app-button {
+    background: lightgrey;
+    width: 100%;
+    border: 0;
+    padding:1rem;
+}
+
+.app-button:hover, .app-button:focus {
+  background: gold;
+  outline: 0;
+}
+
+.Blink {
+  animation: blinker 1.5s cubic-bezier(.5, 0, 1, 1) infinite alternate;
+}
+
+@keyframes blinker {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+
+#Speedtap-stop-control {
+    flex-direction: column;
+    padding: 1em;
+}
+
+#Practice-stop-control {
+    flex-direction: column;
+    padding: 1em;
+}
+
+#stop-control {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    align-items: center;
+    width: 100%;
+}
+
+.display-div {
+    flex-direction: column;
+    display: flex;
+    padding: 0;
+    align-items: flex-start;
+}
+
+#mnemonic td, #mnemonic th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+#mnemonic tr:nth-child(even){background-color: #f2f2f2;}
+
+#mnemonic tr:hover {background-color: #ddd;}
+
+#mnemonic th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: #04AA6D;
+  color: white;
+}
+
+
+.green {
+  color: green;
+}
+
+.red {
+  color: red;
+}
