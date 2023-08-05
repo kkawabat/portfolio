@@ -18,7 +18,8 @@ gunicorn = "^21.2.0"
 whitenoise = "^6.5.0"
 channels = {extras = ["daphne"], version = "^4.0.0"}
 morse-code-util = {git = "https://github.com/kkawabat/Morse-Code-Util.git"}
-
+opencv-cam-distance-measurer = {git = "https://github.com/kkawabat/opencv_cam_distance_measurer.git"}
+aiortc = "^1.5.0"
 
 [build-system]
 requires = ["poetry-core"]

@@ -74,53 +74,7 @@ form p {
 }
 
 
-#Speedtap-stop-control {
+#button-control {
     flex-direction: column;
     padding: 1em;
-}
-
-#Practice-stop-control {
-    flex-direction: column;
-    padding: 1em;
-}
-
-#stop-control {
-    display: flex;
-    flex-direction: row;
-    gap: 10px;
-    align-items: center;
-    width: 100%;
-}
-
-.display-div {
-    flex-direction: column;
-    display: flex;
-    padding: 0;
-    align-items: flex-start;
-}
-
-#mnemonic td, #mnemonic th {
-  border: 1px solid #ddd;
-  padding: 8px;
-}
-
-#mnemonic tr:nth-child(even){background-color: #f2f2f2;}
-
-#mnemonic tr:hover {background-color: #ddd;}
-
-#mnemonic th {
-  padding-top: 12px;
-  padding-bottom: 12px;
-  text-align: left;
-  background-color: #04AA6D;
-  color: white;
-}
-
-
-.green {
-  color: green;
-}
-
-.red {
-  color: red;
 }
