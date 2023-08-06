@@ -197,17 +197,15 @@ function send_data(morse_signal){
 
 function connectSocket(on_message_handler) {
     let ws_scheme = window.location.protocol == "https:" ? "wss://" : "ws://";
-    console.log(ws_scheme);
+    let morse_ws_endpoint = ws_scheme + window.location.host + '/ws/morse/'
+//    console.log(morse_ws_endpoint);
 
-    morseSocket = new WebSocket( ws_scheme + window.location.host + '/ws/morse/' );
+    morseSocket = new WebSocket( morse_ws_endpoint );
 
     morseSocket.onmessage = (response) =>{
         result = JSON.parse(response.data);
-        if ('disconnected' in result){
-            stopMorseRecording();
-        }
-        else{
-            on_message_handler(); }
+        if ('disconnected' in result){ stopMorseRecording(); }
+        else{ on_message_handler(); }
     }
 }
 
