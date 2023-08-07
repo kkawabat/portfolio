@@ -40,10 +40,11 @@ Here is a list of resources I found useful while working on this project. They h
 - https://stackoverflow.com/questions/31635275/what-is-rtsp-and-webrtc-for-streaming  # a hit on rtsp which seems exactly what I want
 - https://getstream.io/blog/streaming-protocols/  # a list of streaming protocols and descriptions
 - https://stackoverflow.com/questions/76643088/display-encoded-video-frames-using-react-and-django  # django channels http + websocket streaming solution
-- https://webrtc.github.io/samples/  # holy grail of webrtc samples
+- https://webrtc.github.io/samples/  # webrtc samples
 - https://gist.github.com/kueblert/fc1517fc9254e9a3cb0add7795c337f4  # webrtc example with opencv
-- https://dev.to/whitphx/python-webrtc-basics-with-aiortc-48id  # webrtc aiortc demo
 - https://gist.github.com/mondain/b0ec1cf5f60ae726202e?permalink_comment_id=3273048#gistcomment-3273048  # entry point to making my own stun/turn server
+- https://dev.to/whitphx/python-webrtc-basics-with-aiortc-48id  # best article on webrtc aiortc
+
 
 ### video and audio recording related
 - https://www.geeksforgeeks.org/how-to-open-web-cam-in-javascript/#  # video demo

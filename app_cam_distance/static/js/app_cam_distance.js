@@ -1,4 +1,5 @@
-var cam_video = document.getElementById("vidElement");
+var input_feed_vid = document.getElementById("inputFeedVid");
+var output_feed_vid = document.getElementById("outputFeedVid")
 var video_codec = 'VP8';
 var webrtc_obj = null;
 
@@ -14,10 +15,11 @@ function startRecording(){
 
     navigator.mediaDevices
         .getUserMedia(media_constraints)
-        .then((media_stream) => {
-            cam_video.srcObject = media_stream;
-            cam_video.addEventListener("loadedmetadata", () => { cam_video.play();});
-            webrtc_obj = init_webrtc(media_stream, cam_signaling_ws_endpoint)
+        .then((input_media_stream) => {
+            input_feed_vid.srcObject = input_media_stream;
+            input_feed_vid.addEventListener("loadedmetadata", () => { input_feed_vid.play();});
+            output_feed_vid.addEventListener("loadedmetadata", () => { output_feed_vid.play();});
+            webrtc_obj = init_webrtc(input_media_stream, cam_signaling_ws_endpoint, output_feed_vid)
         })
         .catch(err => {
             alert(err);
@@ -30,8 +32,9 @@ function stopRecording(){
     $("#stopBtn").hide()
     $("#recordingIcon").hide()
 
-    cam_video.srcObject.getTracks().forEach((track) => { track.stop(); });
-    cam_video.srcObject = null;
+    input_feed_vid.srcObject.getTracks().forEach((track) => { track.stop(); });
+    input_feed_vid.srcObject = null;
+    output_feed_vid.srcObject.getTracks().forEach((track) => { track.stop(); });
+    output_feed_vid.srcObject = null;
     if (webrtc_obj != null){ disconnect_webrtc(pc); }
-
 }
