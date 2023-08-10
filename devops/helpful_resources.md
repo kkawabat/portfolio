@@ -61,3 +61,7 @@ Here is a list of resources I found useful while working on this project. They h
 
 ### cool stuff
 - https://github.com/cwilso/WebAudio/tree/master  # very cool web audio playground
+
+
+### face recognition
+- https://github.com/opencv/opencv_contrib/blob/4.8.0/modules/face/samples/landmarks_demo.py  # sample code from opencv website for face landmark detection 

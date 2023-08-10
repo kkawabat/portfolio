@@ -24,5 +24,3 @@ class VideoPassThroughTrack(VideoTransformTrack):
     async def recv(self):
         frame = await self.track.recv()
         return frame
-
-
