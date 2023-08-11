@@ -11,16 +11,27 @@ class VideoTransformTrack(MediaStreamTrack):
 
     kind = "video"
 
-    def __init__(self, track):
+    def __init__(self):
         super().__init__()
-        self.track = track
+        self.tracks = []
+
+    def add_track(self, track):
+        self.tracks.append(track)
+        return self
+
+    async def recv(self):
+        frame = await self._recv(self.tracks[0])
+        return frame
 
     @abstractmethod
-    async def recv(self):
+    async def _recv(self, track):
+        pass
+
+    async def set_params(self, **kwargs):
         pass
 
 
 class VideoPassThroughTrack(VideoTransformTrack):
-    async def recv(self):
-        frame = await self.track.recv()
+    async def _recv(self, track):
+        frame = await track.recv()
         return frame

@@ -1,5 +1,6 @@
 {% extends "_base.html" %}
 {% load static %}
+{% block title %}Kan Kawabata - Camera Distance Measurer{% endblock title %}
 {% block ref %}
 <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
 <link rel="stylesheet" type="text/css" href="{% static 'css/app_cam_distance.css' %}">
@@ -10,8 +11,7 @@
 
 <div class="tab">
     <button class="tablinks" onclick="openTab(event, 'Detail')" id="defaultOpen">Info</button>
-    <button class="tablinks" onclick="openTab(event, 'face_detection_div')">Measure with face</button>
-    <button class="tablinks" onclick="openTab(event, 'qr_detection_div')">Measure with QR Code</button>
+    <button class="tablinks" onclick="openTab(event, 'face_detection_div')">Measure</button>
 </div>
 
 <div id="Detail" class="tabcontent">
@@ -19,7 +19,6 @@
 </div>
 
 {% include 'face_detection_div.html' %}
-{% include 'qr_detection_div.html' %}
 <link rel="stylesheet" type="text/css" href="{% static 'css/tab_logic.css' %}">
 <script src="{% static 'js/tab_logic.js' %}"></script>
 

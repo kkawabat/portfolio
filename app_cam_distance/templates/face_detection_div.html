@@ -1,16 +1,27 @@
 <div id="face_detection_div" class="tabcontent">
-    <h1>Work In Progress</h1>
-<div>
-    <h2>Camera</h2>
-    <video id="inputFeedVid" muted></video>
-    <h2>Distance</h2>
-    <video id="outputFeedVid" muted></video>
+    <p>Note: this app isn't meant to be accurate it's a rough estimation and intended for logiTec webcam. Results might differ for other camera types due to focal length.</p>
+    <div>
+        <p>Choose what to detect</p>
+        <input type="radio" id="face" name="measure_type" value="face" checked>
+        <label for="face">Face</label><br>
+        <input type="radio" id="qr_code" name="measure_type" value="qr_code">
+        <label for="qr_code">QR Code</label><br>
+    </div>
+    <br>
+    <button id="startBtn" class="button-control" onclick="startRecording()">Start Recording</button>
+    <div>
+        <i id="recordingIcon" class="fa fa-circle text-danger Blink" style="display: none;"></i>
+        <button id="stopBtn" class="button-control" style="display: none;" onclick="stopRecording()">Stop Recording</button>
+    </div>
 
-</div>
-<br>
-<button id="startBtn" class="button-control" onclick="startRecording()">Start Recording</button>
-<div>
-    <i id="recordingIcon" class="fa fa-circle text-danger Blink" style="display: none;"></i>
-    <button id="stopBtn" class="button-control" style="display: none;" onclick="stopRecording()">Stop Recording</button>
-</div>
+    <div id='vidsContainer' style="display: none;">
+        <div>
+            <h2>Raw Image</h2>
+            <video id="inputFeedVid" muted></video>
+        </div>
+        <div>
+            <h2>Processed with Distance</h2>
+            <video id="outputFeedVid" muted></video>
+        </div>
+    </div>
 </div>
