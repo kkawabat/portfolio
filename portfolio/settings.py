@@ -42,6 +42,7 @@ ALLOWED_HOSTS = ['kankawabata.com', 'localhost', '127.0.0.1', '0.0.0.0']
 INSTALLED_APPS = [
     'daphne',
     'main',
+    'new_main',
     'magic_eye',
     'app_whistle_detector',
     'app_morse_code',

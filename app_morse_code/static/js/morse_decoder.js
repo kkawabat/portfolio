@@ -100,7 +100,7 @@ function SpeedTestStartMorseRecording() {
     startTimer();
     morse_signal = "";
     random_prompt_idx = ~~(Math.random() * prompt_list.length);
-    selected_prompt = prompt_list[random_prompt_idx].replace(/[^A-Za-z]/g, '').toLowerCase();
+    selected_prompt = prompt_list[random_prompt_idx].replace(/[^A-Za-z ]/g, '').toLowerCase();
     prompt_span.textContent = selected_prompt;
     up_time = Date.now();
     document.addEventListener('keydown', down_handler);

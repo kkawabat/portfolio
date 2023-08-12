@@ -23,6 +23,7 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('main.urls')),
+    path('new_main/', include('new_main.urls')),
     path('magic_eye/', include('magic_eye.urls')),
     path('whistle_detector/', include('app_whistle_detector.urls')),
     path('morse_code/', include('app_morse_code.urls')),

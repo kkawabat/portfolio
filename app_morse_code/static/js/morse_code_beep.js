@@ -22,7 +22,7 @@ function stopTone() {
 var prompt = null;
 
 function answer(){
-    answer_text = $("#answerTextbox").val().replace(/[^A-Za-z]/g, '').toLowerCase()
+    answer_text = $("#answerTextbox").val().replace(/[^A-Za-z ]/g, '').toLowerCase()
     if (prompt == answer_text){
         alert('You got it correct!')
     } else {
@@ -67,7 +67,7 @@ function getPrompt(){
             return word_list[~~(Math.random() * word_list.length)];
             break;
         case 'sentences':
-            return sentence_list[~~(Math.random() * sentence_list.length)].replace(/[^A-Za-z]/g, '').toLowerCase();
+            return sentence_list[~~(Math.random() * sentence_list.length)].replace(/[^A-Za-z ]/g, '').toLowerCase();
             break;
     }
 }
