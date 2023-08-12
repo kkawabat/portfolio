@@ -34,6 +34,8 @@ function startRecording(){
             input_feed_vid.addEventListener("loadedmetadata", () => { input_feed_vid.play();});
             output_feed_vid.addEventListener("loadedmetadata", () => { output_feed_vid.play();});
             webrtc_obj = init_webrtc(input_media_stream, signalingSocket, output_feed_vid)
+            detector_change_request = JSON.stringify({ detector_type: $('input[name="measure_type"]:checked').val() })
+            signalingSocket.send(detector_change_request);
         })
         .catch(err => {
             alert(err);
@@ -41,10 +43,6 @@ function startRecording(){
         });
     }
 
-//    if (signalingSocket.readyState == WebSocket.OPEN ) {
-//        detector_change_request = JSON.stringify({ detector_type: this.value })
-//        signalingSocket.send(detector_change_request);
-//    }
 
 function stopRecording(){
     $("#startBtn").show()

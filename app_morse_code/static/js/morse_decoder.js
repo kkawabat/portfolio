@@ -2,7 +2,6 @@ let morseSocket;
 let morse_signal;
 let down_time;
 let up_time;
-let start;
 let prompt_list = ["I am counting my calories yet I really want dessert",
 "I do not respect anybody who can not tell the difference between Pepsi and Coke",
 "I was starting to worry that my pet turtle could tell what I was thinking",
@@ -42,7 +41,7 @@ let prompt_list = ["I am counting my calories yet I really want dessert",
 "The rusty nail stood erect angled at a five degree angle just waiting for the perfect barefoot to come along",
 "A suit of armor provides excellent sun protection on hot days",
 "My dentist tells me that chewing bricks is very bad for your teeth",
-"I want to buy a onesie but know it won’t suit me",
+"I want to buy a onesie but know it wont suit me",
 "Greetings from the real universe",
 "At that moment she realized she had a sixth sense",
 "The golden retriever loved the fireworks each Fourth of July"];
@@ -50,21 +49,19 @@ let selected_prompt;
 let prompt_span = document.querySelector('#prompt');
 
 
-function speedtest_on_message_handler(){
+function speedtest_on_message_handler() {
     $('#STMorse').text(result['morse']);
     $('#STText').text(result['text']);
     update_prompt(result['text']);
 }
 
-function update_prompt(decoded_text){
+function update_prompt(decoded_text) {
     matched_str = "";
     unmatched_str = selected_prompt;
     err = false;
     i = 0;
     while (i < decoded_text.length) {
-        if (unmatched_str.length == 0){
-            break;
-        }
+        if (unmatched_str.length == 0){ break; }
 
         if (!!unmatched_str[0].match(/^[.,:!?']/)){
             matched_str += unmatched_str[0];
@@ -75,16 +72,12 @@ function update_prompt(decoded_text){
             matched_str += decoded_text[i];
             unmatched_str = unmatched_str.slice(1);
             err = false;
-        } else {
-            err = true; }
+        } else { err = true; }
         i++;
     }
 
-    if (err){
-        prompt_span.innerHTML = '<span class="green">' + matched_str + '</span>' + '<span class="red">' + unmatched_str[0] + '</span>' + unmatched_str.slice(1);
-    } else {
-        prompt_span.innerHTML = '<span class="green">' + matched_str + '</span>' + unmatched_str;
-    }
+    if (err){ prompt_span.innerHTML = '<span class="green">' + matched_str + '</span>' + '<span class="red">' + unmatched_str[0] + '</span>' + unmatched_str.slice(1); }
+    else { prompt_span.innerHTML = '<span class="green">' + matched_str + '</span>' + unmatched_str; }
 
     if (unmatched_str.length === 0){
         stopTimer();
@@ -102,11 +95,12 @@ function SpeedTestStartMorseRecording() {
     $('#Speedtap-stop-control')[0].scrollIntoView(false);
     $('#STTapBtn').mousedown(btn_down_handler);
     $('#STTapBtn').mouseup(btn_up_handler);
-    startTimer();
+
     connectSocket(speedtest_on_message_handler);
+    startTimer();
     morse_signal = "";
-    random_prompt_idx = Math.floor(Math.random() * prompt_list.length);
-    selected_prompt = prompt_list[random_prompt_idx].toLowerCase();
+    random_prompt_idx = ~~(Math.random() * prompt_list.length);
+    selected_prompt = prompt_list[random_prompt_idx].replace(/[^A-Za-z]/g, '').toLowerCase();
     prompt_span.textContent = selected_prompt;
     up_time = Date.now();
     document.addEventListener('keydown', down_handler);
@@ -127,7 +121,7 @@ function SpeedTestStopMorseRecording() {
     $('#STText').text("");
 }
 
-function practice_on_message_handler(){
+function practice_on_message_handler() {
     $('#PMorse').text(result['morse']);
     $('#PText').text(result['text']);
 }
@@ -160,34 +154,40 @@ function PracticeStopMorseRecording() {
 function down_handler(e) {
     if (e.repeat) { return }
     if (e.key === " ") {
-        down_time = Date.now();
-        morse_signal += Math.round((down_time - up_time)/10).toString() + 'U';
-        send_data(morse_signal);
+        down_behavior();
     }
 };
 
 function up_handler(e) {
     if (e.key === " ") {
-        up_time = Date.now();
-        morse_signal += Math.round((up_time - down_time)/10).toString() + 'D';
-        send_data(morse_signal);
+        up_behavior();
     }
 };
 
 function btn_down_handler(e) {
     e.preventDefault();
     if (e.repeat) { return; }
-    down_time = Date.now();
-    morse_signal += Math.round((down_time - up_time)/10).toString() + 'U';
-    send_data(morse_signal);
+    down_behavior();
+
 };
 
 function btn_up_handler(e) {
-    up_time = Date.now();
-    morse_signal += Math.round((up_time - down_time)/10).toString() + 'D';
-    send_data(morse_signal);
+    up_behavior();
 };
 
+function down_behavior(){
+    down_time = Date.now();
+    morse_signal += Math.round((down_time - up_time)/10).toString() + 'U';
+    startTone();
+    send_data(morse_signal);
+}
+
+function up_behavior(){
+    up_time = Date.now();
+    morse_signal += Math.round((up_time - down_time)/10).toString() + 'D';
+    stopTone();
+    send_data(morse_signal);
+}
 
 function send_data(morse_signal){
     morseSocket.send(JSON.stringify({type: 'decode', data: morse_signal}));
@@ -201,7 +201,6 @@ function connectSocket(on_message_handler) {
 //    console.log(morse_ws_endpoint);
 
     morseSocket = new WebSocket( morse_ws_endpoint );
-
     morseSocket.onmessage = (response) =>{
         result = JSON.parse(response.data);
         if ('disconnected' in result){ stopMorseRecording(); }

@@ -1,8 +1,9 @@
 <div id="Speedtap" class="tabcontent">
     <div class="wrapper">
         <div>
-            <h3>Morse Code Speed Test</h3>
+            <h3>Instruction</h3>
             <p> try and tap the prompt as fast as you can, if you make a mistake that's ok just tap the correct character to proceed. </p>
+            <p>Click the button below then click/tap (or use spacebar) to send morse code. short tap for dots and hold for dashes, short pause (~2 tap worth) for next character and long pause (~4 tap worth) for space.</p>
             {% include 'mnemonic_table.html' %}
         </div>
         <br>
@@ -14,7 +15,7 @@
                 <h3>Time</h3>
                 <p><span id="seconds">00</span>:<span id="tens">00</span></p>
                 <h3>Prompt</h3>
-                <p><span id="prompt"></span></p>
+                <h2><span id="prompt"></span></h2>
                 <h4>morse</h4>
                 <textarea id="STMorse" readonly></textarea>
                 <h4>text</h4>

@@ -11,19 +11,20 @@
 
 <div class="tab">
     <button class="tablinks" onclick="openTab(event, 'Detail')" id="defaultOpen">Info</button>
-    <button class="tablinks" onclick="openTab(event, 'Speedtap')">Speed tap morse code</button>
-    <button class="tablinks" onclick="openTab(event, 'Practice')">Practice morse code</button>
+    <button class="tablinks" onclick="openTab(event, 'Speedtap')">Tap morse code</button>
+    <button class="tablinks" onclick="openTab(event, 'Listen')">Listen to morse code</button>
 </div>
 
 <div id="Detail" class="tabcontent">
     {% include 'post.html' with post=post %}
 </div>
 
-{% include 'practice_div.html' %}
+{% include 'listening_div.html' %}
 {% include 'speedtap_div.html' %}
 
 <script src="{% static 'js/timer.js' %}"></script>
 <script src="{% static 'js/morse_decoder.js' %}"></script>
+<script src="{% static 'js/morse_code_beep.js' %}"></script>
 <link rel="stylesheet" type="text/css" href="{% static 'css/tab_logic.css' %}">
 <script src="{% static 'js/tab_logic.js' %}"></script>
 {% endblock content %}

@@ -43,7 +43,7 @@ Here is a list of resources I found useful while working on this project. They h
 - https://webrtc.github.io/samples/  # webrtc samples
 - https://gist.github.com/kueblert/fc1517fc9254e9a3cb0add7795c337f4  # webrtc example with opencv
 - https://gist.github.com/mondain/b0ec1cf5f60ae726202e?permalink_comment_id=3273048#gistcomment-3273048  # entry point to making my own stun/turn server
-- https://dev.to/whitphx/python-webrtc-basics-with-aiortc-48id  # best article on webrtc aiortc
+- https://dev.to/whitphx/python-webrtc-basics-with-aiortc-48id  # best article on webrtc aiortc I've found
 
 
 ### video and audio recording related
@@ -57,7 +57,8 @@ Here is a list of resources I found useful while working on this project. They h
 - https://ralzohairi.medium.com/audio-recording-in-javascript-96eed45b75ee  # audio recording js  
 - https://codepen.io/dcode-software/pen/xxwpLQo  # drag-dropzone  
 - https://www.w3schools.com/howto/tryit.asp?filename=tryhow_js_scroll_to_top  # scroll to top example  
-- https://codepen.io/cathydutton/pen/xxpOOw # stopwatch
+- https://codepen.io/cathydutton/pen/xxpOOw  # stopwatch
+- https://stackoverflow.com/a/39987136/4231985  # oscillator demo
 
 ### cool stuff
 - https://github.com/cwilso/WebAudio/tree/master  # very cool web audio playground
