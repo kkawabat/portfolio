@@ -15,7 +15,7 @@
 
     {% block ref %}{% endblock ref %}
 </head>
-<body>
+<body {% block body_attr %}{% endblock body_attr %}>
     {% block content %}{% endblock content %}
 </body>
 </html>

@@ -1,6 +1,6 @@
 from django.urls import path
 
-from magic_eye.views import magic_eye_view, magic_eye_generate_view, magic_eye_decode_view
+from app_magic_eye.views import magic_eye_view, magic_eye_generate_view, magic_eye_decode_view
 
 urlpatterns = [
     path('', magic_eye_view, name='magic_eye'),

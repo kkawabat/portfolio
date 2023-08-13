@@ -1,0 +1,18 @@
+{% extends "_base.html" %}
+{% load static %}
+{% block title %}Kan Kawabata - portfolio{% endblock title %}
+{% block ref %}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css"/>
+<script src="https://unpkg.com/htmx.org@1.9.4"></script>
+<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+{% endblock ref %}
+
+{% block body_attr %}hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'{% endblock body_attr %}
+
+{% block content %}
+<div class="typewriter">
+  <h1>The cat and the hat.</h1>
+</div>
+{% endblock content %}

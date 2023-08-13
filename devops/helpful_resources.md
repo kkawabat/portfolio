@@ -59,6 +59,10 @@ Here is a list of resources I found useful while working on this project. They h
 - https://www.w3schools.com/howto/tryit.asp?filename=tryhow_js_scroll_to_top  # scroll to top example  
 - https://codepen.io/cathydutton/pen/xxpOOw  # stopwatch
 - https://stackoverflow.com/a/39987136/4231985  # oscillator demo
+- https://css-tricks.com/snippets/css/typewriter-effect/  # typewriter-effect
+
+### htmx related
+- https://www.mattlayman.com/blog/2021/how-to-htmx-django/
 
 ### cool stuff
 - https://github.com/cwilso/WebAudio/tree/master  # very cool web audio playground

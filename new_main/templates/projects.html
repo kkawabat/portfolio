@@ -1,0 +1,24 @@
+{% extends "_accordion_item_base.html" %}
+
+{% block item_content %}
+{%with accordion_section=section section_title=section_title %}
+{{ block.super }}
+    <div id="projectAccordion" class="accordion nested-accordion">
+        {% for project in projects %}
+            {% include 'accordion_post.html' with slug=project.slug title=project.title created_on=project.created_on %}
+        {% empty %}
+            <div class="accordion-item accordion-content">coming soon!</div>
+        {% endfor %}
+    </div>
+{% endwith%}
+
+<script type="text/javascript">
+var content_div = document.getElementById('projectsContent')
+content_div.addEventListener('hidden.bs.collapse', function () {
+  $("#projectsBtn").text('{{section_title}}');
+});
+content_div.addEventListener('shown.bs.collapse', function () {
+  $("#projectsBtn").text('{{section_title}}' + " click sections below for details 👇");
+});
+</script>
+{% endblock item_content %}
