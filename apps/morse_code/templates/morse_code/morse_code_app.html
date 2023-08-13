@@ -3,7 +3,7 @@
 {% block title %}Kan Kawabata - Morse Code Speed tap test{% endblock title %}
 {% block ref %}
 <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
-<link rel="stylesheet" type="text/css" href="{% static 'css/app_morse_code.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'morse_code/css/app_morse_code.css' %}">
 
 {% endblock ref %}
 
@@ -19,12 +19,12 @@
     {% include 'post.html' with post=post %}
 </div>
 
-{% include 'listening_div.html' %}
-{% include 'speedtap_div.html' %}
+{% include 'morse_code/listening_div.html' %}
+{% include 'morse_code/speedtap_div.html' %}
 
-<script src="{% static 'js/timer.js' %}"></script>
-<script src="{% static 'js/morse_decoder.js' %}"></script>
-<script src="{% static 'js/morse_code_beep.js' %}"></script>
+<script src="{% static 'morse_code/js/timer.js' %}"></script>
+<script src="{% static 'morse_code/js/morse_decoder.js' %}"></script>
+<script src="{% static 'morse_code/js/morse_code_beep.js' %}"></script>
 <link rel="stylesheet" type="text/css" href="{% static 'css/tab_logic.css' %}">
 <script src="{% static 'js/tab_logic.js' %}"></script>
 {% endblock content %}

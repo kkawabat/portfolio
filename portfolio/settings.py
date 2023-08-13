@@ -45,7 +45,7 @@ INSTALLED_APPS = [
     'new_main',
     'app_magic_eye',
     'app_whistle_detector',
-    'app_morse_code',
+    'apps.morse_code',
     'app_cam_distance',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -146,7 +146,7 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
     os.path.join(BASE_DIR, 'app_magic_eye', 'static'),
     os.path.join(BASE_DIR, 'app_whistle_detector', 'static'),
-    os.path.join(BASE_DIR, 'app_morse_code', 'static'),
+    os.path.join(BASE_DIR, 'apps', 'morse_code', 'static'),
     os.path.join(BASE_DIR, 'app_cam_distance', 'static'),
 )
 

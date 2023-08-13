@@ -26,7 +26,7 @@ urlpatterns = [
     path('new_main/', include('new_main.urls')),
     path('magic_eye/', include('app_magic_eye.urls')),
     path('whistle_detector/', include('app_whistle_detector.urls')),
-    path('morse_code/', include('app_morse_code.urls')),
+    path('morse_code/', include('apps.morse_code.urls')),
     path('cam_distance/', include('app_cam_distance.urls'))
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
