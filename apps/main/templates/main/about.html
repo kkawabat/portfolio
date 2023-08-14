@@ -1,0 +1,15 @@
+{% extends "main/_accordion_item_base.html" %}
+
+{% block item_content %}
+{%with accordion_section=section section_title=section_title %}
+{{ block.super }}
+<div class="accordion-content">
+    <p>Software developer and signal processing engineer. I studied electrical engineering at Arizona State University specializing in signal processing.
+        I am a founding member of <a href="https://auralanalytics.com">Aural Analytics</a>, one of the first startup
+        in digital speech biomarkers for clinical grade speech analytics.</p>
+    <p>Through my school and work experience I've developed a unique set of skills that allows me to process, analyze,
+        visualize data from spreadsheet to videos. I enjoy using my skills to explore various ideas ranging from neat to
+        (hopefully) mindblowing.</p>
+</div>
+{% endwith%}
+{% endblock item_content %}

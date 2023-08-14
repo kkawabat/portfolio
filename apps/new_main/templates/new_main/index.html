@@ -1,0 +1,49 @@
+{% extends "_base.html" %}
+{% load static %}
+{% block title %}Kan Kawabata - portfolio{% endblock title %}
+{% block ref %}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css"/>
+<script src="https://unpkg.com/htmx.org@1.9.4"></script>
+<link rel="stylesheet" type="text/css" href="{% static 'new_main/css/style.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'new_main/css/animations.css' %}">
+
+{% endblock ref %}
+
+{% block body_attr %}hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'{% endblock body_attr %}
+
+{% block content %}
+
+
+<div id="main">
+    <div class="intro-div">
+        <div class="typewriter"> <h1 id='intro1'>Hello <span id='hand'>👋</span>, I'm Kan!</h1></div>
+        <div class="typewriter"> <h1 id='intro2'>Welcome to my website!</h1></div>
+    </div>
+    <br>
+    <div id='header1' class="fade-in">
+        <h3 hx-get="/about" hx-swap="outerHTML" hx-target="#content_div" >Myself</h3>
+        <h3>My Projects</h3>
+        <h3>My Blog</h3>
+        <h3>My Socials</h3>
+        <h3 hx-on:click="window.open('{% url 'cv' %}', '_blank')">My CV</h3>
+    </div>
+    <br>
+    <div id="content_div" class="fade-in"></div>
+
+</div>
+
+<script>
+function fetch_cv(){
+
+}
+
+$(document).on('click',function(){
+    $("#intro1").addClass("skip-animation");
+    $("#intro2").addClass("skip-animation");
+    $("#header1").addClass("skip-animation");
+});
+
+</script>
+{% endblock content %}

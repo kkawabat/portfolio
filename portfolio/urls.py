@@ -22,12 +22,12 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('main.urls')),
-    path('new_main/', include('new_main.urls')),
-    path('magic_eye/', include('app_magic_eye.urls')),
-    path('whistle_detector/', include('app_whistle_detector.urls')),
+    path('old_main/', include('apps.main.urls')),
+    path('', include('apps.new_main.urls')),
+    path('magic_eye/', include('apps.magic_eye.urls')),
+    path('whistle_detector/', include('apps.whistle_detector.urls')),
     path('morse_code/', include('apps.morse_code.urls')),
-    path('cam_distance/', include('app_cam_distance.urls'))
+    path('cam_distance/', include('apps.cam_distance.urls'))
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
-handler404 = 'main.views.not_found_view'
+handler404 = 'apps.main.views.not_found_view'

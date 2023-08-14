@@ -1,0 +1,24 @@
+{% extends "main/_accordion_item_base.html" %}
+
+{% block item_content %}
+{%with accordion_section=section section_title=section_title %}
+{{ block.super }}
+    <div class="accordion nested-accordion">
+        {% for blog in blogs %}
+            {% include 'main/accordion_post.html' with slug=blog.slug title=blog.title created_on=blog.created_on %}
+        {% empty %}
+            <div class="accordion-item accordion-content">I have no thoughts atm...</div>
+        {% endfor %}
+    </div>
+{% endwith%}
+
+<script type="text/javascript">
+var content_div = document.getElementById('blogsContent')
+content_div.addEventListener('hidden.bs.collapse', function () {
+  $("#blogsBtn").text('{{section_title}}');
+});
+content_div.addEventListener('shown.bs.collapse', function () {
+  $("#blogsBtn").text('{{section_title}}' + " click sections below for details 👇");
+});
+</script>
+{% endblock item_content %}

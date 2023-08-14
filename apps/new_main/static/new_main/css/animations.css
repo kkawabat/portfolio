@@ -1,0 +1,88 @@
+#intro1{
+    animation:
+        typing1 1.5s steps(20, end),
+        blink-caret .4s step-end 2 both;
+}
+
+#intro2{
+    animation:
+        typing2 1s steps(20, end) 2.5s both,
+        blink-caret .4s step-end 1s 3 both;
+}
+
+@keyframes typing1 {
+  from { width: 0 }
+  25% { width: 50% }
+  55% { width: 50% }
+  70% { width: 100% }
+  to { width: 100% }
+}
+
+@keyframes typing2 {
+  from { width: 0 }
+  65% { width: 100% }
+  to { width: 100% }
+}
+
+@keyframes blink-caret {
+  from, to { border-color: transparent }
+  50% { border-color: orange }
+}
+
+#hand {
+    animation: wave-animation 2.5s 1 1.5s;
+    transform-origin: 70% 70%;
+    display: inline-block;
+}
+
+#hand:hover {
+  animation: wave-animation2 2.5s 1;
+  transform-origin: 70% 70%;
+  display: inline-block;
+}
+
+@keyframes wave-animation {
+    0% { transform: rotate( 0.0deg) }
+   10% { transform: rotate(14.0deg) }
+   20% { transform: rotate(-8.0deg) }
+   30% { transform: rotate(14.0deg) }
+   40% { transform: rotate(-4.0deg) }
+   50% { transform: rotate(10.0deg) }
+   60% { transform: rotate( 0.0deg) }
+  100% { transform: rotate( 0.0deg) }
+}
+@keyframes wave-animation2 {
+    0% { transform: rotate( 0.0deg) }
+   10% { transform: rotate(14.0deg) }
+   20% { transform: rotate(-8.0deg) }
+   30% { transform: rotate(14.0deg) }
+   40% { transform: rotate(-4.0deg) }
+   50% { transform: rotate(10.0deg) }
+   60% { transform: rotate( 0.0deg) }
+  100% { transform: rotate( 0.0deg) }
+}
+
+#header1 {
+    animation-delay: 3.5s;
+}
+
+.fade-in {
+    animation: .5s normal both 1 fadein-keys;
+}
+
+#header1 h3:hover{
+    color: orange;
+    cursor: pointer;
+}
+
+@keyframes fadein-keys{
+    0% { opacity:0; }
+    100% { opacity:1; }
+}
+
+.skip-animation{
+  animation-duration: 1ms !important;
+  animation-delay: 0s !important;
+  animation-fill-mode: forwards !important;
+}
+

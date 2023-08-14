@@ -4,6 +4,7 @@ Here is a list of resources I found useful while working on this project. They h
 - https://www.digitalocean.com/community/tutorials/how-to-set-up-django-with-postgres-nginx-and-gunicorn-on-ubuntu-18-04#step-6-testing-gunicorn-s-ability-to-serve-the-project  
 - https://www.youtube.com/watch?v=Jyvffr3aCp0&ab_channel=WebDevSimplified  
 - https://djangocentral.com/building-a-blog-application-with-django/  
+- https://stackoverflow.com/a/35244323/4231985  # SO thread about django folder structures
 
 ### production server related
 - https://plainenglish.io/blog/how-deploy-an-asgi-django-application-with-nginx-gunicorn-daphne-and-supervisor-on-ubuntu-server # gunicorn + daphne server configuration help  
@@ -49,6 +50,7 @@ Here is a list of resources I found useful while working on this project. They h
 ### video and audio recording related
 - https://www.geeksforgeeks.org/how-to-open-web-cam-in-javascript/#  # video demo
 - https://ralzohairi.medium.com/audio-recording-in-javascript-96eed45b75ee  # audio demo
+- https://github.com/cwilso/WebAudio/tree/master  # very cool web audio playground
 
 ### css/javascript
 - https://www.youtube.com/@KevinPowell  # a pretty helpful youtuber for css  
@@ -60,13 +62,12 @@ Here is a list of resources I found useful while working on this project. They h
 - https://codepen.io/cathydutton/pen/xxpOOw  # stopwatch
 - https://stackoverflow.com/a/39987136/4231985  # oscillator demo
 - https://css-tricks.com/snippets/css/typewriter-effect/  # typewriter-effect
+- https://codepen.io/jakejarvis/pen/pBZWZw  # hand wave-effect
+- https://developer.mozilla.org/en-US/docs/Web/CSS/animation  # animation documentation
+- https://stackoverflow.com/a/19989633/4231985  # cancel animation 
 
 ### htmx related
 - https://www.mattlayman.com/blog/2021/how-to-htmx-django/
-
-### cool stuff
-- https://github.com/cwilso/WebAudio/tree/master  # very cool web audio playground
-
 
 ### face recognition
 - https://github.com/opencv/opencv_contrib/blob/4.8.0/modules/face/samples/landmarks_demo.py  # sample code from opencv website for face landmark detection 

@@ -1,6 +1,6 @@
 from django.shortcuts import render
 
-from main.models import Post
+from apps.main.models import Post
 
 
 def morse_code_app_view(request):

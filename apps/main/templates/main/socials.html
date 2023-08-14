@@ -1,0 +1,12 @@
+{% extends "main/_accordion_item_base.html" %}
+
+{% block item_content %}
+{%with accordion_section=section section_title=section_title %}
+{{ block.super }}
+    <div class="Social-media accordion-content">
+        <a href="https://stackoverflow.com/users/4231985/kkawabat"><font color="#007cc4"><i class="fab fa-stack-overflow"></i></font></a>
+        <a href="https://github.com/kkawabat"><font color="#007cc4"><i class="fab fa-github"></i></font></a>
+        <a href="https://www.linkedin.com/in/kan-kawabata-8b4106a2/"><font color="#007cc4"><i class="fab fa-linkedin"></i></font></a>
+    </div>
+{% endwith%}
+{% endblock item_content %}

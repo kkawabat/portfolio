@@ -41,12 +41,12 @@ ALLOWED_HOSTS = ['kankawabata.com', 'localhost', '127.0.0.1', '0.0.0.0']
 
 INSTALLED_APPS = [
     'daphne',
-    'main',
-    'new_main',
-    'app_magic_eye',
-    'app_whistle_detector',
+    'apps.main',
+    'apps.new_main',
+    'apps.magic_eye',
+    'apps.whistle_detector',
     'apps.morse_code',
-    'app_cam_distance',
+    'apps.cam_distance',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -144,10 +144,11 @@ STATIC_URL = '/static/'
 
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
-    os.path.join(BASE_DIR, 'app_magic_eye', 'static'),
-    os.path.join(BASE_DIR, 'app_whistle_detector', 'static'),
+    os.path.join(BASE_DIR, 'apps', 'new_main', 'static'),
+    os.path.join(BASE_DIR, 'apps', 'magic_eye', 'static'),
+    os.path.join(BASE_DIR, 'apps', 'whistle_detector', 'static'),
     os.path.join(BASE_DIR, 'apps', 'morse_code', 'static'),
-    os.path.join(BASE_DIR, 'app_cam_distance', 'static'),
+    os.path.join(BASE_DIR, 'apps', 'cam_distance', 'static'),
 )
 
 # Default primary key field type
