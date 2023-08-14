@@ -30,22 +30,26 @@ body {
 }
 
 
-#header1 {
+.header-div {
     display: flex;
     gap: 5%;
     color: #fff;
     margin: 0 auto;
+    margin-top: 1em;
+}
+
+.header-div h3:hover{
+    color: orange;
+    cursor: pointer;
 }
 
 #content_div {
     display: flex;
     flex-direction: column;
-    padding: 1rem;
     gap: 5%;
     color: #fff;
     margin: 0 auto;
+    margin-top: 1em;
 }
 
-a {
-color: orange;
-}
+a { color: orange; }

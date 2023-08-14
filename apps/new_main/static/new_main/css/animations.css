@@ -6,7 +6,7 @@
 
 #intro2{
     animation:
-        typing2 1s steps(20, end) 2.5s both,
+        typing2 1s steps(20, end) 2s both,
         blink-caret .4s step-end 1s 3 both;
 }
 
@@ -30,13 +30,13 @@
 }
 
 #hand {
-    animation: wave-animation 2.5s 1 1.5s;
+    animation: wave-animation 1s 1 1.5s;
     transform-origin: 70% 70%;
     display: inline-block;
 }
 
 #hand:hover {
-  animation: wave-animation2 2.5s 1;
+  animation: wave-animation2 2s 1;
   transform-origin: 70% 70%;
   display: inline-block;
 }
@@ -62,17 +62,12 @@
   100% { transform: rotate( 0.0deg) }
 }
 
-#header1 {
-    animation-delay: 3.5s;
-}
-
 .fade-in {
     animation: .5s normal both 1 fadein-keys;
 }
 
-#header1 h3:hover{
-    color: orange;
-    cursor: pointer;
+#header1-div {
+    animation-delay: 3s;
 }
 
 @keyframes fadein-keys{

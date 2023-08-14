@@ -14,36 +14,27 @@
 {% block body_attr %}hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'{% endblock body_attr %}
 
 {% block content %}
-
-
 <div id="main">
     <div class="intro-div">
         <div class="typewriter"> <h1 id='intro1'>Hello <span id='hand'>👋</span>, I'm Kan!</h1></div>
         <div class="typewriter"> <h1 id='intro2'>Welcome to my website!</h1></div>
     </div>
-    <br>
-    <div id='header1' class="fade-in">
-        <h3 hx-get="/about" hx-swap="outerHTML" hx-target="#content_div" >Myself</h3>
-        <h3>My Projects</h3>
-        <h3>My Blog</h3>
-        <h3>My Socials</h3>
+    <div id="header1-div" class='fade-in header-div'>
+        <h3 class='header1' hx-get="/about" hx-swap="outerHTML" hx-target="#content_div" >Myself</h3>
+        <h3 class='header1' hx-get="/projects" hx-swap="outerHTML" hx-target="#content_div" >My Projects</h3>
+        <h3 class='header1' hx-get="/blogs" hx-swap="outerHTML" hx-target="#content_div" >My Blog</h3>
+        <h3 class='header1' hx-get="/socials" hx-swap="outerHTML" hx-target="#content_div" >My Socials</h3>
         <h3 hx-on:click="window.open('{% url 'cv' %}', '_blank')">My CV</h3>
     </div>
-    <br>
     <div id="content_div" class="fade-in"></div>
-
 </div>
 
 <script>
-function fetch_cv(){
-
-}
-
-$(document).on('click',function(){
-    $("#intro1").addClass("skip-animation");
-    $("#intro2").addClass("skip-animation");
-    $("#header1").addClass("skip-animation");
-});
-
+    $(document).on('click', function(){
+        $("#intro1").addClass("skip-animation");
+        $("#intro2").addClass("skip-animation");
+        $("#header1-div").addClass("skip-animation");
+        $(document).prop("onclick", null).off("click");
+    });
 </script>
 {% endblock content %}

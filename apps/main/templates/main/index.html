@@ -31,4 +31,17 @@
 
 <button onclick="topFunction()" id="jumpToTopBtn" title="Go to top">Top</button>
 <script src="{% static 'js/jump_to_top_button.js' %}"></script>
+<script>
+    function get_post(post_slug){
+        $.ajax({
+            url: "post_request",
+            data: {"post_slug": post_slug},
+            dataType: "JSON",
+            success: function(response){
+                $("#contentDiv").html(response);
+                $("#contentDiv")[0].scrollIntoView();
+            }
+        });
+    }
+</script>
 {% endblock content %}
