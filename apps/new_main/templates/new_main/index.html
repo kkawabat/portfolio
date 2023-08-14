@@ -2,9 +2,8 @@
 {% load static %}
 {% block title %}Kan Kawabata - portfolio{% endblock title %}
 {% block ref %}
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css"/>
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.10/css/all.css" integrity="sha384-+d0P83n9kaQMCwj8F4RJB66tzIwOKmrdb46+porD/OvrJ+37WqIM7UoBtwHO6Nlg" crossorigin="anonymous">
 <script src="https://unpkg.com/htmx.org@1.9.4"></script>
 <link rel="stylesheet" type="text/css" href="{% static 'new_main/css/style.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'new_main/css/animations.css' %}">
@@ -23,10 +22,17 @@
         <h3 class='header1' hx-get="/about" hx-swap="outerHTML" hx-target="#content_div" hx-on:click="headerSelected(event);">Myself</h3>
         <h3 class='header1' hx-get="/projects" hx-swap="outerHTML" hx-target="#content_div" hx-on:click="headerSelected(event);">My Projects</h3>
         <h3 class='header1' hx-get="/blogs" hx-swap="outerHTML" hx-target="#content_div" hx-on:click="headerSelected(event);">My Blog</h3>
-        <h3 class='header1' hx-get="/socials" hx-swap="outerHTML" hx-target="#content_div" hx-on:click="headerSelected(event);">My Socials</h3>
+        <h3 class='header1' hx-on:click="headerSelected(event); show_socials();">My Socials</h3>
         <h3 class='header1' hx-on:click="headerSelected(event); window.open('{% url 'cv' %}', '_blank');">My CV</h3>
     </div>
     <div id="content_div" class="fade-in"></div>
+</div>
+<div id='socials' style="display:none">
+    <div class="Social-media fade-in">
+        <a href="https://stackoverflow.com/users/4231985/kkawabat" target="_blank"><i class="fab fa-stack-overflow"></i></a>
+        <a href="https://github.com/kkawabat" target="_blank"><i class="fab fa-github"></i></a>
+        <a href="https://www.linkedin.com/in/kan-kawabata-8b4106a2/" target="_blank"><i class="fab fa-linkedin"></i></a>
+    </div>
 </div>
 
 <script>
@@ -48,5 +54,9 @@
         }
         evt.currentTarget.className = evt.currentTarget.className.replace(" deactive", " active");
     }
+
+  function show_socials() {
+    document.getElementById('content_div').innerHTML = document.getElementById('socials').innerHTML;
+  }
 </script>
 {% endblock content %}

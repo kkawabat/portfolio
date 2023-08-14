@@ -48,7 +48,7 @@ body {
     flex-direction: column;
     gap: 5%;
     color: #fff;
-    margin: 0 auto;
+    margin: 0;
 
 }
 
@@ -56,3 +56,13 @@ a { color: orange; }
 
 .active { color: orange; }
 .deactive { color: #666; }
+
+
+.fab {
+    padding: 20px;
+    font-size: 30px;
+    color: #fff;
+    width: 50px;
+    text-align: center;
+    text-decoration: none;
+}
