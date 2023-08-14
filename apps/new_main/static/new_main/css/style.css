@@ -29,12 +29,11 @@ body {
     letter-spacing: .15em;
 }
 
-
 .header-div {
     display: flex;
     gap: 5%;
     color: #fff;
-    margin: 0 auto;
+    margin: 0;
     margin-top: 1em;
 }
 
@@ -42,6 +41,12 @@ body {
     color: orange;
     cursor: pointer;
 }
+
+@media screen and (max-width: 791px) {
+  #header-div1 { flex-direction: column; }
+}
+
+#header-div2 { flex-direction: column; }
 
 #content_div {
     display: flex;

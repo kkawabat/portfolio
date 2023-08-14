@@ -29,7 +29,11 @@ def blogs_view(request):
     return render(request, 'new_main/blogs.html', context={'blogs': blog_list})
 
 
-def cv_view(_):
+def cv_view(request):
+    return render(request, 'new_main/cv.html')
+
+
+def cv_pdf(_):
     cv_path = staticfiles_storage.path('resources/KanKawabataCV.pdf')
     with open(cv_path, 'rb') as pdf:
         response = HttpResponse(pdf.read(), content_type='application/pdf')
