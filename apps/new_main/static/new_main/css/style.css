@@ -49,7 +49,10 @@ body {
     gap: 5%;
     color: #fff;
     margin: 0 auto;
-    margin-top: 1em;
+
 }
 
 a { color: orange; }
+
+.active { color: orange; }
+.deactive { color: #666; }

@@ -20,11 +20,11 @@
         <div class="typewriter"> <h1 id='intro2'>Welcome to my website!</h1></div>
     </div>
     <div id="header1-div" class='fade-in header-div'>
-        <h3 class='header1' hx-get="/about" hx-swap="outerHTML" hx-target="#content_div" >Myself</h3>
-        <h3 class='header1' hx-get="/projects" hx-swap="outerHTML" hx-target="#content_div" >My Projects</h3>
-        <h3 class='header1' hx-get="/blogs" hx-swap="outerHTML" hx-target="#content_div" >My Blog</h3>
-        <h3 class='header1' hx-get="/socials" hx-swap="outerHTML" hx-target="#content_div" >My Socials</h3>
-        <h3 hx-on:click="window.open('{% url 'cv' %}', '_blank')">My CV</h3>
+        <h3 class='header1' hx-get="/about" hx-swap="outerHTML" hx-target="#content_div" hx-on:click="headerSelected(event);">Myself</h3>
+        <h3 class='header1' hx-get="/projects" hx-swap="outerHTML" hx-target="#content_div" hx-on:click="headerSelected(event);">My Projects</h3>
+        <h3 class='header1' hx-get="/blogs" hx-swap="outerHTML" hx-target="#content_div" hx-on:click="headerSelected(event);">My Blog</h3>
+        <h3 class='header1' hx-get="/socials" hx-swap="outerHTML" hx-target="#content_div" hx-on:click="headerSelected(event);">My Socials</h3>
+        <h3 class='header1' hx-on:click="headerSelected(event); window.open('{% url 'cv' %}', '_blank');">My CV</h3>
     </div>
     <div id="content_div" class="fade-in"></div>
 </div>
@@ -36,5 +36,17 @@
         $("#header1-div").addClass("skip-animation");
         $(document).prop("onclick", null).off("click");
     });
+
+    function headerSelected(evt) {
+        header_tab = document.getElementsByClassName("header1");
+        for (i = 0; i < header_tab.length; i++) {
+            if (!header_tab[i].className.includes(' deactive')){
+                header_tab[i].className += " deactive";
+            }
+            header_tab[i].className = header_tab[i].className.replace(" active", "");
+
+        }
+        evt.currentTarget.className = evt.currentTarget.className.replace(" deactive", " active");
+    }
 </script>
 {% endblock content %}
