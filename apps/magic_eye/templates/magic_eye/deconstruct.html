@@ -1,23 +1,25 @@
 {% load static %}
 <div id="project-content-div">
     <h3>Magic Eye Decoder</h3>
-    <form id="decodeForm" action="{% url 'magic_eye_decode' %}">
+    <form id="decodeForm" action="{% url 'magic-eye-deconstruct' %}">
         {% csrf_token %}
         <div id="decodableDropzone" class="drop-zone">
         <span class="drop-zone__prompt">Drop Magic eye image here or click to upload</span>
         <input type="file" id="decodableFile" name="decodableFile" class="drop-zone__input" accept="image/*">
         </div>
-        <input id="decodeSubmitBtn" class='magic-eye-submit-button' type="submit" value="Decode Magic Eye">
+        <input id="decodeSubmitBtn" class='app-button' type="submit" value="Decode Magic Eye">
     </form>
-    <div id="decoded_image"></div>
+
     <p>Drag a magic eye image to test it out! Note decoder is not always successful, it really depends on how the magic eye is generated.</p>
     <p>sample magic eye (open in a new tab to view in full)</p>
     <div style="display: flex; gap: 10%;">
         <img class='sample-img' src="{% static 'magic_eye/images/squirrel_magic_eye.png' %}">
     </div>
 
-    <script type="application/javascript" src="{% static 'magic_eye/js/dragzone.js' %}"></script>
+    <div id="decoded_image"></div>
+
     <script>
+        init_dropzones();
         $('#decodeForm').on( "submit", function( event ) {
             event.preventDefault();
 

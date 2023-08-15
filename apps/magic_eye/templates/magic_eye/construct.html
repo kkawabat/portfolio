@@ -1,34 +1,39 @@
 {% load static %}
 <div id="project-content-div">
     <h3>Magic Eye Generator</h3>
-    <form id="genForm" action="{% url 'magic_eye_generate' %}">
+    <p>Drag <span style="color: orange;">texture</span> and <span style="color: orange;">depth maps</span> below to the corresponding areas above to test it out!</p>
+    <form id="genForm" action="{% url 'magic-eye-construct' %}">
         {% csrf_token %}
-        <div id="textureDropzone" class="drop-zone">
-        <span class="drop-zone__prompt">Drop texture image here or click to upload</span>
-        <input type="file" id="textureFile" name="textureFile" class="drop-zone__input" accept="image/*">
+        <div id="gen-img-div">
+            <div id="textureDropzone" class="drop-zone">
+                <span class="drop-zone__prompt">Drop texture image here or click to upload</span>
+                <input type="file" id="textureFile" name="textureFile" class="drop-zone__input" accept="image/*">
+            </div>
+            <div id='depthmapDropzone' class="drop-zone">
+                <span class="drop-zone__prompt">Drop depth map image here or click to upload</span>
+                <input type="file" id="depthMapFile" name="depthMapFile" class="drop-zone__input" accept="image/*">
+            </div>
         </div>
-        <p><b>+</b></p>
-        <div id='depthmapDropzone' class="drop-zone">
-        <span class="drop-zone__prompt">Drop depth map image here or click to upload</span>
-        <input type="file" id="depthMapFile" name="depthMapFile" class="drop-zone__input" accept="image/*">
-        </div>
-        <input class='magic-eye-submit-button' type="submit" value="Generate Magic Eye">
+        <input class='app-button' type="submit" value="Generate Magic Eye">
     </form>
-    <div id="generated_image"></div>
-    <p>Drag Texture and Depth maps below to the corresponding areas above to test it out!</p>
-    <p>sample texture files (should be small square image that can be used to tile the magic eye image)</p>
-    <div style="display: flex; gap: 10%;">
-        <img class='sample-img' src="{% static 'magic_eye/images/flower.png' %}">
-        <img class='sample-img' src="{% static 'magic_eye/images/swirl_texture.png' %}">
-    </div>
-    <p>sample depth map files (a black and white image that determines what the magic eye should hide)</p>
-    <div style="display: flex; gap: 10%;">
-        <img class='sample-img' src="{% static 'magic_eye/images/squirrel.png' %}">
-        <img class='sample-img' src="{% static 'magic_eye/images/bunny.png' %}">
+
+    <div style="display: flex; margin: 1em; gap: 5%;">
+        <div class='inner-helper-div'>
+            <p>sample <span style="color: orange;">texture</span> files (small square image that can be used to tile the magic eye image)</p>
+            <img class='sample-img' src="{% static 'magic_eye/images/flower.png' %}">
+            <img class='sample-img' src="{% static 'magic_eye/images/swirl_texture.png' %}">
+        </div>
+        <div class='inner-helper-div'>
+            <p>sample <span style="color: orange;">depth maps</span> files (a black and white image the conveys depth)</p>
+            <img class='sample-img' src="{% static 'magic_eye/images/squirrel.png' %}">
+            <img class='sample-img' src="{% static 'magic_eye/images/bunny.png' %}">
+        </div>
     </div>
 
-    <script type="application/javascript" src="{% static 'magic_eye/js/dragzone.js' %}"></script>
+    <div id="generated_image"></div>
+
     <script>
+        init_dropzones();
         $('#genForm').on( "submit", function( event ) {
             event.preventDefault();
             var $form = $( this ),

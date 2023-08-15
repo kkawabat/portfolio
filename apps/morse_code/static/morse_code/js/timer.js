@@ -1,8 +1,10 @@
-var Interval ;
-var seconds = 00;
-var tens = 00;
-var appendSeconds = document.getElementById('seconds');
-var appendTens = document.getElementById('tens');
+if (typeof audioCtx  === 'undefined'){
+    var Interval ;
+    var seconds = 00;
+    var tens = 00;
+    var appendSeconds = document.getElementById('seconds');
+    var appendTens = document.getElementById('tens');
+}
 
 // https://codepen.io/cathydutton/pen/xxpOOw
 function startTimer() {

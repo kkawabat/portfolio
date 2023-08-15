@@ -1,3 +1,7 @@
+* {
+  box-sizing: border-box;
+}
+
 body {
   background: #333;
   padding-top: 5em;
@@ -14,6 +18,7 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    margin: 1em 6em 3em 6em;
 }
 
 .project-header-div {
@@ -22,6 +27,22 @@ body {
     flex-direction: row;
     justify-content: center;
 }
+
+.app-button {
+    margin: 1em;
+    color: #333;
+    background: orange;
+    text-align: center;
+    font-weight: 700;
+    border-radius: 12px;
+    border: 0;
+    padding: 1em;
+}
+
+.app-button:hover {
+    color: #fff;
+}
+
 
 .header-div {
     display: flex;
