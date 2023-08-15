@@ -1,10 +1,10 @@
 {% extends "_base.html" %}
 {% load static %}
-{% block title %}Kan Kawabata - portfolio{% endblock title %}
+{% block title %}Kan Kawabata{% endblock title %}
 {% block ref %}
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.10/css/all.css" integrity="sha384-+d0P83n9kaQMCwj8F4RJB66tzIwOKmrdb46+porD/OvrJ+37WqIM7UoBtwHO6Nlg" crossorigin="anonymous">
-<script src="https://unpkg.com/htmx.org@1.9.4"></script>
+
 <link rel="stylesheet" type="text/css" href="{% static 'new_main/css/style.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'new_main/css/animations.css' %}">
 
@@ -19,14 +19,15 @@
         <div class="typewriter"> <h1 id='intro2'>Welcome to my website!</h1></div>
     </div>
     <div id="header-div1" class='fade-in header-div'>
-        <h3 id='header-about' hx-get="/about" hx-swap="outerHTML" hx-target="#content_div" hx-on:click="headerSelected(event);">Myself</h3>
-        <h3 id='header-projects' hx-get="/projects" hx-swap="outerHTML" hx-target="#content_div" hx-on:click="headerSelected(event);">My Projects</h3>
-        <h3 id='header-blog' hx-get="/blogs" hx-swap="outerHTML" hx-target="#content_div" hx-on:click="headerSelected(event);">My Blog</h3>
-        <h3 id='header-social' hx-on:click="headerSelected(event); show_socials();">My Socials</h3>
-        <h3 id='header-cv' hx-get="/cv" hx-swap="outerHTML" hx-target="#content_div" hx-on:click="headerSelected(event);">My CV</h3>
+        <h3 id='header-about' hx-get="/about" hx-swap="outerHTML" hx-target="#content_div" hx-on:click="headerSelected(event, '#header-div1');">Myself</h3>
+        <h3 id='header-projects' hx-get="/projects" hx-swap="outerHTML" hx-target="#content_div" hx-on:click="headerSelected(event, '#header-div1');">My Projects</h3>
+        <h3 id='header-blog' hx-get="/blogs" hx-swap="outerHTML" hx-target="#content_div" hx-on:click="headerSelected(event, '#header-div1');">My Blog</h3>
+        <h3 id='header-social' hx-on:click="headerSelected(event, '#header-div1'); show_socials();">My Socials</h3>
+        <h3 id='header-cv' hx-get="/cv" hx-swap="outerHTML" hx-target="#content_div" hx-on:click="headerSelected(event, '#header-div1');">My CV</h3>
     </div>
     <div id="content_div" class="fade-in"></div>
 </div>
+
 <template id='socials'>
     <div class="Social-media fade-in">
         <div class='Social-media-cell'>
@@ -44,8 +45,6 @@
     </div>
 </template>
 
-<button onclick="topFunction()" id="jumpToTopBtn" title="Go to top">Top</button>
-<script src="{% static 'js/jump_to_top_button.js' %}"></script>
 <script>
     $(document).on('click', function(){
         $("#intro1").addClass("skip-animation");
@@ -53,14 +52,6 @@
         $("#header-div1").addClass("skip-animation");
         $(document).prop("onclick", null).off("click");
     });
-
-    function headerSelected(evt) {
-        $('#header-div1').children('h3').each(function() {
-            // ensure all header-div1 headers are in deactivated state
-            $(this).removeClass('active').addClass('deactive');
-        })
-        $("#" +  evt.currentTarget.id).removeClass('deactive').addClass('active');
-    }
 
     function shakeElement(id) {
         $(id).removeClass("shake").addClass("shake");

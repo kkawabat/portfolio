@@ -1,0 +1,21 @@
+{% extends "_base.html" %}
+{% load static %}
+{% block title %}Magic Eye Tool{% endblock title %}
+{% block ref %}
+<link rel="stylesheet" type="text/css" href="{% static 'magic_eye/css/magic_eye_style.css' %}">
+<script type="application/javascript" src="{% static 'magic_eye/js/dragzone.js' %}"></script>
+{% endblock ref %}
+
+{% block content %}
+<div class="project-div">
+    <h1 class="fade-in-right">Magic Eye App 👀</h1>
+    <div id="header-div1" class='fade-in-right header-div project-header-div'>
+        <h3 id='header-details' hx-get="{% url 'magic-eye-about' %}" hx-swap="outerHTML" hx-target="#project-content-div" hx-on:click="headerSelected(event, '#header-div1');">About</h3>
+        <h3 id='header-construct' hx-get="{% url 'magic-eye-construct' %}" hx-swap="outerHTML" hx-target="#project-content-div" hx-on:click="headerSelected(event, '#header-div1');">Create Magic Eye</h3>
+        <h3 id='header-deconstruct' hx-get="{% url 'magic-eye-deconstruct' %}" hx-swap="outerHTML" hx-target="#project-content-div" hx-on:click="headerSelected(event, '#header-div1');">Solve Magic Eye</h3>
+        <h3 id='header-back' hx-on:click="window.location.href='{% url 'new_main' %}';">Go-Back 👉</h3>
+    </div>
+
+    <div id="project-content-div"></div>
+</div>
+{% endblock content %}

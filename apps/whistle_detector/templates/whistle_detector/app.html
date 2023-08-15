@@ -1,0 +1,35 @@
+{% load static %}
+<div id="project-content-div">
+    <div>
+        <h3>Instruction</h3>
+        <p>Click record whistle, whistle, click stop when you are done. The app will then generate the midi file.</p>
+    </div>
+    <form id="whistleForm">
+        {% csrf_token %}
+        <input type='hidden' name='csrf_token' id='csrf_token' value='{{csrf_token}}'>
+        <div id="button-controls">
+            <button id="startBtn" class='whistle-button' type="button" onclick="startAudioRecording()">Record Whistle</button>
+            <i id="recordingIcon" class="fa fa-circle text-danger Blink" style="display: none;"></i>
+            <button id="stopBtn" class='whistle-button' type="button" onclick="stopAudioRecording()" style="display: none;">Stop</button>
+            <button id="cancelBtn" class='whistle-button' type="button" onclick="cancelAudioRecording()" style="display: none;">Cancel</button>
+        </div>
+    </form>
+    <div id="playbackDiv" hidden>
+
+    </div>
+    <div id="midiDiv" hidden>
+        <h3>Raw Whistle Recording</h3>
+        <audio id="audioControl" controls>
+             <source id="audioSrc" src="" type="audio/*" />
+             <midi-player sound-font></midi-player>
+        </audio>
+        <h3>Midified Whistle</h3>
+        <midi-visualizer id="midiViz1" type="piano-roll"></midi-visualizer>
+        <h3>Midified Whistle</h3>
+        <midi-visualizer id="midiViz2" type="staff"></midi-visualizer>
+        <midi-player id="midiPlayer" sound-font visualizer="#midiDiv midi-visualizer"></midi-player>
+    </div>
+</div>
+
+<script src="{% static 'whistle_detector/js/whistle_detector.js' %}"></script>
+<script src="{% static 'whistle_detector/js/recorder.js' %}"></script>

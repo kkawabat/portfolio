@@ -39,7 +39,7 @@ class FaceDistanceTrack(VideoTransformTrack):
 
             if self.detector_type == 'face':
                 img = add_facial_distance_img(img)
-            else:
+            elif self.detector_type == 'qr_code':
                 img = add_qr_code_distance_img(img)
 
             new_frame = av.video.VideoFrame.from_ndarray(img, format="bgr24")

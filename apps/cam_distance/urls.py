@@ -1,8 +1,10 @@
 from django.urls import path
 
-from .views import cam_distance_app_view
+from .views import index_view, about_view, app_view
 
 
 urlpatterns = [
-    path('', cam_distance_app_view, name='cam-distance'),
+    path('', index_view, name='webcam-ruler'),
+    path('about', about_view, name='about'),
+    path('app', app_view, name='app'),
 ]

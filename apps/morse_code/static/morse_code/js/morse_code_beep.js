@@ -10,6 +10,7 @@ const gainNode = audioCtx.createGain();
 gainNode.gain.value = .1;
 oscillator.connect(gainNode).connect(audioCtx.destination);
 oscillator.start();
+audioCtx.suspend();
 
 function startTone() {
     if (audioCtx.state == 'suspended'){ audioCtx.resume(); }

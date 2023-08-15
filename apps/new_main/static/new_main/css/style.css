@@ -1,12 +1,3 @@
-body {
-  background: #333;
-  padding-top: 5em;
-  display: flex;
-  justify-content: center;
-  font-family: monospace;
-  margin: 1em;
-}
-
 #main {
   width: 90%;
 }
@@ -20,7 +11,6 @@ body {
 
 .typewriter h1 {
     width: fit-content;
-    color: #fff;
     overflow: hidden;
     border-right: .15em solid orange;
     white-space: nowrap;
@@ -28,38 +18,8 @@ body {
     letter-spacing: .15em;
 }
 
-.header-div {
-    display: flex;
-    gap: 5%;
-    color: #fff;
-    margin: 0;
-    margin-top: 1em;
-}
-
-.header-div h3:hover{
-    color: orange;
-    cursor: pointer;
-}
-
-@media screen and (max-width: 791px) {
-  #header-div1 { flex-direction: column; }
-}
-
 #header-div2 { flex-direction: column; }
 
-#content_div {
-    display: flex;
-    flex-direction: column;
-    gap: 5%;
-    color: #fff;
-    margin: 0;
-
-}
-
-a { color: orange; }
-
-.active { color: orange; }
-.deactive { color: #666; }
 
 
 .fab {
@@ -90,6 +50,5 @@ a { color: orange; }
 }
 
 @media screen and (max-width: 791px) {
-    #header-div1 { flex-direction: column; }
     .Social-media { flex-direction: column; }
 }

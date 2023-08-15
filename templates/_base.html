@@ -7,15 +7,21 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>{% block title %}Kan Kawabata{% endblock title %}</title>
     <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
     <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/common_animations.css' %}">
     <link rel="shortcut icon" href="{% static 'images/favicon.png' %}">
     <link rel="icon" href="{% static 'images/favicon.png' %}">
+    <script src="https://unpkg.com/htmx.org@1.9.4"></script>
 
+    <script src="{% static 'js/header_highlights.js' %}"></script>
     {% block ref %}{% endblock ref %}
 </head>
 <body {% block body_attr %}{% endblock body_attr %}>
     {% block content %}{% endblock content %}
+    <button onclick="topFunction()" id="jumpToTopBtn" title="Go to top">Top</button>
+    <script src="{% static 'js/jump_to_top_button.js' %}"></script>
 </body>
 </html>

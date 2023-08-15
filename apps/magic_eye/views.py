@@ -11,8 +11,11 @@ from apps.main.models import Post
 
 
 def magic_eye_view(request):
-    magic_eye_proj = Post.objects.get(slug="magic-eye-generator")
-    return render(request, 'magic_eye/magic_eye.html', context={"post": magic_eye_proj})
+    return render(request, 'magic_eye/index.html')
+
+
+def magic_eye_decode_page_view(request):
+    return render(request, 'magic_eye/deconstruct.html')
 
 
 def magic_eye_decode_view(request):
@@ -26,6 +29,10 @@ def magic_eye_decode_view(request):
         return JsonResponse({'image_url': img_uri})
     except Exception as e:
         return JsonResponse({'error': f"Image failed to decode: {e}"})
+
+
+def magic_eye_generate_page_view(request):
+    return render(request, 'magic_eye/construct.html')
 
 
 def magic_eye_generate_view(request):
@@ -51,3 +58,7 @@ def pillow_image_to_base64_string(img):
     buffered = io.BytesIO()
     img.save(buffered, format="PNG")
     return base64.b64encode(buffered.getvalue()).decode("utf-8")
+
+
+def magic_eye_about_view(request):
+    return render(request, 'magic_eye/about.html')

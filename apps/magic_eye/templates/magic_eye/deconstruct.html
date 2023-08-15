@@ -1,0 +1,52 @@
+{% load static %}
+    <div id="project-content-div">
+        <h3>Magic Eye Decoder</h3>
+        <form id="decodeForm" action="{% url 'magic_eye_decode' %}">
+            {% csrf_token %}
+            <div id="decodableDropzone" class="drop-zone">
+            <span class="drop-zone__prompt">Drop Magic eye image here or click to upload</span>
+            <input type="file" id="decodableFile" name="decodableFile" class="drop-zone__input" accept="image/*">
+            </div>
+            <input id="decodeSubmitBtn" class='magic-eye-submit-button' type="submit" value="Decode Magic Eye">
+        </form>
+        <div id="decoded_image"></div>
+    </div>
+<script>
+    $('#decodeForm').on( "submit", function( event ) {
+        event.preventDefault();
+
+        $("#decodeSubmitBtn").prop("value", "Decoding in progress (this might take a moment)...");
+
+        var $form = $( this ),
+        url = $form.attr( "action" );
+        input_image = $form.find( "input[name='decodableFile']" )[0].files[0]
+
+        var formData = new FormData();
+        formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+        formData.append('input_image', input_image);
+
+        $.ajax({
+            url: url,
+            type: 'POST',
+            dataType: "json",
+            data: formData,
+            enctype: 'multipart/form-data',
+            cache: false,
+            processData: false,
+            contentType: false,
+            success: function(response){
+                $("#decodeSubmitBtn").prop("value", "Decode Magic Eye");
+                if('error' in response){
+                    alert(response['error'])
+                }
+                else{
+                    $('#decoded_image').empty().append('<img style="max-width: 100%;" src="'+response['image_url']+'" />');
+                }
+
+            },
+            error: function (request, status, error) {
+                console.log('failed')
+            }
+        });
+    });
+</script>

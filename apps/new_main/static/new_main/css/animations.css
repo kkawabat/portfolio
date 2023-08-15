@@ -62,21 +62,8 @@
   100% { transform: rotate( 0.0deg) }
 }
 
-.fade-in {
-    animation: .5s normal both 1 fadein-keys;
-}
-
 #header-div1 {
     animation-delay: 3s;
-}
-
-@keyframes fadein-keys{
-    0% { opacity:0;
-    transform: translate3d(0, -20%, 0);
-    }
-    100% { opacity:1;
-    transform: translate3d(0, 0, 0);
-    }
 }
 
 .skip-animation{

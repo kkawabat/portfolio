@@ -1,14 +1,16 @@
-<div id="face_detection_div" class="tabcontent">
-    <p>Note: this app isn't meant to be accurate it's a rough estimation and intended for logiTec webcam. Results might differ for other camera types due to focal length.</p>
+{% load static %}
+<div id="project-content-div" class="fade-in">
     <div>
-        <p>Choose what to detect</p>
+        <p>Choose what to detect:</p>
         <input type="radio" id="face" name="measure_type" value="face" checked>
         <label for="face">Face</label><br>
         <input type="radio" id="qr_code" name="measure_type" value="qr_code">
         <label for="qr_code">QR Code</label><br>
+        <input type="radio" id="raw_feed" name="measure_type" value="raw_feed">
+        <label for="raw_feed">raw feed</label><br>
     </div>
     <br>
-    <button id="startBtn" class="button-control" onclick="startRecording()">Start Recording</button>
+    <button id="startBtn" class="button-control" onclick="startRecording()">Start Detecting</button>
     <div>
         <i id="recordingIcon" class="fa fa-circle text-danger Blink" style="display: none;"></i>
         <button id="stopBtn" class="button-control" style="display: none;" onclick="stopRecording()">Stop Recording</button>
@@ -24,4 +26,8 @@
             <video id="outputFeedVid" muted></video>
         </div>
     </div>
+    <p>Note: this app isn't meant to be accurate it's a rough estimation and are dependent on camera focal lengths.</p>
 </div>
+
+<script src="{% static 'cam_distance/js/webrtc_client.js' %}"></script>
+<script src="{% static 'cam_distance/js/app_cam_distance.js' %}"></script>

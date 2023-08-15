@@ -49,8 +49,8 @@ def cv_pdf(_):
 
 def project_post_view(_, slug_id):
     response = HttpResponse()
-    if slug_id.startswith('opencv-cam-distance-app'):
-        response['HX-redirect'] = reverse('cam-distance')
+    if slug_id.startswith('webcam-ruler'):
+        response['HX-redirect'] = reverse('webcam-ruler')
         return response
     elif slug_id.startswith('magic-eye'):
         response['HX-redirect'] = reverse('magic-eye')
