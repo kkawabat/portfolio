@@ -19,22 +19,33 @@
         <div class="typewriter"> <h1 id='intro2'>Welcome to my website!</h1></div>
     </div>
     <div id="header-div1" class='fade-in header-div'>
-        <h3 class='header1' hx-get="/about" hx-swap="outerHTML" hx-target="#content_div" hx-on:click="headerSelected(event);">Myself</h3>
-        <h3 class='header1' hx-get="/projects" hx-swap="outerHTML" hx-target="#content_div" hx-on:click="headerSelected(event);">My Projects</h3>
-        <h3 class='header1' hx-get="/blogs" hx-swap="outerHTML" hx-target="#content_div" hx-on:click="headerSelected(event);">My Blog</h3>
-        <h3 class='header1' hx-on:click="headerSelected(event); show_socials();">My Socials</h3>
-        <h3 class='header1' hx-get="/cv" hx-swap="outerHTML" hx-target="#content_div" hx-on:click="headerSelected(event);">My CV</h3>
+        <h3 id='header-about' hx-get="/about" hx-swap="outerHTML" hx-target="#content_div" hx-on:click="headerSelected(event);">Myself</h3>
+        <h3 id='header-projects' hx-get="/projects" hx-swap="outerHTML" hx-target="#content_div" hx-on:click="headerSelected(event);">My Projects</h3>
+        <h3 id='header-blog' hx-get="/blogs" hx-swap="outerHTML" hx-target="#content_div" hx-on:click="headerSelected(event);">My Blog</h3>
+        <h3 id='header-social' hx-on:click="headerSelected(event); show_socials();">My Socials</h3>
+        <h3 id='header-cv' hx-get="/cv" hx-swap="outerHTML" hx-target="#content_div" hx-on:click="headerSelected(event);">My CV</h3>
     </div>
     <div id="content_div" class="fade-in"></div>
 </div>
-<div id='socials' style="display:none">
+<template id='socials'>
     <div class="Social-media fade-in">
-        <a href="https://stackoverflow.com/users/4231985/kkawabat" target="_blank"><i class="fab fa-stack-overflow"></i></a>
-        <a href="https://github.com/kkawabat" target="_blank"><i class="fab fa-github"></i></a>
-        <a href="https://www.linkedin.com/in/kan-kawabata-8b4106a2/" target="_blank"><i class="fab fa-linkedin"></i></a>
+        <div class='Social-media-cell'>
+            <a href="https://stackoverflow.com/users/4231985/kkawabat" target="_blank"><i class="fab fa-stack-overflow"></i></a>
+            <h3 style='margin: 0;'>stackOverflow</h3>
+        </div>
+        <div class='Social-media-cell'>
+            <a href="https://github.com/kkawabat" target="_blank"><i class="fab fa-github"></i></a>
+            <h3 style='margin: 0;'>Github</h3>
+        </div>
+        <div class='Social-media-cell'>
+            <a href="https://www.linkedin.com/in/kan-kawabata-8b4106a2/" target="_blank"><i class="fab fa-linkedin"></i></a>
+            <h3 style='margin: 0;'>LinkedIn</h3>
+        </div>
     </div>
-</div>
+</template>
 
+<button onclick="topFunction()" id="jumpToTopBtn" title="Go to top">Top</button>
+<script src="{% static 'js/jump_to_top_button.js' %}"></script>
 <script>
     $(document).on('click', function(){
         $("#intro1").addClass("skip-animation");
@@ -44,19 +55,20 @@
     });
 
     function headerSelected(evt) {
-        header_tab = document.getElementsByClassName("header1");
-        for (i = 0; i < header_tab.length; i++) {
-            if (!header_tab[i].className.includes(' deactive')){
-                header_tab[i].className += " deactive";
-            }
-            header_tab[i].className = header_tab[i].className.replace(" active", "");
-
-        }
-        evt.currentTarget.className = evt.currentTarget.className.replace(" deactive", " active");
+        $('#header-div1').children('h3').each(function() {
+            // ensure all header-div1 headers are in deactivated state
+            $(this).removeClass('active').addClass('deactive');
+        })
+        $("#" +  evt.currentTarget.id).removeClass('deactive').addClass('active');
     }
 
-  function show_socials() {
-    document.getElementById('content_div').innerHTML = document.getElementById('socials').innerHTML;
-  }
+    function shakeElement(id) {
+        $(id).removeClass("shake").addClass("shake");
+        $(id).on("animationend", function(){
+             $(this).removeClass('shake');
+        })
+    }
+
+    function show_socials() { document.getElementById('content_div').replaceChildren(document.getElementById('socials').content.cloneNode(true)); }
 </script>
 {% endblock content %}

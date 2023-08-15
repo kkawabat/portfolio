@@ -1,4 +1,3 @@
-/* GLOBAL STYLES */
 body {
   background: #333;
   padding-top: 5em;
@@ -70,4 +69,27 @@ a { color: orange; }
     width: 50px;
     text-align: center;
     text-decoration: none;
+}
+
+.Social-media{
+  display: flex;
+  justify-content: flex-start;
+  gap: 10%
+}
+
+.Social-media-cell {
+    display: flex;
+    align-items: center;
+    gap: 5%
+    padding: 0;
+}
+
+.Social-media-cell:hover {
+    color: orange;
+    cursor: pointer;
+}
+
+@media screen and (max-width: 791px) {
+    #header-div1 { flex-direction: column; }
+    .Social-media { flex-direction: column; }
 }

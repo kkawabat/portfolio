@@ -1,6 +1,7 @@
 from django.contrib.staticfiles.storage import staticfiles_storage
-from django.http import HttpResponse
-from django.shortcuts import render
+from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import render, redirect
+from django.urls import reverse
 
 from apps.main.models import Post
 
@@ -29,6 +30,11 @@ def blogs_view(request):
     return render(request, 'new_main/blogs.html', context={'blogs': blog_list})
 
 
+def blog_post_view(request, slug_id):
+    blog = Post.objects.get(slug=slug_id)
+    return render(request, 'new_main/blog_post.html', context={'blog': blog})
+
+
 def cv_view(request):
     return render(request, 'new_main/cv.html')
 
@@ -38,4 +44,20 @@ def cv_pdf(_):
     with open(cv_path, 'rb') as pdf:
         response = HttpResponse(pdf.read(), content_type='application/pdf')
         response['Content-Disposition'] = 'filename=KanKawabata_CV.pdf'
+        return response
+
+
+def project_post_view(_, slug_id):
+    response = HttpResponse()
+    if slug_id.startswith('opencv-cam-distance-app'):
+        response['HX-redirect'] = reverse('cam-distance')
+        return response
+    elif slug_id.startswith('magic-eye'):
+        response['HX-redirect'] = reverse('magic-eye')
+        return response
+    elif slug_id.startswith('morse-code'):
+        response['HX-redirect'] = reverse('morse-code')
+        return response
+    elif slug_id.startswith('whistle-detector'):
+        response['HX-redirect'] = reverse('whistle-detector')
         return response

@@ -1,4 +1,4 @@
-### introduction  
+### Introduction  
 
 If you are reading this, chances are you are reading it from my personal website. In which case I pat my future self on the back for getting this thing up and running.
 
