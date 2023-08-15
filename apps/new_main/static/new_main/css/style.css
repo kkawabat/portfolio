@@ -40,14 +40,17 @@
 .Social-media-cell {
     display: flex;
     align-items: center;
-    gap: 5%
+    gap: 2%;
     padding: 0;
+    text-decoration: none;
+    color: inherit;
 }
 
 .Social-media-cell:hover {
     color: orange;
     cursor: pointer;
 }
+
 
 @media screen and (max-width: 791px) {
     .Social-media { flex-direction: column; }

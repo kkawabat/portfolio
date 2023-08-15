@@ -18,16 +18,13 @@
 
     <div id='vidsContainer' style="display: none;">
         <div>
-            <h2>Raw Image</h2>
-            <video id="inputFeedVid" muted></video>
-        </div>
-        <div>
-            <h2>Processed with Distance</h2>
+            <h2>Feed</h2>
             <video id="outputFeedVid" muted></video>
         </div>
     </div>
     <p>Note: this app isn't meant to be accurate it's a rough estimation and are dependent on camera focal lengths.</p>
+    <script src="{% static 'cam_distance/js/webrtc_client.js' %}"></script>
+    <script src="{% static 'cam_distance/js/app_cam_distance.js' %}"></script>
 </div>
 
-<script src="{% static 'cam_distance/js/webrtc_client.js' %}"></script>
-<script src="{% static 'cam_distance/js/app_cam_distance.js' %}"></script>
+

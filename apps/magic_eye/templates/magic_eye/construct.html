@@ -1,21 +1,20 @@
 {% load static %}
 <div id="project-content-div">
     <h3>Magic Eye Generator</h3>
-        <form id="genForm" action="{% url 'magic_eye_generate' %}">
-            {% csrf_token %}
-            <div id="textureDropzone" class="drop-zone">
-            <span class="drop-zone__prompt">Drop texture image here or click to upload</span>
-            <input type="file" id="textureFile" name="textureFile" class="drop-zone__input" accept="image/*">
-            </div>
-            <p><b>+</b></p>
-            <div id='depthmapDropzone' class="drop-zone">
-            <span class="drop-zone__prompt">Drop depth map image here or click to upload</span>
-            <input type="file" id="depthMapFile" name="depthMapFile" class="drop-zone__input" accept="image/*">
-            </div>
-            <input class='magic-eye-submit-button' type="submit" value="Generate Magic Eye">
-        </form>
-        <div id="generated_image"></div>
-    </div>
+    <form id="genForm" action="{% url 'magic_eye_generate' %}">
+        {% csrf_token %}
+        <div id="textureDropzone" class="drop-zone">
+        <span class="drop-zone__prompt">Drop texture image here or click to upload</span>
+        <input type="file" id="textureFile" name="textureFile" class="drop-zone__input" accept="image/*">
+        </div>
+        <p><b>+</b></p>
+        <div id='depthmapDropzone' class="drop-zone">
+        <span class="drop-zone__prompt">Drop depth map image here or click to upload</span>
+        <input type="file" id="depthMapFile" name="depthMapFile" class="drop-zone__input" accept="image/*">
+        </div>
+        <input class='magic-eye-submit-button' type="submit" value="Generate Magic Eye">
+    </form>
+    <div id="generated_image"></div>
     <p>Drag Texture and Depth maps below to the corresponding areas above to test it out!</p>
     <p>sample texture files (should be small square image that can be used to tile the magic eye image)</p>
     <div style="display: flex; gap: 10%;">
@@ -27,41 +26,42 @@
         <img class='sample-img' src="{% static 'magic_eye/images/squirrel.png' %}">
         <img class='sample-img' src="{% static 'magic_eye/images/bunny.png' %}">
     </div>
-</div>
 
-<script>
-    $('#genForm').on( "submit", function( event ) {
-        event.preventDefault();
-        var $form = $( this ),
-        url = $form.attr( "action" );
-        texture_image = $form.find( "input[name='textureFile']" )[0].files[0]
-        depth_image = $form.find( "input[name='depthMapFile']" )[0].files[0]
+    <script type="application/javascript" src="{% static 'magic_eye/js/dragzone.js' %}"></script>
+    <script>
+        $('#genForm').on( "submit", function( event ) {
+            event.preventDefault();
+            var $form = $( this ),
+            url = $form.attr( "action" );
+            texture_image = $form.find( "input[name='textureFile']" )[0].files[0]
+            depth_image = $form.find( "input[name='depthMapFile']" )[0].files[0]
 
-        var formData = new FormData();
-        formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
-        formData.append('texture', texture_image);
-        formData.append('depth_map', depth_image);
+            var formData = new FormData();
+            formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+            formData.append('texture', texture_image);
+            formData.append('depth_map', depth_image);
 
-        $.ajax({
-            url: url,
-            type: 'POST',
-            dataType: "json",
-            data: formData,
-            enctype: 'multipart/form-data',
-            cache: false,
-            processData: false,
-            contentType: false,
-            success: function(response){
-                if('error' in response){
-                    alert(response['error'])
+            $.ajax({
+                url: url,
+                type: 'POST',
+                dataType: "json",
+                data: formData,
+                enctype: 'multipart/form-data',
+                cache: false,
+                processData: false,
+                contentType: false,
+                success: function(response){
+                    if('error' in response){
+                        alert(response['error'])
+                    }
+                    else{
+                        $('#generated_image').empty().append('<img style="max-width: 100%;" src="'+response['image_url']+'" />')
+                    }
+                },
+                error: function (request, status, error) {
+                    console.log('failed')
                 }
-                else{
-                    $('#generated_image').empty().append('<img style="max-width: 100%;" src="'+response['image_url']+'" />')
-                }
-            },
-            error: function (request, status, error) {
-                console.log('failed')
-            }
+            });
         });
-    });
-</script>
+    </script>
+</div>

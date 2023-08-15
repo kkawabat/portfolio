@@ -1,4 +1,4 @@
-var input_feed_vid = document.getElementById("inputFeedVid");
+var input_track = null;
 var output_feed_vid = document.getElementById("outputFeedVid");
 var video_codec = 'VP8';
 var webrtc_obj = null;
@@ -30,8 +30,7 @@ function startRecording(){
     navigator.mediaDevices
         .getUserMedia(media_constraints)
         .then((input_media_stream) => {
-            input_feed_vid.srcObject = input_media_stream;
-            input_feed_vid.addEventListener("loadedmetadata", () => { input_feed_vid.play();});
+            input_track = input_media_stream;
             output_feed_vid.addEventListener("loadedmetadata", () => { output_feed_vid.play();});
             webrtc_obj = init_webrtc(input_media_stream, signalingSocket, output_feed_vid)
             detector_change_request = JSON.stringify({ detector_type: $('input[name="measure_type"]:checked').val() })
@@ -50,8 +49,7 @@ function stopRecording(){
     $("#recordingIcon").hide()
     $('#vidsContainer').css('display', 'none')
 
-    input_feed_vid.srcObject.getTracks().forEach((track) => { track.stop(); });
-    input_feed_vid.srcObject = null;
+    input_track.getTracks().forEach((track) => { track.stop(); });
     output_feed_vid.srcObject.getTracks().forEach((track) => { track.stop(); });
     output_feed_vid.srcObject = null;
     signalingSocket.close()
