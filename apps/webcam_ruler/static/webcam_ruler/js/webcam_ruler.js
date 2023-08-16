@@ -15,6 +15,7 @@ function change_detector_type(evt) {
         detector_change_request = JSON.stringify({ detector_type: detector_type });
         signalingSocket.send(detector_change_request);
     }
+    $('#button-control').show()
 }
 
 

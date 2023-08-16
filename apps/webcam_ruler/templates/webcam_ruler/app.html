@@ -1,24 +1,29 @@
 {% load static %}
 <div id="project-content-div" class="fade-in">
-    <div style="display: flex; flex-direction: column; align-items: center;">
+    <div class="center-flex">
         <h3>Choose what to detect</h3>
 
-        <div id="header-div2" class='header-div project-header-div'>
+        <div id="header-div2" style="margin: 1em;" class='header-div project-header-div'>
             <h5 id="face" hx-on:click="change_detector_type(event);">Face </h5>
             <h5 id="qr_code" hx-on:click="change_detector_type(event);">QR Code </h5>
             <h5 id="raw_feed" hx-on:click="change_detector_type(event);">Raw Feed </h5>
         </div>
-    </div>
-    <button id="startBtn" class="app-button" onclick="startRecording()">Start Detecting</button>
-    <button id="stopBtn" class="app-button" style="display: none;" onclick="stopRecording()">
-        <i id="recordingIcon" class="fa fa-circle text-danger Blink" style="display: none;"></i> Stop Recording
-    </button>
 
-    <div id='vidsContainer' style="display: none;">
-        <h2>Feed</h2>
-        <video id="outputFeedVid" muted></video>
+        <div id='button-control' class='center-flex' style="display: none;">
+            <button id="startBtn" class="app-button" onclick="startRecording()">Start Detecting</button>
+            <button id="stopBtn" class="app-button" style="display: none;" onclick="stopRecording()">
+                <i id="recordingIcon" class="fa fa-circle text-danger Blink" style="display: none;"></i> Stop Recording
+            </button>
+
+            <div id='vidsContainer' style="display: none;">
+                <h2>Feed</h2>
+                <video id="outputFeedVid" muted></video>
+            </div>
+
+            <p>Note: this app isn't meant to be accurate it's a rough estimation and are dependent on camera focal lengths.</p>
+        </div>
     </div>
-    <p>Note: this app isn't meant to be accurate it's a rough estimation and are dependent on camera focal lengths.</p>
+
     <script src="{% static 'webcam_ruler/js/webrtc_client.js' %}"></script>
     <script src="{% static 'webcam_ruler/js/webcam_ruler.js' %}"></script>
 </div>
