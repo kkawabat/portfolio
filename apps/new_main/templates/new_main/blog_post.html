@@ -1,6 +1,6 @@
-<div id="content_div" style="margin-top: 1em; marin-bottom: 4em;">
+<div id="content_div">
     <h3>{{ blog.title }}</h3>
-    <div class="fade-in">
+    <div class="fade-in" style="max-width: 700px;">
         <p class=" text-muted">{{ blog.author }} | {{ blog.created_on }}</p>
         <p class="card-text ">{{ blog.content |safe }}</p>
     </div>
