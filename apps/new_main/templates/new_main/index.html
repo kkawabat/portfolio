@@ -14,9 +14,12 @@
 
 {% block content %}
 <div id="main">
-    <div class="intro-div">
-        <div class="typewriter"> <h1 id='intro1'>Hello <span id='hand'>👋</span>, I'm Kan!</h1></div>
-        <div class="typewriter"> <h1 id='intro2'>Welcome to my website!</h1></div>
+    <div id='intro1' class="intro-div">
+        <div class="typewriter"> <h1 id='intro1a'>Hello <span class='wave'>👋</span>, I'm Kan!</h1></div>
+        <div class="typewriter"> <h1 id='intro1b'>Welcome to my website!</h1></div>
+    </div>
+    <div id='intro2' class="intro-div">
+        <div class="typewriter"> <h1 id='intro2a'>Welcome back! <span class='wave'>👋</span></h1></div>
     </div>
     <div id="header-div1" class='fade-in header-div'>
         <h3 id='header-about' hx-get="/about" hx-swap="outerHTML" hx-target="#content_div" hx-on:click="headerSelected(event, '#header-div1');">Myself</h3>
@@ -37,9 +40,30 @@
 </template>
 
 <script>
+    $(window).on('load', function(){
+        $('#intro1').hide()
+        $('#intro2').hide()
+        var parts = document.referrer.split('://');
+        if (document.referrer.split('://').length == 1){
+            $('#intro1').show()
+        }else {
+            var protocol = parts[0];
+            var host = parts[1].split('/')[0];
+            var pathName = parts.slice(1).join('/');
+            if (host === window.location.host) {
+                $('#intro2').show()
+                $("#header-div1").addClass("fade-in2");
+            } else {
+                $('#intro1').show()
+            }
+        }
+    });
+
+
     $(document).on('click', function(){
-        $("#intro1").addClass("skip-animation");
-        $("#intro2").addClass("skip-animation");
+        $("#intro1a").addClass("skip-animation");
+        $("#intro1b").addClass("skip-animation");
+        $("#intro2a").addClass("skip-animation");
         $("#header-div1").addClass("skip-animation");
         $(document).prop("onclick", null).off("click");
     });

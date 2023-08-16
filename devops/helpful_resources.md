@@ -65,7 +65,7 @@ Here is a list of resources I found useful while working on this project. They h
 - https://codepen.io/jakejarvis/pen/pBZWZw  # hand wave-effect
 - https://developer.mozilla.org/en-US/docs/Web/CSS/animation  # animation documentation
 - https://stackoverflow.com/a/19989633/4231985  # cancel animation 
-
+- https://www.queness.com/post/356/create-a-vertical-horizontal-and-diagonal-sliding-content-website-with-jquery  # tutorial on page transitions
 ### htmx related
 - https://www.mattlayman.com/blog/2021/how-to-htmx-django/
 

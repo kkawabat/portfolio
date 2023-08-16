@@ -1,13 +1,7 @@
-#intro1{
+#intro1a{
     animation:
         typing1 1.5s steps(20, end),
         blink-caret .4s step-end 2 both;
-}
-
-#intro2{
-    animation:
-        typing2 1s steps(20, end) 2s both,
-        blink-caret .4s step-end 1s 3 both;
 }
 
 @keyframes typing1 {
@@ -16,6 +10,24 @@
   55% { width: 50% }
   70% { width: 100% }
   to { width: 100% }
+}
+
+#intro1b{
+    animation:
+        typing2 1s steps(20, end) 2s both,
+        blink-caret .4s step-end 1s 3 both;
+}
+
+@keyframes typing2 {
+  from { width: 0 }
+  65% { width: 100% }
+  to { width: 100% }
+}
+
+#intro2a{
+    animation:
+        typing2 .2s steps(20, end) 0s both,
+        blink-caret .4s step-end 0s 3 both;
 }
 
 @keyframes typing2 {
@@ -29,7 +41,7 @@
   50% { border-color: orange }
 }
 
-#hand {
+.wave {
     animation: wave-animation 1s 1 1.5s;
     transform-origin: 70% 70%;
     display: inline-block;
@@ -66,7 +78,11 @@
     animation-delay: 3s;
 }
 
-.skip-animation{
+.fade-in2 {
+    animation-delay: 0s !important;
+}
+
+.skip-animation {
   animation-duration: 1ms !important;
   animation-delay: 0s !important;
   animation-fill-mode: forwards !important;
