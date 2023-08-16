@@ -25,7 +25,9 @@
 }
 
 .Blink {
-  animation: blinker 1.5s cubic-bezier(.5, 0, 1, 1) infinite alternate;
+    padding-top: 0.35em;
+    padding-right: 0.5em;
+    animation: blinker 1.5s cubic-bezier(.5, 0, 1, 1) infinite alternate;
 }
 
 @keyframes blinker {

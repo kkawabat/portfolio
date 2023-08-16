@@ -38,6 +38,7 @@ body {
     border-radius: 12px;
     border: 0;
     padding: 1em;
+    justify-content: center;
 }
 
 .app-button:hover {

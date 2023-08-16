@@ -1,10 +1,6 @@
-if (typeof audioCtx  === 'undefined'){
-    var Interval ;
-    var seconds = 00;
-    var tens = 00;
-    var appendSeconds = document.getElementById('seconds');
-    var appendTens = document.getElementById('tens');
-}
+var Interval ;
+var seconds = 00;
+var tens = 00;
 
 // https://codepen.io/cathydutton/pen/xxpOOw
 function startTimer() {
@@ -20,8 +16,8 @@ function resetTimer(){
     clearInterval(Interval);
     tens = "00";
   	seconds = "00";
-    appendTens.innerHTML = tens;
-  	appendSeconds.innerHTML = seconds;
+    $('#appendSeconds').html(seconds);
+    $('#appendTens').html(tens);
 }
 
 function incrementTimer () {
@@ -33,9 +29,9 @@ function incrementTimer () {
     if (tens > 99) {
         console.log("seconds");
         seconds++;
-        appendSeconds.innerHTML = "0" + seconds;
+        $('#appendSeconds').html("0" + seconds);
         tens = 0;
-        appendTens.innerHTML = "0" + 0;
+        $('#appendTens').html("0" + 0);
     }
 
     if (seconds > 9){ appendSeconds.innerHTML = seconds; }

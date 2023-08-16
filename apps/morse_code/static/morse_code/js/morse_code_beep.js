@@ -1,30 +1,29 @@
 //WARNING: VERY LOUD.  TURN DOWN YOUR SPEAKERS BEFORE TESTING
 // code modified from https://stackoverflow.com/a/39987136/4231985
-if (typeof audioCtx  === 'undefined'){
-    var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    var oscillator = audioCtx.createOscillator();
-    oscillator.type = 'sine';
-    oscillator.frequency.value = 550; // value in hertz
-    const gainNode = audioCtx.createGain();
-    gainNode.gain.value = .1;
-    oscillator.connect(gainNode).connect(audioCtx.destination);
-    oscillator.start();
-    audioCtx.suspend();
-    const alphabet = "abcdefghijklmnopqrstuvwxyz";
-    const word_list = ['about', 'all', 'also', 'and', 'because', 'but', 'can', 'come', 'could', 'day', 'even', 'find', 'first', 'for', 'from', 'get', 'give', 'have', 'her', 'here', 'him', 'his', 'how', 'into', 'its', 'just', 'know', 'like', 'look', 'make', 'man', 'many', 'more', 'new', 'not', 'now', 'one', 'only', 'other', 'our', 'out', 'people', 'say', 'see', 'she', 'some', 'take', 'tell', 'than', 'that', 'the', 'their', 'them', 'then', 'there', 'these', 'they', 'thing', 'think', 'this', 'those', 'time', 'two', 'use', 'very', 'want', 'way', 'well', 'what', 'when', 'which', 'who', 'will', 'with', 'would', 'year', 'you', 'your'];
-    const sentence_list = [
-            'Yes, I live in this house over here.',
-            'It’s getting dark.',
-            'She hoped she wasn\'t about to get fired.',
-            'Her grandmother gave her the bracelet.',
-            'He does laundry in his basement.',
-            'I didn\'t know that was an option.',
-            'Robert tends to talk big.',
-            'She swims every morning.',
-            'Naps are good for you.',
-            'Have you opened the door?'
-    ];
-}
+
+var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+var oscillator = audioCtx.createOscillator();
+oscillator.type = 'sine';
+oscillator.frequency.value = 550; // value in hertz
+const gainNode = audioCtx.createGain();
+gainNode.gain.value = .1;
+oscillator.connect(gainNode).connect(audioCtx.destination);
+oscillator.start();
+audioCtx.suspend();
+const alphabet = "abcdefghijklmnopqrstuvwxyz";
+const word_list = ['about', 'all', 'also', 'and', 'because', 'but', 'can', 'come', 'could', 'day', 'even', 'find', 'first', 'for', 'from', 'get', 'give', 'have', 'her', 'here', 'him', 'his', 'how', 'into', 'its', 'just', 'know', 'like', 'look', 'make', 'man', 'many', 'more', 'new', 'not', 'now', 'one', 'only', 'other', 'our', 'out', 'people', 'say', 'see', 'she', 'some', 'take', 'tell', 'than', 'that', 'the', 'their', 'them', 'then', 'there', 'these', 'they', 'thing', 'think', 'this', 'those', 'time', 'two', 'use', 'very', 'want', 'way', 'well', 'what', 'when', 'which', 'who', 'will', 'with', 'would', 'year', 'you', 'your'];
+const sentence_list = [
+        'Yes, I live in this house over here.',
+        'It’s getting dark.',
+        'She hoped she wasn\'t about to get fired.',
+        'Her grandmother gave her the bracelet.',
+        'He does laundry in his basement.',
+        'I didn\'t know that was an option.',
+        'Robert tends to talk big.',
+        'She swims every morning.',
+        'Naps are good for you.',
+        'Have you opened the door?'
+];
 
 
 function startTone() {

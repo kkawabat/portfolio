@@ -5,7 +5,6 @@
         <p> Click on play morse code and write your answer as to what was spoken in the textbox and click answer </p>
         {% include 'morse_code/mnemonic_table.html' %}
     </div>
-    <br>
     <div>
         <p>Choose difficulty</p>
         <input type="radio" id="letters" name="morse_difficulty" value="letters" checked>
@@ -15,12 +14,15 @@
         <input type="radio" id="sentences" name="morse_difficulty" value="sentences">
         <label for="sentences">sentences (hard)</label><br>
     </div>
-    <br>
     <div id="Practice-start-control" class="button-controls">
-        <button class='app-button' type="button" onclick="PlayMorse(false)">Play Morse Code</button>
-        <button class='app-button' type="button" onclick="PlayMorse(true)">Play Again</button>
-        <textarea id="answerTextbox" placeholder="write your answer here..."></textarea>
-        <button class='app-button' type="button" onclick="answer()">Answer</button>
+        <div style="display: flex; flex-direction: row;">
+            <button class='app-button' type="button" onclick="PlayMorse(false)">Play Morse Code</button>
+            <button class='app-button' type="button" onclick="PlayMorse(true)">Play Again</button>
+        </div>
+        <div style="display: flex; flex-direction: column;">
+            <textarea id="answerTextbox" placeholder="write your answer here..."></textarea>
+            <button class='app-button' type="button" onclick="answer()">Answer</button>
+        </div>
     </div>
     <script src="{% static 'morse_code/js/timer.js' %}"></script>
     <script src="{% static 'morse_code/js/morse_decoder.js' %}"></script>
