@@ -54,7 +54,7 @@ function loadAudio(audioBlob) {
         audioElementSource.type = BlobType
         audioElement.load();
         console.log("Playing audio...");
-        audioElement.play();
+        // audioElement.play();
     };
     reader.readAsDataURL(audioBlob);
 }
@@ -80,12 +80,10 @@ function submitWhistleBlob(audioBlob){
                 alert(response['error'])
             }
             else{
-                $("#midiDiv").attr("hidden", false);
-                $("#midiViz1")[0].src = response['midi_blob_url']
-                $("#midiViz2")[0].src = response['midi_blob_url']
+                $("#midi-div").attr("hidden", false);
+                $("#midiViz")[0].src = response['midi_blob_url']
                 $("#midiPlayer")[0].src = response['midi_blob_url']
             }
-
         },
         error: function (request, status, error) {
             console.log('failed')

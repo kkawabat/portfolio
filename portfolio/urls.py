@@ -27,7 +27,7 @@ urlpatterns = [
     path('magic_eye/', include('apps.magic_eye.urls')),
     path('whistle_detector/', include('apps.whistle_detector.urls')),
     path('morse_code/', include('apps.morse_code.urls')),
-    path('webcam_ruler/', include('apps.cam_distance.urls'))
+    path('webcam_ruler/', include('apps.webcam_ruler.urls'))
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 handler404 = 'apps.main.views.not_found_view'
