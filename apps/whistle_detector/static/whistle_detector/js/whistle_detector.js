@@ -41,7 +41,6 @@ function cancelAudioRecording() {
 
 
 function loadAudio(audioBlob) {
-
     let reader = new FileReader();
     reader.onload = (e) => {
         let audioElement = $("#audioControl")[0];
