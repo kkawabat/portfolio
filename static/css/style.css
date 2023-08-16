@@ -126,3 +126,5 @@ a { color: orange; }
 #jumpToTopBtn:hover {
   background-color: #555;
 }
+
+.blog-content h5 {color: orange;}

@@ -32,6 +32,9 @@ def blogs_view(request):
 
 def blog_post_view(request, slug_id):
     blog = Post.objects.get(slug=slug_id)
+    if slug_id.startswith('how-to-get-started-on-web'):
+        return render(request, 'blog_posts/How to get started on web development for layman.html', context={'blog': blog})
+
     return render(request, 'new_main/blog_post.html', context={'blog': blog})
 
 
