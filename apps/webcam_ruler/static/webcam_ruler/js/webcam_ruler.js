@@ -2,38 +2,43 @@ var input_track = null;
 var output_feed_vid = document.getElementById("outputFeedVid");
 var video_codec = 'VP8';
 var webrtc_obj = null;
-
+var detector_type = null;
 var media_constraints = { audio: false, video: { width: 320, height: 240 }};
 
 var signalingSocket = null;
 
 
-$(document).ready(function() {
-    $('input:radio[name=measure_type]').change(function() {
-        if (signalingSocket != null){
-            detector_change_request = JSON.stringify({ detector_type: this.value })
-            signalingSocket.send(detector_change_request);
-        }
-    });
-});
+function change_detector_type(evt) {
+    headerSelected(evt, '#header-div2');
+    detector_type = evt.currentTarget.id;
+    if (signalingSocket != null){
+        detector_change_request = JSON.stringify({ detector_type: detector_type });
+        signalingSocket.send(detector_change_request);
+    }
+}
 
 
 function startRecording(){
     $("#startBtn").hide()
     $("#stopBtn").show()
     $("#recordingIcon").show()
-    $('#vidsContainer').css('display', 'flex')
+
 
     var ws_scheme = window.location.protocol == "https:" ? "wss://" : "ws://";
-    var cam_signaling_ws_endpoint = ws_scheme + window.location.host + '/ws/cam_distance_signaling/'
+    var cam_signaling_ws_endpoint = ws_scheme + window.location.host + '/ws/webcam_ruler_signaling/'
     signalingSocket = new WebSocket( cam_signaling_ws_endpoint )
     navigator.mediaDevices
         .getUserMedia(media_constraints)
         .then((input_media_stream) => {
             input_track = input_media_stream;
-            output_feed_vid.addEventListener("loadedmetadata", () => { output_feed_vid.play();});
+
+            output_feed_vid.addEventListener("loadedmetadata", () => {
+                output_feed_vid.play();
+                $('#vidsContainer').css('display', 'flex')
+            });
+
             webrtc_obj = init_webrtc(input_media_stream, signalingSocket, output_feed_vid)
-            detector_change_request = JSON.stringify({ detector_type: $('input[name="measure_type"]:checked').val() })
+            detector_change_request = JSON.stringify({ detector_type: detector_type })
             signalingSocket.send(detector_change_request);
         })
         .catch(err => {

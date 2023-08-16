@@ -2,7 +2,7 @@
 {% load static %}
 {% block title %}Webcam Ruler{% endblock title %}
 {% block ref %}
-<link rel="stylesheet" type="text/css" href="{% static 'cam_distance/css/app_cam_distance.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'webcam_ruler/css/webcam_ruler.css' %}">
 
 {% endblock ref %}
 
@@ -10,8 +10,8 @@
 <div class="project-div">
     <h1 class="fade-in-right">Webcam Ruler 📏</h1>
     <div id="header-div1" class='fade-in-right header-div project-header-div'>
-        <h3 id='header-details' hx-get="{% url 'about' %}" hx-swap="outerHTML" hx-target="#project-content-div" hx-on:click="headerSelected(event, '#header-div1');">About</h3>
-        <h3 id='header-app' hx-get="{% url 'app' %}" hx-swap="outerHTML" hx-target="#project-content-div" hx-on:click="headerSelected(event, '#header-div1');">App</h3>
+        <h3 id='header-details' hx-get="{% url 'webcam-ruler-about' %}" hx-swap="outerHTML" hx-target="#project-content-div" hx-on:click="headerSelected(event, '#header-div1');">About</h3>
+        <h3 id='header-app' hx-get="{% url 'webcam-ruler-app' %}" hx-swap="outerHTML" hx-target="#project-content-div" hx-on:click="headerSelected(event, '#header-div1');">App</h3>
         <h3 id='header-back' hx-on:click="window.location.href='{% url 'new_main' %}';">Go-Back 👉</h3>
     </div>
 

@@ -29,6 +29,7 @@ body {
 }
 
 .app-button {
+    display: flex;
     margin: 1em;
     color: #333;
     background: orange;
@@ -52,7 +53,12 @@ body {
     margin-top: 1em;
 }
 
-.header-div h3:hover{
+.header-div h3:hover {
+    color: orange;
+    cursor: pointer;
+}
+
+.header-div h5:hover {
     color: orange;
     cursor: pointer;
 }

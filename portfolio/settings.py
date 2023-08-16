@@ -46,7 +46,7 @@ INSTALLED_APPS = [
     'apps.magic_eye',
     'apps.whistle_detector',
     'apps.morse_code',
-    'apps.cam_distance',
+    'apps.webcam_ruler',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -145,10 +145,11 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
     os.path.join(BASE_DIR, 'apps', 'new_main', 'static'),
+    os.path.join(BASE_DIR, 'apps', 'main', 'static'),
     os.path.join(BASE_DIR, 'apps', 'magic_eye', 'static'),
     os.path.join(BASE_DIR, 'apps', 'whistle_detector', 'static'),
     os.path.join(BASE_DIR, 'apps', 'morse_code', 'static'),
-    os.path.join(BASE_DIR, 'apps', 'cam_distance', 'static'),
+    os.path.join(BASE_DIR, 'apps', 'webcam_ruler', 'static'),
 )
 
 # Default primary key field type

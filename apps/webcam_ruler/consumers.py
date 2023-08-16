@@ -33,7 +33,6 @@ class FaceDistanceTrack(VideoTransformTrack):
 
     async def _recv(self, track):
         frame = await track.recv()
-        print(f'{self.detector_type}')
         try:
             img = frame.to_ndarray(format="bgr24")
 
