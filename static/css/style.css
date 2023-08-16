@@ -72,8 +72,7 @@ body {
     flex-direction: column;
     gap: 5%;
     color: #fff;
-    margin: 0;
-    margin-bottom: 3em;
+    margin: 1em 6em 3em 6em;
 }
 
 #project-content-div {
