@@ -10,20 +10,24 @@
         <input id="decodeSubmitBtn" class='app-button' type="submit" value="Decode Magic Eye">
     </form>
 
-    <p>Drag a magic eye image to test it out! Note decoder is not always successful, it really depends on how the magic eye is generated.</p>
-    <p>sample magic eye (open in a new tab to view in full)</p>
+    <p>Drag a sample <span style="color: orange;">magic eye image</span> to test it out! (open in a new tab to view in full)</p>
+    <p>Note: currently the decoder only works for magic eye images generated from my website due to algorithm specific reasons.</p>
     <div style="display: flex; gap: 10%;">
         <img class='sample-img' src="{% static 'magic_eye/images/squirrel_magic_eye.png' %}">
+        <img class='sample-img' src="{% static 'magic_eye/images/rabbit_magic_eye.jpg' %}">
     </div>
 
-    <div id="decoded_image"></div>
+    <div id="img-popup" class="modal">
+        <span class="close">&times;</span>
+        <div id="decoded_image">
+    </div>
 
     <script>
         init_dropzones();
         $('#decodeForm').on( "submit", function( event ) {
             event.preventDefault();
 
-            $("#decodeSubmitBtn").prop("value", "Decoding in progress (this might take a moment)...");
+            $("#decodeSubmitBtn").prop("value", "Decoding in progress...");
 
             var $form = $( this ),
             url = $form.attr( "action" );
@@ -48,7 +52,8 @@
                         alert(response['error'])
                     }
                     else{
-                        $('#decoded_image').empty().append('<img style="max-width: 100%;" src="'+response['image_url']+'" />');
+                        $('#decoded_image').empty().append('<img style="max-width: 100%;" src="'+response['image_url']+'" />')
+                        popup('img-popup')
                     }
 
                 },

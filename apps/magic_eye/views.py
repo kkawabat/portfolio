@@ -7,8 +7,6 @@ from django.shortcuts import render
 from magic_eye_util.magic_eye_decoder import decode_magic_eye
 from magic_eye_util.magic_eye_generator import generate_magic_eye
 
-from apps.main.models import Post
-
 
 def magic_eye_view(request):
     return render(request, 'magic_eye/index.html')

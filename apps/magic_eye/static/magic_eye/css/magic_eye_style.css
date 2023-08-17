@@ -16,3 +16,9 @@
     justify-content: flex-end;
     align-items: center;
 }
+
+#decodeForm {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}

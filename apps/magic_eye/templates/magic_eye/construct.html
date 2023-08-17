@@ -30,7 +30,10 @@
         </div>
     </div>
 
-    <div id="generated_image"></div>
+    <div id="img-popup" class="modal">
+        <span class="close">&times;</span>
+        <div id="generated_image">
+    </div>
 
     <script>
         init_dropzones();
@@ -61,6 +64,7 @@
                     }
                     else{
                         $('#generated_image').empty().append('<img style="max-width: 100%;" src="'+response['image_url']+'" />')
+                        popup('img-popup')
                     }
                 },
                 error: function (request, status, error) {
