@@ -13,7 +13,7 @@
         <h3 id='header-details' hx-get="{% url 'morse-code-about' %}" hx-swap="outerHTML" hx-target="#project-content-div" hx-on:click="headerSelected(event, '#header-div1');">About</h3>
         <h3 id='header-tap' hx-get="{% url 'morse-code-tap' %}" hx-swap="outerHTML" hx-target="#project-content-div" hx-on:click="headerSelected(event, '#header-div1');">Morse Code (Tap)</h3>
         <h3 id='header-listen' hx-get="{% url 'morse-code-listen' %}" hx-swap="outerHTML" hx-target="#project-content-div" hx-on:click="headerSelected(event, '#header-div1');">Morse Code (Listen)</h3>
-        <h3 id='header-back' hx-on:click="window.location.href='{% url 'new_main' %}';">Go-Back 👉</h3>
+        {% include "go_back_element.html" %}
     </div>
 
     <div id="project-content-div"></div>

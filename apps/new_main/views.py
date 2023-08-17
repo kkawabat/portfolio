@@ -17,29 +17,36 @@ def main_view(request):
 
 
 def about_view(request):
-    return render(request, 'new_main/about.html')
+    if request.META.get("HTTP_HX_REQUEST"):
+        return render(request, 'new_main/about.html')
+    return render(request, 'new_main/index.html', context={'anchor': 'about'})
 
 
 def projects_view(request):
-    project_list = Post.objects.filter(status=1, content_type=1).order_by('-created_on')
-    return render(request, 'new_main/projects.html', context={'projects': project_list})
+    if request.META.get("HTTP_HX_REQUEST"):
+        project_list = Post.objects.filter(status=1, content_type=1).order_by('-created_on')
+        return render(request, 'new_main/projects.html', context={'projects': project_list})
+    return render(request, 'new_main/index.html', context={'anchor': 'projects'})
 
 
 def blogs_view(request):
-    blog_list = Post.objects.filter(status=1, content_type=0).order_by('-created_on')
-    return render(request, 'new_main/blogs.html', context={'blogs': blog_list})
+    if request.META.get("HTTP_HX_REQUEST"):
+        blog_list = Post.objects.filter(status=1, content_type=0).order_by('-created_on')
+        return render(request, 'new_main/blogs.html', context={'blogs': blog_list})
+    return render(request, 'new_main/index.html', context={'anchor': 'blogs'})
 
 
 def blog_post_view(request, slug_id):
     blog = Post.objects.get(slug=slug_id)
     if slug_id.startswith('how-to-get-started-on-web'):
         return render(request, 'blog_posts/How to get started on web development for layman.html', context={'blog': blog})
-
     return render(request, 'new_main/blog_post.html', context={'blog': blog})
 
 
 def cv_view(request):
-    return render(request, 'new_main/cv.html')
+    if request.META.get("HTTP_HX_REQUEST"):
+        return render(request, 'new_main/cv.html')
+    return render(request, 'new_main/index.html', context={'anchor': 'cv'})
 
 
 def cv_pdf(_):

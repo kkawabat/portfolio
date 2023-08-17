@@ -34,3 +34,16 @@
   from { opacity: 1; }
   to { opacity: 0; }
 }
+
+.poke:hover span {
+    animation: 1.5s normal both infinite poke-frames;
+    display: inline-block;
+}
+
+@keyframes poke-frames {
+    from { transform: translate3d(0, 0, 0); }
+    25% { transform: translate3d(20%, 0, 0); }
+    50% { transform: translate3d(0, 0, 0); }
+    75% { transform: translate3d(20%, 0, 0); }
+    to { transform: translate3d(0, 0, 0); }
+}
