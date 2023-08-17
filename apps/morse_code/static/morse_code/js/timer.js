@@ -23,16 +23,15 @@ function resetTimer(){
 function incrementTimer () {
     tens++;
 
-    if(tens <= 9){ appendTens.innerHTML = "0" + tens; }
-    if(tens > 9){ appendTens.innerHTML = tens; }
+    if(tens <= 9){ $('#appendTens').html( "0" + tens); }
+    if(tens > 9){ $('#appendTens').html(tens);}
 
     if (tens > 99) {
-        console.log("seconds");
         seconds++;
         $('#appendSeconds').html("0" + seconds);
         tens = 0;
         $('#appendTens').html("0" + 0);
     }
 
-    if (seconds > 9){ appendSeconds.innerHTML = seconds; }
+    if (seconds > 9){ $('#appendSeconds').html(seconds); }
 }

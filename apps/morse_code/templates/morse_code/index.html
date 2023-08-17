@@ -18,9 +18,8 @@
 
     <div id="project-content-div"></div>
 </div>
-<script>
-//    document.addEventListener("DOMContentLoaded", function(){
-//        setTimeout(function(){ $('#header-details').click() }, 1000);
-//    });
-</script>
+
+<script src="{% static 'morse_code/js/timer.js' %}"></script>
+<script src="{% static 'morse_code/js/morse_decoder.js' %}"></script>
+<script src="{% static 'morse_code/js/morse_code_beep.js' %}"></script>
 {% endblock content %}

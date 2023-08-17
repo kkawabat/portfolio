@@ -19,6 +19,7 @@ body {
     justify-content: center;
     align-items: center;
     max-width: 80em;
+    width: 100%;
     margin: auto;
 }
 
@@ -92,6 +93,7 @@ body {
     color: #fff;
     align-items: center;
     max-width: 40em;
+    width: 100%;
     margin: auto;
 }
 
