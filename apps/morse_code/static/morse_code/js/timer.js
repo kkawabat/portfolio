@@ -16,22 +16,22 @@ function resetTimer(){
     clearInterval(Interval);
     tens = "00";
   	seconds = "00";
-    $('#appendSeconds').html(seconds);
-    $('#appendTens').html(tens);
+    $('#seconds').html(seconds);
+    $('#tens').html(tens);
 }
 
 function incrementTimer () {
     tens++;
 
-    if(tens <= 9){ $('#appendTens').html( "0" + tens); }
-    if(tens > 9){ $('#appendTens').html(tens);}
+    if(tens <= 9){ $('#tens').html( "0" + tens); }
+    if(tens > 9){ $('#tens').html(tens);}
 
     if (tens > 99) {
         seconds++;
-        $('#appendSeconds').html("0" + seconds);
+        $('#seconds').html("0" + seconds);
         tens = 0;
-        $('#appendTens').html("0" + 0);
+        $('#tens').html("0" + 0);
     }
 
-    if (seconds > 9){ $('#appendSeconds').html(seconds); }
+    if (seconds > 9){ $('#seconds').html(seconds); }
 }

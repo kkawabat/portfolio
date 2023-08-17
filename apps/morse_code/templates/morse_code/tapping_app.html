@@ -9,14 +9,24 @@
     </div>
     <div id="Speedtap-stop-control"  style="display: none;">
         <div class="display-div">
-            <h3>Time</h3>
-            <p><span id="seconds">00</span>:<span id="tens">00</span></p>
-            <h3>Prompt</h3>
-            <h2><span id="prompt"></span></h2>
-            <h4>morse</h4>
-            <textarea id="STMorse" readonly></textarea>
-            <h4>text</h4>
-            <textarea id="STText" readonly></textarea>
+            <div class="button-controls" style="display: flex; align-items: center; gap: 10%; ">
+                <h3>Time</h3> <h4><span id="seconds">00</span>:<span id="tens">00</span></h4>
+            </div>
+
+            <div id="prompt-div">
+                <h3>Prompt</h3>
+                <h4><span id="prompt"></span></h4>
+            </div>
+
+            <div id="transcribed-prompt-div">
+                <h3>Transcribed Prompt</h3>
+                <h4><span id="transcribed-prompt"></span></h4>
+            </div>
+
+            <div style="display: none;">
+                <h4>morse</h4> <textarea id="STMorse" readonly></textarea>
+                <h4>text</h4> <textarea id="STText" readonly></textarea>
+            </div>
         </div>
         <br>
         <div class="button-controls" style="display: flex;">

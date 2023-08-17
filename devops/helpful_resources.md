@@ -66,6 +66,7 @@ Here is a list of resources I found useful while working on this project. They h
 - https://developer.mozilla.org/en-US/docs/Web/CSS/animation  # animation documentation
 - https://stackoverflow.com/a/19989633/4231985  # cancel animation 
 - https://www.queness.com/post/356/create-a-vertical-horizontal-and-diagonal-sliding-content-website-with-jquery  # tutorial on page transitions
+- https://matthewjamestaylor.com/holy-grail-layout  # css layout
 
 ### htmx related
 - https://www.mattlayman.com/blog/2021/how-to-htmx-django/

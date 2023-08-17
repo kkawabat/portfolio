@@ -46,6 +46,8 @@ let prompt_list = ["I am counting my calories yet I really want dessert",
 "At that moment she realized she had a sixth sense",
 "The golden retriever loved the fireworks each Fourth of July"];
 let selected_prompt;
+let transcribed_prompt;
+
 
 function speedtest_on_message_handler() {
     $('#STMorse').text(result['morse']);
@@ -53,41 +55,77 @@ function speedtest_on_message_handler() {
     update_prompt(result['text']);
 }
 
+
 function update_prompt(decoded_text) {
     matched_str = "";
+    matched_str_span = "";
     unmatched_str = selected_prompt;
-    err = false;
     i = 0;
-    while (i < decoded_text.length) {
+    err = false;
+    while (i < decoded_text.length){
         if (unmatched_str.length == 0){ break; }
-
-        if (!!unmatched_str[0].match(/^[.,:!?']/)){
-            matched_str += unmatched_str[0];
-            unmatched_str = unmatched_str.slice(1);
-        }
-
-        if (unmatched_str[0] === decoded_text[i]){
-            matched_str += decoded_text[i];
+        else if (decoded_text[i] === unmatched_str[0]) {
+            matched_str +=  decoded_text[i]
+            if (err) { matched_str_span += '<span class="red">' + decoded_text[i] + '</span>'; }
+            else { matched_str_span += '<span class="green">' + decoded_text[i] + '</span>'; }
             unmatched_str = unmatched_str.slice(1);
             err = false;
-        } else { err = true; }
+        }
+        else { err = true; }
         i++;
     }
 
-    if (err){ $('#prompt').html('<span class="green">' + matched_str + '</span>' + '<span class="red">' + unmatched_str[0] + '</span>' + unmatched_str.slice(1)); }
-    else { $('#prompt').html('<span class="green">' + matched_str + '</span>' + unmatched_str); }
+    transcribed_prompt = '<span class="green">' + matched_str + '</span>'
+    if (err){ transcribed_prompt += '<span class="red">' + decoded_text[decoded_text.length - 1] + '</span>'; }
+    $('#transcribed-prompt').html(transcribed_prompt);
+    $('#prompt').html(matched_str_span + unmatched_str);
 
     if (unmatched_str.length === 0){
         stopTimer();
+        stopTone();  // stops the beep if pressed twice
         total_duration = (seconds + (tens/100)).toFixed(3);
         alert("you did it! \n" +
             "total time: " + total_duration + "\n" +
             "tapping rate: " + (selected_prompt.length/total_duration).toFixed(3) + " characters per second\n" +
             "error rate: " + (((decoded_text.length-selected_prompt.length)/selected_prompt.length)*100).toFixed(1)) + "%";
-        stopTone();  // stops the beep if pressed twice
     }
-
 }
+
+//function update_prompt(decoded_text) {
+//    matched_str = "";
+//    unmatched_str = selected_prompt;
+//    err = false;
+//    i = 0;
+//    while (i < decoded_text.length) {
+//        if (unmatched_str.length == 0){ break; }
+//
+//        if (!!unmatched_str[0].match(/^[.,:!?']/)){
+//            matched_str += unmatched_str[0];
+//            unmatched_str = unmatched_str.slice(1);
+//        }
+//
+//        if (unmatched_str[0] === decoded_text[i]){
+//            matched_str += decoded_text[i];
+//            unmatched_str = unmatched_str.slice(1);
+//            err = false;
+//        } else { err = true; }
+//        i++;
+//    }
+//
+//    if (err){ $('#prompt').html('<span class="green">' + matched_str + '</span>' + '<span class="red">' + unmatched_str[0] + '</span>' + unmatched_str.slice(1)); }
+//    else { $('#prompt').html('<span class="green">' + matched_str + '</span>' + unmatched_str); }
+//
+//    if (unmatched_str.length === 0){
+//        stopTimer();
+//        stopTone();  // stops the beep if pressed twice
+//        total_duration = (seconds + (tens/100)).toFixed(3);
+//        alert("you did it! \n" +
+//            "total time: " + total_duration + "\n" +
+//            "tapping rate: " + (selected_prompt.length/total_duration).toFixed(3) + " characters per second\n" +
+//            "error rate: " + (((decoded_text.length-selected_prompt.length)/selected_prompt.length)*100).toFixed(1)) + "%";
+//
+//    }
+//}
 
 function SpeedTestStartMorseRecording() {
     $('#Speedtap-start-control').hide();
@@ -102,6 +140,8 @@ function SpeedTestStartMorseRecording() {
     random_prompt_idx = ~~(Math.random() * prompt_list.length);
     selected_prompt = prompt_list[random_prompt_idx].replace(/[^A-Za-z ]/g, '').toLowerCase();
     $('#prompt').text(selected_prompt);
+    $('#transcribed-prompt').text('');
+    $('#transcribed-prompt-div').height($('#prompt-div').height());
     up_time = Date.now();
     document.addEventListener('keydown', down_handler);
     document.addEventListener('keyup', up_handler);
