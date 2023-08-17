@@ -58,3 +58,8 @@
 .red {
   color: red;
 }
+
+textarea {
+    background: #333;
+    color: orange;
+}
