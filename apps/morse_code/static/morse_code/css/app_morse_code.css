@@ -1,7 +1,3 @@
-#project-content-div {
-    max-width: unset;
-}
-
 #Speedtap-stop-control {
     flex-direction: column;
     padding: 1em;
@@ -12,14 +8,6 @@
     padding: 1em;
 }
 
-#stop-control {
-    display: flex;
-    flex-direction: row;
-    gap: 10px;
-    align-items: center;
-    width: 100%;
-}
-
 .display-div {
     flex-direction: column;
     display: flex;
@@ -28,9 +16,11 @@
 }
 
 #mnemonic {
-    overflow-x: auto;
+    overflow-x: revert;
     display: block;
     width: 100%;
+    max-width: unset;
+    white-space: nowrap;
 }
 
 #mnemonic td, #mnemonic th {
@@ -49,7 +39,6 @@
   background-color: orange;
   color: black;
 }
-
 
 .green {
   color: green;

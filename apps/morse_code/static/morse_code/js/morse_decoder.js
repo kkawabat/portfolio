@@ -84,7 +84,9 @@ function update_prompt(decoded_text) {
             "total time: " + total_duration + "\n" +
             "tapping rate: " + (selected_prompt.length/total_duration).toFixed(3) + " characters per second\n" +
             "error rate: " + (((decoded_text.length-selected_prompt.length)/selected_prompt.length)*100).toFixed(1)) + "%";
+        stopTone();  // stops the beep if pressed twice
     }
+
 }
 
 function SpeedTestStartMorseRecording() {
@@ -103,6 +105,7 @@ function SpeedTestStartMorseRecording() {
     up_time = Date.now();
     document.addEventListener('keydown', down_handler);
     document.addEventListener('keyup', up_handler);
+    startBeeper();
 }
 
 
@@ -117,6 +120,7 @@ function SpeedTestStopMorseRecording() {
     document.removeEventListener('keyup', up_handler);
     $('#STMorse').text("");
     $('#STText').text("");
+    stopTone();
 }
 
 function practice_on_message_handler() {
@@ -189,14 +193,12 @@ function up_behavior(){
 
 function send_data(morse_signal){
     morseSocket.send(JSON.stringify({type: 'decode', data: morse_signal}));
-//    console.log(morse_signal);
 }
 
 
 function connectSocket(on_message_handler) {
     let ws_scheme = window.location.protocol == "https:" ? "wss://" : "ws://";
     let morse_ws_endpoint = ws_scheme + window.location.host + '/ws/morse/'
-//    console.log(morse_ws_endpoint);
 
     morseSocket = new WebSocket( morse_ws_endpoint );
     morseSocket.onmessage = (response) =>{
