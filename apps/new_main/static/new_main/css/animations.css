@@ -78,6 +78,10 @@
     animation-delay: 3s;
 }
 
+#content-div {
+    animation-delay: 3s;
+}
+
 .fade-in2 {
     animation-delay: 0s !important;
 }

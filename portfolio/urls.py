@@ -24,10 +24,10 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('old_main/', include('apps.main.urls')),
     path('', include('apps.new_main.urls')),
-    path('magic_eye/', include('apps.magic_eye.urls')),
-    path('whistle_detector/', include('apps.whistle_detector.urls')),
-    path('morse_code/', include('apps.morse_code.urls')),
-    path('webcam_ruler/', include('apps.webcam_ruler.urls'))
+    path('projects/magic_eye/', include('apps.magic_eye.urls')),
+    path('projects/whistle_detector/', include('apps.whistle_detector.urls')),
+    path('projects/morse_code/', include('apps.morse_code.urls')),
+    path('projects/webcam_ruler/', include('apps.webcam_ruler.urls'))
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 handler404 = 'apps.main.views.not_found_view'

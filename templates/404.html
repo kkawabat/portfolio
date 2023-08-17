@@ -12,7 +12,7 @@
 </style>
 {% endblock ref %}
 
-{% block content %}
+{% block body %}
     <div id="main_div">
         <img src="{% static 'images/zach_faceless.png' %}" class="under">
         <img src="{% static 'images/zach_face.png' %}" onclick="shrinkFace()" class="over" id="face">
@@ -26,4 +26,4 @@
             img.style.transform = "scale(" + String(cur_scale) + ")";
         }
     </script>
-{% endblock content %}
+{% endblock body %}

@@ -13,27 +13,35 @@ def favicon(_):
 
 
 def main_view(request):
-    return render(request, 'new_main/index.html')
+    blog_list = Post.objects.filter(status=1, content_type=0).order_by('-created_on')
+    project_list = Post.objects.filter(status=1, content_type=1).order_by('-created_on')
+    return render(request, 'new_main/index.html', context={'blogs': blog_list,
+                                                           'projects': project_list,
+                                                           })
 
 
 def about_view(request):
-    if request.META.get("HTTP_HX_REQUEST"):
-        return render(request, 'new_main/about.html')
-    return render(request, 'new_main/index.html', context={'anchor': 'about'})
+    blog_list = Post.objects.filter(status=1, content_type=0).order_by('-created_on')
+    project_list = Post.objects.filter(status=1, content_type=1).order_by('-created_on')
+    return render(request, 'new_main/index.html', context={'blogs': blog_list,
+                                                           'projects': project_list,
+                                                           'anchor': 'about'})
 
 
 def projects_view(request):
-    if request.META.get("HTTP_HX_REQUEST"):
-        project_list = Post.objects.filter(status=1, content_type=1).order_by('-created_on')
-        return render(request, 'new_main/projects.html', context={'projects': project_list})
-    return render(request, 'new_main/index.html', context={'anchor': 'projects'})
+    blog_list = Post.objects.filter(status=1, content_type=0).order_by('-created_on')
+    project_list = Post.objects.filter(status=1, content_type=1).order_by('-created_on')
+    return render(request, 'new_main/index.html', context={'blogs': blog_list,
+                                                           'projects': project_list,
+                                                           'anchor': 'projects'})
 
 
 def blogs_view(request):
-    if request.META.get("HTTP_HX_REQUEST"):
-        blog_list = Post.objects.filter(status=1, content_type=0).order_by('-created_on')
-        return render(request, 'new_main/blogs.html', context={'blogs': blog_list})
-    return render(request, 'new_main/index.html', context={'anchor': 'blogs'})
+    blog_list = Post.objects.filter(status=1, content_type=0).order_by('-created_on')
+    project_list = Post.objects.filter(status=1, content_type=1).order_by('-created_on')
+    return render(request, 'new_main/index.html', context={'blogs': blog_list,
+                                                           'projects': project_list,
+                                                           'anchor': 'blogs'})
 
 
 def blog_post_view(request, slug_id):
@@ -43,10 +51,12 @@ def blog_post_view(request, slug_id):
     return render(request, 'new_main/blog_post.html', context={'blog': blog})
 
 
-def cv_view(request):
-    if request.META.get("HTTP_HX_REQUEST"):
-        return render(request, 'new_main/cv.html')
-    return render(request, 'new_main/index.html', context={'anchor': 'cv'})
+def contacts_view(request):
+    blog_list = Post.objects.filter(status=1, content_type=0).order_by('-created_on')
+    project_list = Post.objects.filter(status=1, content_type=1).order_by('-created_on')
+    return render(request, 'new_main/index.html', context={'blogs': blog_list,
+                                                           'projects': project_list,
+                                                           'anchor': 'contacts'})
 
 
 def cv_pdf(_):
@@ -71,3 +81,11 @@ def project_post_view(_, slug_id):
     elif slug_id.startswith('whistle-detector'):
         response['HX-redirect'] = reverse('whistle-detector')
         return response
+
+
+def socials_view(request):
+    blog_list = Post.objects.filter(status=1, content_type=0).order_by('-created_on')
+    project_list = Post.objects.filter(status=1, content_type=1).order_by('-created_on')
+    return render(request, 'new_main/index.html', context={'blogs': blog_list,
+                                                           'projects': project_list,
+                                                           'anchor': 'socials'})

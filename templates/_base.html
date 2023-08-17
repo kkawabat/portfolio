@@ -18,11 +18,12 @@
     <link rel="icon" href="{% static 'images/favicon.png' %}">
     <script src="https://unpkg.com/htmx.org@1.9.4"></script>
 
-    <script src="{% static 'js/header_highlights.js' %}"></script>
+    <script src="{% static 'js/nav_selector_logic.js' %}"></script>
+    <script src="{% static 'js/visit_logic.js' %}"></script>
     {% block ref %}{% endblock ref %}
 </head>
 <body {% block body_attr %}{% endblock body_attr %}>
-    {% block content %}{% endblock content %}
+    {% block body %}{% endblock body %}
     <button onclick="topFunction()" id="jumpToTopBtn" title="Go to top">Top</button>
     <script src="{% static 'js/jump_to_top_button.js' %}"></script>
 </body>

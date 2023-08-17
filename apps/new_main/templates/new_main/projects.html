@@ -1,4 +1,4 @@
-<div id="content_div" class="fade-in">
+<div id="content-projects" class="fade-in content-div">
     <div id='header-div2' class='header-div'>
         {% for project in projects %}
             <h3 class='header2' hx-push-url="true" hx-get="{% url 'project_post' slug_id=project.slug %}">{{project.title}}</h3>
