@@ -68,7 +68,6 @@ def cv_pdf(_):
 
 
 def project_post_view(_, slug_id):
-    response = HttpResponse()
     if slug_id.startswith('webcam-ruler'):
         return redirect('webcam-ruler')
     elif slug_id.startswith('magic-eye'):

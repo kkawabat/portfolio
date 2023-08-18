@@ -1,7 +1,20 @@
 <div id="content-blogs" class="fade-in-top content-div">
     <div id='header-div2' class='header-div'>
         {% for blog in blogs %}
-            <h3 id='blog-{{blog.slug}}' class='header' hx-get="{% url 'blog_post' slug_id=blog.slug %}" hx-swap="outerHTML" hx-target="#content-div" >{{blog.title}}</h3>
+            <h3 id='blog-{{blog.slug}}' class='header' hx-get="{% url 'blog_post' slug_id=blog.slug %}" hx-swap="innerHTML" hx-target="#blog-div" hx-on:click="blog_toggle(true)">{{blog.title}}</h3>
         {% endfor %}
     </div>
+    <div id="blog-div" style="display: none;"></div>
 </div>
+
+<script>
+function blog_toggle(toggle){
+    if (toggle) {
+        $('#header-div2').hide();
+        $('#blog-div').show();
+    } else {
+        $('#header-div2').show();
+        $('#blog-div').hide();
+    }
+}
+</script>
