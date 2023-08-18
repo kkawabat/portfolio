@@ -49,6 +49,9 @@ function answer(){
 }
 
 function PlayMorse(play_again){
+    if (audioCtx == null)
+        startBeeper();
+
     if (play_again & prompt != null) {
         PlayMorseSound(prompt);
     }
