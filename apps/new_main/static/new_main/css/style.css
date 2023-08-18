@@ -1,12 +1,9 @@
-#main {
-  margin: auto;
-}
-
 .intro-div {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    width: 100%;
+    width: fit-content;
+    margin: auto;
 }
 
 .typewriter h1 {
@@ -18,9 +15,16 @@
     letter-spacing: .15em;
 }
 
+
+#content-projects {
+    margin: auto;
+}
+
 #header-div2 { flex-direction: column; }
 
-
+.header {
+    white-space: nowrap;
+}
 
 .fab {
     padding: 20px;

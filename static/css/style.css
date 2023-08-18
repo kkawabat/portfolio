@@ -57,10 +57,12 @@ body {
 
 .header-div {
     display: flex;
-    gap: 5%;
+    gap: .5em 2em;
     color: #fff;
     margin: auto;
     margin-top: 1em;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
 .header-div h3:hover {
@@ -71,10 +73,6 @@ body {
 .header-div h5:hover {
     color: orange;
     cursor: pointer;
-}
-
-@media screen and (max-width: 791px) {
-    #header-div1 { flex-direction: column; }
 }
 
 #content-div {

@@ -6,7 +6,7 @@ function select_nav(name, headerClass){
 }
 
 function headerSelected(name, headerClass) {
-    $(headerClass).children().each(function() { $(this).removeClass('active').addClass('deactive'); })
+    $(headerClass + ' ' + '.header').each(function() { $(this).removeClass('active').addClass('deactive'); })
     $("#header-" +  name).removeClass('deactive').addClass('active');
 }
 

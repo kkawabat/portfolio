@@ -16,17 +16,19 @@
 <div id="main">
     <div id='intro1' class="intro-div">
         <div class="typewriter"> <h1 id='intro1a'>Hello <span class='wave'>👋</span>, I'm Kan!</h1></div>
-        <div class="typewriter"> <h1 id='intro1b'>Welcome to my website!</h1></div>
+        <div class="typewriter"> <h1 id='intro1b'>Welcome to my site!</h1></div>
     </div>
     <div id='intro2' class="intro-div" style="display: none;">
         <div class="typewriter"> <h1 id='intro2a'>Welcome back! <span class='wave'>👋</span></h1></div>
     </div>
     <div id="header-div1" class='fade-in header-div'>
-        <h3 id='header-about' onclick="select_nav('about', '#header-div1');">My self</h3>
-        <h3 id='header-projects' onclick="select_nav('projects', '#header-div1');">My Projects</h3>
-        <h3 id='header-blogs' onclick="select_nav('blogs', '#header-div1');">My Blog</h3>
-        <h3 id='header-socials' onclick="select_nav('socials', '#header-div1');">My Socials</h3>
-        <h3 id='header-contacts' onclick="select_nav('contacts', '#header-div1');">My Contacts</h3>
+        <h3 id='header-about' class="header" onclick="select_nav('about', '#header-div1');">My self</h3>
+        <h3 id='header-projects' class="header" onclick="select_nav('projects', '#header-div1');">My Projects</h3>
+        <h3 id='header-blogs' class="header" onclick="select_nav('blogs', '#header-div1');">My Blog</h3>
+        <div style="display: flex; flex-direction: row; gap: 2em;">
+        <h3 id='header-socials' class="header" onclick="select_nav('socials', '#header-div1');">My Socials</h3>
+        <h3 id='header-contacts' class="header" onclick="select_nav('contacts', '#header-div1');">My Contacts</h3>
+        </div>
     </div>
     <div id="content-div" class="fade-in">
         {% include "new_main/about.html" %}
