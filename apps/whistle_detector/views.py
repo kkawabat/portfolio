@@ -20,9 +20,13 @@ def whistle_submit_view(request):
         return JsonResponse({'error': f"failed to generate whistle midi: {e}"})
 
 
-def about_view(request):
-    return render(request, 'whistle_detector/about.html')
+def details_view(request):
+    whistle_detector_proj = Post.objects.get(slug="whistle-detector")
+    return render(request, 'whistle_detector/index.html', context={"anchor": 'details',
+                                                                   "post": whistle_detector_proj})
 
 
 def app_view(request):
-    return render(request, 'whistle_detector/app.html')
+    whistle_detector_proj = Post.objects.get(slug="whistle-detector")
+    return render(request, 'whistle_detector/index.html', context={"anchor": 'app',
+                                                                   "post": whistle_detector_proj})

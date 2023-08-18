@@ -84,38 +84,18 @@ body {
     margin: auto;
 }
 
-#project-content-div {
-    display: flex;
-    flex-direction: column;
-    gap: 5%;
-    color: #fff;
-    align-items: center;
-    max-width: 40em;
-    width: 100%;
-    margin: auto;
-    margin-top: 2em;
-}
+.project h3 { color: orange; }
 
-#project-content-div h3 { color: orange; }
+.subheader {
+    margin: 1em auto;
+    width: fit-content;
+
+}
 
 a { color: orange; }
 
 .active { color: orange; }
 .deactive { color: #666; }
-
-.fade-in {
-    animation: .5s normal both 1 fadein-keys;
-}
-
-@keyframes fadein-keys{
-    0% { opacity:0;
-    transform: translate3d(0, -20%, 0);
-    }
-    100% { opacity:1;
-    transform: translate3d(0, 0, 0);
-    }
-}
-
 
 #jumpToTopBtn {
   display: none;

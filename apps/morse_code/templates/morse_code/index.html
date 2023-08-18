@@ -1,4 +1,4 @@
-{% extends "_base.html" %}
+{% extends "project_base.html" %}
 {% load static %}
 {% block title %}Morse Code Speed tap test{% endblock title %}
 {% block ref %}
@@ -7,16 +7,19 @@
 {% endblock ref %}
 
 {% block body %}
-<div class="project-div">
-    <h1 class="fade-in-right">Morse Code App</h1>
-    <div id="header-div1" class='fade-in-right header-div project-header-div'>
-        <h3 id='header-details' hx-get="{% url 'morse-code-about' %}" hx-swap="outerHTML" hx-target="#project-content-div" hx-on:click="headerSelected(event, '#header-div1');">About</h3>
-        <h3 id='header-tap' hx-get="{% url 'morse-code-tap' %}" hx-swap="outerHTML" hx-target="#project-content-div" hx-on:click="headerSelected(event, '#header-div1');">Morse Code (Tap)</h3>
-        <h3 id='header-listen' hx-get="{% url 'morse-code-listen' %}" hx-swap="outerHTML" hx-target="#project-content-div" hx-on:click="headerSelected(event, '#header-div1');">Morse Code (Listen)</h3>
-        {% include "go_back_element.html" %}
+<div class="project-div fade-in-right">
+    <h1>Morse Code App</h1>
+    <div id="header-div1" class='header-div project-header-div'>
+        <h3 id='header-details' class='header' onclick="select_nav('details', '#header-div1');">Details</h3>
+        <h3 id='header-tap' class='header' onclick="select_nav('tap', '#header-div1');">Morse Code (Tap)</h3>
+        <h3 id='header-listen' class='header' onclick="select_nav('listen', '#header-div1');">Morse Code (Listen)</h3>
     </div>
 
-    <div id="project-content-div"></div>
+    <div id="content-div" style="display:none;">
+        {% include "morse_code/details.html" %}
+        {% include "morse_code/listening_app.html" %}
+        {% include "morse_code/tapping_app.html" %}
+    </div>
 </div>
 
 <script src="{% static 'morse_code/js/timer.js' %}"></script>

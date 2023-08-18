@@ -1,7 +1,7 @@
-<div id="content-blogs" class="fade-in content-div">
+<div id="content-blogs" class="fade-in-top content-div">
     <div id='header-div2' class='header-div'>
         {% for blog in blogs %}
-            <h3 id='blog-{{blog.slug}}' class='header2' hx-get="{% url 'blog_post' slug_id=blog.slug %}" hx-swap="outerHTML" hx-target="#content_div" >{{blog.title}}</h3>
+            <h3 id='blog-{{blog.slug}}' class='header' hx-get="{% url 'blog_post' slug_id=blog.slug %}" hx-swap="outerHTML" hx-target="#content-div" >{{blog.title}}</h3>
         {% endfor %}
     </div>
 </div>

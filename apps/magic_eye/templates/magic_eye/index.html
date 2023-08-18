@@ -1,4 +1,4 @@
-{% extends "_base.html" %}
+{% extends "project_base.html" %}
 {% load static %}
 {% block title %}Magic Eye Tool{% endblock title %}
 {% block ref %}
@@ -11,15 +11,100 @@
 {% endblock ref %}
 
 {% block body %}
-<div class="project-div">
-    <h1 class="fade-in-right">Magic Eye App 👀</h1>
-    <div id="header-div1" class='fade-in-right header-div project-header-div'>
-        <h3 id='header-details' hx-get="{% url 'magic-eye-about' %}" hx-swap="outerHTML" hx-target="#project-content-div" hx-on:click="headerSelected(event, '#header-div1');">About</h3>
-        <h3 id='header-construct' hx-get="{% url 'magic-eye-construct-page' %}" hx-swap="outerHTML" hx-target="#project-content-div" hx-on:click="headerSelected(event, '#header-div1');">Create Magic Eye</h3>
-        <h3 id='header-deconstruct' hx-get="{% url 'magic-eye-deconstruct-page' %}" hx-swap="outerHTML" hx-target="#project-content-div" hx-on:click="headerSelected(event, '#header-div1');">Solve Magic Eye</h3>
-        {% include "go_back_element.html" %}
+<div class="project-div fade-in-right">
+    <h1>Magic Eye App 👀</h1>
+    <div id="header-div1" class='header-div project-header-div'>
+        <h3 id='header-details' class='header' onclick="select_nav('details', '#header-div1');">About</h3>
+        <h3 id='header-construct' class='header' onclick="select_nav('construct', '#header-div1');">Create Magic Eye</h3>
+        <h3 id='header-deconstruct' class='header' onclick="select_nav('deconstruct', '#header-div1');">Solve Magic Eye</h3>
     </div>
 
-    <div id="project-content-div"></div>
+    <div id="content-div" style="display:none;">
+        {% include 'magic_eye/details.html' %}
+        {% include 'magic_eye/construct.html' %}
+        {% include 'magic_eye/deconstruct.html' %}
+        <div id="img-popup" class="modal">
+            <span class="close">&times;</span>
+            <div id="img_holder"> </div>
+        </div>
+    </div>
 </div>
+
+<script>
+    init_dropzones();
+    $('#genForm').on( "submit", function( event ) {
+        event.preventDefault();
+        var $form = $( this ),
+        url = $form.attr( "action" );
+        texture_image = $form.find( "input[name='textureFile']" )[0].files[0]
+        depth_image = $form.find( "input[name='depthMapFile']" )[0].files[0]
+
+        var formData = new FormData();
+        formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+        formData.append('texture', texture_image);
+        formData.append('depth_map', depth_image);
+
+        $.ajax({
+            url: url,
+            type: 'POST',
+            dataType: "json",
+            data: formData,
+            enctype: 'multipart/form-data',
+            cache: false,
+            processData: false,
+            contentType: false,
+            success: function(response){
+                if('error' in response){
+                    alert(response['error'])
+                }
+                else{
+                    $('#img_holder').empty().append('<img style="max-width: 100%;" src="'+response['image_url']+'" />')
+                    popup('img-popup')
+                }
+            },
+            error: function (request, status, error) {
+                console.log('failed')
+            }
+        });
+    });
+
+    $('#decodeForm').on( "submit", function( event ) {
+        event.preventDefault();
+
+        $("#decodeSubmitBtn").prop("value", "Decoding in progress...");
+
+        var $form = $( this ),
+        url = $form.attr( "action" );
+        input_image = $form.find( "input[name='decodableFile']" )[0].files[0]
+
+        var formData = new FormData();
+        formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+        formData.append('input_image', input_image);
+
+        $.ajax({
+            url: url,
+            type: 'POST',
+            dataType: "json",
+            data: formData,
+            enctype: 'multipart/form-data',
+            cache: false,
+            processData: false,
+            contentType: false,
+            success: function(response){
+                $("#decodeSubmitBtn").prop("value", "Decode Magic Eye");
+                if('error' in response){
+                    alert(response['error'])
+                }
+                else{
+                    $('#img_holder').empty().append('<img style="max-width: 100%;" src="'+response['image_url']+'" />')
+                    popup('img-popup')
+                }
+
+            },
+            error: function (request, status, error) {
+                console.log('failed')
+            }
+        });
+    });
+</script>
 {% endblock body %}

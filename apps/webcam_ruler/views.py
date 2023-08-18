@@ -1,15 +1,13 @@
 from django.shortcuts import render
 
-from apps.main.models import Post
-
 
 def index_view(request):
     return render(request, 'webcam_ruler/index.html')
 
 
-def about_view(request):
-    return render(request, 'webcam_ruler/about.html')
+def details_view(request):
+    return render(request, 'webcam_ruler/index.html', context={'anchor': 'details'})
 
 
 def app_view(request):
-    return render(request, 'webcam_ruler/app.html')
+    return render(request, 'webcam_ruler/index.html', context={'anchor': 'app'})

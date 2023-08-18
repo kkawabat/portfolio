@@ -1,27 +1,26 @@
-.fade-in {
-    animation: .5s normal both 1 fadein-keys;
-}
-
-@keyframes fadein-keys{
-    0% { opacity:0;
-    transform: translate3d(0, -20%, 0);
-    }
-    100% { opacity:1;
-    transform: translate3d(0, 0, 0);
-    }
+.fade-in-top {
+    animation: .5s normal both 1 kf-slide-from-top,
+               .5s normal both 1 kf-fade-in;
 }
 
 .fade-in-right {
-    animation: .5s normal both 1 fadein-right-keys;
+    animation: .5s normal both 1 kf-slide-from-left,
+               .5s normal both 1 kf-fade-in;
 }
 
-@keyframes fadein-right-keys{
-    0% { opacity:0;
-    transform: translate3d(20%, 0, 0);
-    }
-    100% { opacity:1;
-    transform: translate3d(0, 0, 0);
-    }
+@keyframes kf-slide-from-top{
+    0% { transform: translate3d(0, -20%, 0); }
+    100% { transform: translate3d(0, 0, 0); }
+}
+
+@keyframes kf-slide-from-left{
+    0% { transform: translate3d(-20%, 0, 0); }
+    100% { transform: translate3d(0, 0, 0); }
+}
+
+@keyframes kf-fade-in {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
 }
 
 .Blink {
@@ -35,15 +34,25 @@
   to { opacity: 0; }
 }
 
+.poke {
+    animation: .5s normal 1.5s both 1 kf-fade-in;
+}
+
+.poke:hover {
+    display: inline-block;
+    cursor: pointer;
+}
+
 .poke:hover span {
     animation: 1.5s normal both infinite poke-frames;
     display: inline-block;
+    cursor: pointer;
 }
 
 @keyframes poke-frames {
     from { transform: translate3d(0, 0, 0); }
-    25% { transform: translate3d(20%, 0, 0); }
+    25% { transform: translate3d(-20%, 0, 0); }
     50% { transform: translate3d(0, 0, 0); }
-    75% { transform: translate3d(20%, 0, 0); }
+    75% { transform: translate3d(-20%, 0, 0); }
     to { transform: translate3d(0, 0, 0); }
 }

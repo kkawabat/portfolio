@@ -1,6 +1,6 @@
 {% load static %}
-<div id="project-content-div">
-    <h3>Magic Eye Generator</h3>
+<div id="content-construct" class="content-div project">
+    <h3 class="subheader">Magic Eye Generator</h3>
     <p>Drag <span style="color: orange;">texture</span> and <span style="color: orange;">depth maps</span> below to the corresponding areas above to test it out!</p>
     <form id="genForm" action="{% url 'magic-eye-construct' %}">
         {% csrf_token %}
@@ -16,7 +16,6 @@
         </div>
         <input class='app-button' type="submit" value="Generate Magic Eye">
     </form>
-
     <div style="display: flex; margin: 1em; gap: 5%;">
         <div class='inner-helper-div'>
             <p>sample <span style="color: orange;">texture</span> files (small square image that can be used to tile the magic eye image)</p>
@@ -29,48 +28,4 @@
             <img class='sample-img' src="{% static 'magic_eye/images/bunny.png' %}">
         </div>
     </div>
-
-    <div id="img-popup" class="modal">
-        <span class="close">&times;</span>
-        <div id="generated_image">
-    </div>
-
-    <script>
-        init_dropzones();
-        $('#genForm').on( "submit", function( event ) {
-            event.preventDefault();
-            var $form = $( this ),
-            url = $form.attr( "action" );
-            texture_image = $form.find( "input[name='textureFile']" )[0].files[0]
-            depth_image = $form.find( "input[name='depthMapFile']" )[0].files[0]
-
-            var formData = new FormData();
-            formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
-            formData.append('texture', texture_image);
-            formData.append('depth_map', depth_image);
-
-            $.ajax({
-                url: url,
-                type: 'POST',
-                dataType: "json",
-                data: formData,
-                enctype: 'multipart/form-data',
-                cache: false,
-                processData: false,
-                contentType: false,
-                success: function(response){
-                    if('error' in response){
-                        alert(response['error'])
-                    }
-                    else{
-                        $('#generated_image').empty().append('<img style="max-width: 100%;" src="'+response['image_url']+'" />')
-                        popup('img-popup')
-                    }
-                },
-                error: function (request, status, error) {
-                    console.log('failed')
-                }
-            });
-        });
-    </script>
 </div>

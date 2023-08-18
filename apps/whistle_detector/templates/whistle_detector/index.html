@@ -1,6 +1,6 @@
-{% extends "_base.html" %}
+{% extends "project_base.html" %}
 {% load static %}
-{% block title %}Kan Kawabata{% endblock title %}
+{% block title %}Whistle Detector{% endblock title %}
 {% block ref %}
 
 <link rel="stylesheet" type="text/css" href="{% static 'whistle_detector/css/app_whistle_detector_style.css' %}">
@@ -8,19 +8,16 @@
 {% endblock ref %}
 
 {% block body %}
-<div class="project-div">
-    <h1 class="fade-in-right">Whistle detector</h1>
-    <div id="header-div1" class='fade-in-right header-div project-header-div'>
-        <h3 id='header-details' hx-get="{% url 'whistle-detector-about' %}" hx-swap="outerHTML" hx-target="#project-content-div" hx-on:click="headerSelected(event, '#header-div1');">About</h3>
-        <h3 id='header-app' hx-get="{% url 'whistle-detector-app' %}" hx-swap="outerHTML" hx-target="#project-content-div" hx-on:click="headerSelected(event, '#header-div1');">App</h3>
-        {% include "go_back_element.html" %}
+<div class="project-div fade-in-right">
+    <h1>Whistle detector</h1>
+    <div id="header-div1" class='header-div project-header-div'>
+        <h3 id='header-details' class='header' onclick="select_nav('details', '#header-div1');">Details</h3>
+        <h3 id='header-app' class='header' onclick="select_nav('app', '#header-div1');">App</h3>
     </div>
 
-    <div id="project-content-div"></div>
+    <div id="content-div" style="display:none;">
+        {% include 'whistle_detector/details.html' %}
+        {% include 'whistle_detector/app.html' %}
+    </div>
 </div>
-<script>
-//    document.addEventListener("DOMContentLoaded", function(){
-//        setTimeout(function(){ $('#header-details').click() }, 1000);
-//    });
-</script>
 {% endblock body %}

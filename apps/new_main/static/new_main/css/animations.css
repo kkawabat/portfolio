@@ -82,10 +82,6 @@
     animation-delay: 3s;
 }
 
-.fade-in2 {
-    animation-delay: 0s !important;
-}
-
 .skip-animation {
   animation-duration: 1ms !important;
   animation-delay: 0s !important;

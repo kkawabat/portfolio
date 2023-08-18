@@ -70,17 +70,13 @@ def cv_pdf(_):
 def project_post_view(_, slug_id):
     response = HttpResponse()
     if slug_id.startswith('webcam-ruler'):
-        response['HX-redirect'] = reverse('webcam-ruler')
-        return response
+        return redirect('webcam-ruler')
     elif slug_id.startswith('magic-eye'):
-        response['HX-redirect'] = reverse('magic-eye')
-        return response
+        return redirect('magic-eye')
     elif slug_id.startswith('morse-code'):
-        response['HX-redirect'] = reverse('morse-code')
-        return response
+        return redirect('morse-code')
     elif slug_id.startswith('whistle-detector'):
-        response['HX-redirect'] = reverse('whistle-detector')
-        return response
+        return redirect('whistle-detector')
 
 
 def socials_view(request):

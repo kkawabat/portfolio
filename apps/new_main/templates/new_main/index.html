@@ -21,7 +21,7 @@
     <div id='intro2' class="intro-div" style="display: none;">
         <div class="typewriter"> <h1 id='intro2a'>Welcome back! <span class='wave'>👋</span></h1></div>
     </div>
-    <div id="header-div1" class='fade-in header-div'>
+    <div id="header-div1" class='fade-in-top header-div'>
         <h3 id='header-about' class="header" onclick="select_nav('about', '#header-div1');">My self</h3>
         <h3 id='header-projects' class="header" onclick="select_nav('projects', '#header-div1');">My Projects</h3>
         <h3 id='header-blogs' class="header" onclick="select_nav('blogs', '#header-div1');">My Blog</h3>
@@ -30,7 +30,7 @@
         <h3 id='header-contacts' class="header" onclick="select_nav('contacts', '#header-div1');">My Contacts</h3>
         </div>
     </div>
-    <div id="content-div" class="fade-in">
+    <div id="content-div" class="fade-in-top">
         {% include "new_main/about.html" %}
         {% include "new_main/blogs.html" with blogs=blogs %}
         {% include "new_main/projects.html" with projects=projects %}
@@ -42,15 +42,13 @@
 <script>
     ContentSelectionHideAll();
 
-    $(document).ready(function() {
-        if ( ! isFirstVisit() ) { skip_animations(); }
-    });
+    $(document).ready(function() { if ( ! isFirstVisit() ) { skip_animations(); } });
 
     $(document).on('click', function(){ skip_animations(); });
 
     {% if anchor %}
-        headerSelected("{{anchor}}", '#header-div1');
-        ContentSelection("{{anchor}}");
+        headerSelected("#header-{{anchor}}", '#header-div1');
+        ContentSelection("#content-{{anchor}}");
     {% endif %}
 
     function skip_animations() {

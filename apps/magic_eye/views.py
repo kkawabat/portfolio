@@ -13,7 +13,7 @@ def magic_eye_view(request):
 
 
 def magic_eye_decode_page_view(request):
-    return render(request, 'magic_eye/deconstruct.html')
+    return render(request, 'magic_eye/index.html', context={'anchor': 'deconstruct'})
 
 
 def magic_eye_decode_view(request):
@@ -30,7 +30,7 @@ def magic_eye_decode_view(request):
 
 
 def magic_eye_generate_page_view(request):
-    return render(request, 'magic_eye/construct.html')
+    return render(request, 'magic_eye/index.html', context={'anchor': 'construct'})
 
 
 def magic_eye_generate_view(request):
@@ -58,5 +58,5 @@ def pillow_image_to_base64_string(img):
     return base64.b64encode(buffered.getvalue()).decode("utf-8")
 
 
-def magic_eye_about_view(request):
-    return render(request, 'magic_eye/about.html')
+def details_view(request):
+    return render(request, 'magic_eye/index.html', context={'anchor': 'details'})

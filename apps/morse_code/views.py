@@ -7,13 +7,13 @@ def morse_code_app_view(request):
     return render(request, 'morse_code/index.html')
 
 
-def morse_code_about_view(request):
-    return render(request, 'morse_code/about.html')
+def morse_code_details_view(request):
+    return render(request, 'morse_code/index.html', context={'anchor': 'details'})
 
 
 def morse_code_listen_view(request):
-    return render(request, 'morse_code/listening_app.html')
+    return render(request, 'morse_code/index.html', context={'anchor': 'listen'})
 
 
 def morse_code_tap_view(request):
-    return render(request, 'morse_code/tapping_app.html')
+    return render(request, 'morse_code/index.html', context={'anchor': 'tap'})

@@ -2,17 +2,18 @@ var input_track = null;
 var output_feed_vid = document.getElementById("outputFeedVid");
 var video_codec = 'VP8';
 var webrtc_obj = null;
-var detector_type = null;
+var selected_detector_type = null;
 var media_constraints = { audio: false, video: { width: 320, height: 240 }};
 
 var signalingSocket = null;
 
 
-function change_detector_type(evt) {
-    headerSelected(evt, '#header-div2');
-    detector_type = evt.currentTarget.id;
+function change_detector_type(detector_type) {
+    headerSelected("#" + detector_type, '#header-div2');
+    selected_detector_type = detector_type;
+
     if (signalingSocket != null){
-        detector_change_request = JSON.stringify({ detector_type: detector_type });
+        detector_change_request = JSON.stringify({ detector_type: selected_detector_type });
         signalingSocket.send(detector_change_request);
     }
     $('#button-control').show()
@@ -39,7 +40,7 @@ function startRecording(){
             });
 
             webrtc_obj = init_webrtc(input_media_stream, signalingSocket, output_feed_vid)
-            detector_change_request = JSON.stringify({ detector_type: detector_type })
+            detector_change_request = JSON.stringify({ detector_type: selected_detector_type })
             signalingSocket.send(detector_change_request);
         })
         .catch(err => {

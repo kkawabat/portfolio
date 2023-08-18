@@ -1,19 +1,20 @@
 function select_nav(name, headerClass){
-    headerSelected(name, headerClass)
+    headerSelected("#header-" +  name, headerClass)
 
-    ContentSelection(name)
+    ContentSelection("#content-" +  name)
     history.pushState({}, "", name)
 }
 
-function headerSelected(name, headerClass) {
+function headerSelected(header_id, headerClass) {
     $(headerClass + ' ' + '.header').each(function() { $(this).removeClass('active').addClass('deactive'); })
-    $("#header-" +  name).removeClass('deactive').addClass('active');
+    $(header_id).removeClass('deactive').addClass('active');
 }
 
 function ContentSelectionHideAll() {
     $('#content-div').children().each(function() { $(this).hide() })
 }
-function ContentSelection(name) {
+function ContentSelection(content_div_id) {
     ContentSelectionHideAll();
-    $("#content-" +  name).show();
+    $('#content-div').show();
+    $(content_div_id).show();
 }
