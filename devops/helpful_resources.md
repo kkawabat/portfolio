@@ -51,6 +51,7 @@ Here is a list of resources I found useful while working on this project. They h
 - https://www.geeksforgeeks.org/how-to-open-web-cam-in-javascript/#  # video demo
 - https://ralzohairi.medium.com/audio-recording-in-javascript-96eed45b75ee  # audio demo
 - https://github.com/cwilso/WebAudio/tree/master  # very cool web audio playground
+- https://codepen.io/brianchirls/pen/YLrgoR  # sample code for web audio output test
 
 ### css/javascript
 - https://www.youtube.com/@KevinPowell  # a pretty helpful youtuber for css  

@@ -1,0 +1,40 @@
+{% load static %}
+<div id="content-app" class="content-div project">
+
+    <div style="margin: 2em;">
+        <div style="display:none;">
+            <h4 style="color: orange;">input devices</h4>
+            <select onchange="set_output_device(this.value);" id="inputDevice" disabled><option value="">Default</option></select>
+        </div>
+        <div>
+            <h4 style="color: orange; width: fit-content; margin: 1em auto;">output devices</h4>
+            <select onchange="set_output_device(this.value);" id="outputDevice" disabled><option value="">Default</option></select>
+        </div>
+    </div>
+
+    <div id="soundboard">
+        {% for s in sound_effects %}
+            <div onclick="toggle_sound($(this));" class="sound-btn">
+                <audio controls src="{% url 'sound-effect' s %}" type="audio/wav" style="display: none;"></audio>
+                <h3>{{s}}</h3>
+            </div>
+        {% endfor %}
+
+    </div>
+<script>
+
+function toggle_sound(sound_button){
+    audio_elem = sound_button.children('audio')[0]
+    if (audio_elem.paused ) {
+        sound_button[0].style.background = '#444';
+        audio_elem.currentTime = 0;
+        audio_elem.play();
+        audio_elem.onended = function() { sound_button[0].style.background = '#555'; };
+
+    } else {
+        sound_button[0].style.background = '#555';
+        audio_elem.pause();
+    };
+}
+</script>
+</div>

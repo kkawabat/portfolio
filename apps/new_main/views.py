@@ -76,6 +76,8 @@ def project_post_view(_, slug_id):
         return redirect('morse-code')
     elif slug_id.startswith('whistle-detector'):
         return redirect('whistle-detector')
+    elif slug_id.startswith('web-soundboard'):
+        return redirect('web-soundboard')
 
 
 def socials_view(request):

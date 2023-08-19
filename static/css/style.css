@@ -72,12 +72,7 @@ body {
     justify-content: center;
 }
 
-.header-div h3:hover {
-    color: orange;
-    cursor: pointer;
-}
-
-.header-div h5:hover {
+.header-div h3:hover, h5:hover {
     color: orange;
     cursor: pointer;
 }
@@ -91,7 +86,11 @@ body {
     margin: auto;
 }
 
-.project h3 { color: orange; }
+#content-div img {
+    max-width:100%;
+}
+
+.project h3, h4, h5 { color: orange; }
 
 .subheader {
     margin: 1em auto;

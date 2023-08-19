@@ -24,6 +24,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('old_main/', include('apps.main.urls')),
     path('', include('apps.new_main.urls')),
+    path('projects/web_soundboard/', include('apps.web_soundboard.urls')),
     path('projects/magic_eye/', include('apps.magic_eye.urls')),
     path('projects/whistle_detector/', include('apps.whistle_detector.urls')),
     path('projects/morse_code/', include('apps.morse_code.urls')),

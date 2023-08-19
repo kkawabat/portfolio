@@ -1,0 +1,33 @@
+#soundboard {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+    grid-gap: 5px;
+}
+
+#soundboard div {
+    background: #555;
+    aspect-ratio: 1;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1em;
+    cursor: pointer;
+}
+
+#soundboard div h3{
+    text-align: center;
+    cursor: pointer;
+}
+
+#soundboard div:hover {
+    background: #444;
+}
+
+select {
+    background: #444;
+    color: orange;
+    width: 35em;
+    margin: auto;
+}

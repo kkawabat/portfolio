@@ -1,0 +1,22 @@
+{% extends "project_base.html" %}
+{% load static %}
+{% block title %}Web Soundboard{% endblock title %}
+{% block ref %}
+<link rel="stylesheet" type="text/css" href="{% static 'web_soundboard/css/styles.css' %}">
+{% endblock ref %}
+
+{% block body %}
+<div class="project-div fade-in-right">
+    <h1>Web Soundboard 📣</h1>
+    <div id="header-div1" class='header-div project-header-div'>
+        <h3 id='header-details' class='header' onclick="select_nav('details', '#header-div1');">Details</h3>
+        <h3 id='header-app' class='header' onclick="select_nav('app', '#header-div1');">Soundboard</h3>
+    </div>
+
+    <div id="content-div" style="display:none;">
+        {% include 'web_soundboard/details.html' %}
+        {% include 'web_soundboard/app.html' %}
+    </div>
+</div>
+<script src="{% static 'web_soundboard/js/web_soundboard.js' %}"></script>
+{% endblock body %}

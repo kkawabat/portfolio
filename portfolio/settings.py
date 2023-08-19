@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'apps.whistle_detector',
     'apps.morse_code',
     'apps.webcam_ruler',
+    'apps.web_soundboard',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -150,6 +151,7 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'apps', 'whistle_detector', 'static'),
     os.path.join(BASE_DIR, 'apps', 'morse_code', 'static'),
     os.path.join(BASE_DIR, 'apps', 'webcam_ruler', 'static'),
+    os.path.join(BASE_DIR, 'apps', 'web_soundboard', 'static'),
 )
 
 # Default primary key field type

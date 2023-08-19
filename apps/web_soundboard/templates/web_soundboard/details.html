@@ -1,0 +1,34 @@
+{% load static %}
+
+<div id="content-details" class="content-div project">
+    <h3>Introduction</h3>
+    <p>A webapp for making and recording sound to be playable on command.</p>
+    <p>Set the output device and press a sound effect button to play audio from your speaker or headphones.</p>
+    <h5>How do I play sound effect into the microphone?</h5>
+
+    <p>currently you are able to play the sound effects into your speakers or headphones however my guess is that
+        you want to play sound into your microphone to annoy your discord friends 😈</p>
+
+    <img src="{% static 'web_soundboard/images/current-ideal.png' %}">
+
+    <p>Unfortunately there isn't an easy way to pipe audio into the microphone virtually through the web browser. So there isn't an easy way
+        to make the soundeffect - discord connection (sad 🎻). However, there are 3rd party software that can help you configure your audio input/output
+        such as <a href="https://vb-audio.com/Voicemeeter/index.htm">Voicemeeter</a> and
+        <a href="https://vb-audio.com/Cable/index.htm">VB-Cable</a>.<p>
+
+    <p> Voicemeeter is a bit too much to get into here but a quick and dirty way of doing this is to install <a href="https://vb-audio.com/Cable/index.htm">VB-Cable</a>
+        which creates a virtual "CABLE input" and "CABLE output" pair that allows you to pipe audio output device into
+        an audio input device virtually. You can then set output device on the soundboard to "CABLE input" and then set
+        "CABLE output" as the input device in discord.</p>
+
+    <p>You can then change the sound settings of the recording device so that microphone is being picked up by the CABLE
+        input and Cable output is being piped into your headphones. However, this will create a feedback between
+        microphone to headphone.</p>
+
+    <img src="{% static 'web_soundboard/images/meh-it-works.png' %}">
+
+    <h3>TO-DOs</h3>
+    <p>in the future I want to add the ability to have custom user sound effects as well as voice recording capabilities.</p>
+</div>
+
+
