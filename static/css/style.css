@@ -36,6 +36,14 @@ body {
     align-items: center;
 }
 
+.app-controls {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 2em;
+    margin-bottom: 10em;
+}
+
 .app-button {
     display: flex;
     margin: 1em;
@@ -53,7 +61,6 @@ body {
 .app-button:hover {
     color: #fff;
 }
-
 
 .header-div {
     display: flex;

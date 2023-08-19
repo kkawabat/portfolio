@@ -3,23 +3,23 @@
     <h3>Instruction</h3>
     <p> Click on play morse code and write your answer as to what was spoken in the textbox and click answer </p>
     {% include 'morse_code/mnemonic_table.html' %}
-    <div>
-        <p>Choose difficulty</p>
-        <input type="radio" id="letters" name="morse_difficulty" value="letters" checked>
-        <label for="letters">letters (easy)</label><br>
-        <input type="radio" id="words" name="morse_difficulty" value="words">
-        <label for="words">words (medium)</label><br>
-        <input type="radio" id="sentences" name="morse_difficulty" value="sentences">
-        <label for="sentences">sentences (hard)</label><br>
-    </div>
-    <div id="Practice-start-control" class="button-controls">
-        <div style="display: flex; flex-direction: row;">
-            <button class='app-button' type="button" onclick="PlayMorse(false)">Play Morse Code</button>
-            <button class='app-button' type="button" onclick="PlayMorse(true)">Play Again</button>
+    <div class='app-controls'>
+        <h4 style="color: orange;">Choose difficulty</h4>
+        <div id="header-div2" class='header-div project-header-div'>
+            <h5 id="letters" class="header" onclick="change_difficulty('letters');">letters (easy)</h5>
+            <h5 id="words" class="header" onclick="change_difficulty('words');">words (medium)</h5>
+            <h5 id="sentences" class="header" onclick="change_difficulty('sentences');">sentences (hard)</h5>
         </div>
-        <div style="display: flex; flex-direction: column;">
-            <textarea id="answerTextbox" placeholder="write your answer here..."></textarea>
-            <button class='app-button' type="button" onclick="answer()">Answer</button>
+        <div id="Practice-start-control" class="button-controls" style="display:none;">
+            <div style="display: flex; flex-direction: row;">
+                <button class='app-button' type="button" onclick="PlayMorse(false)">Play Morse Code</button>
+                <button class='app-button' type="button" onclick="PlayMorse(true)">Repeat</button>
+                <button class='app-button' type="button" onclick="StopMorseSound()">Stop</button>
+            </div>
+            <div style="display: flex; flex-direction: column;">
+                <textarea id="answerTextbox" placeholder="write your answer here..."></textarea>
+                <button class='app-button' type="button" onclick="answer()">Answer</button>
+            </div>
         </div>
     </div>
 </div>

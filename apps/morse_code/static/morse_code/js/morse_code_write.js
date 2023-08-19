@@ -146,6 +146,7 @@ function SpeedTestStartMorseRecording() {
     document.addEventListener('keydown', down_handler);
     document.addEventListener('keyup', up_handler);
     startBeeper();
+    window.scrollTo(0, document.body.scrollHeight);
 }
 
 

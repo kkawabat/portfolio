@@ -15,6 +15,11 @@ const sentence_list = [
         'Naps are good for you.',
         'Have you opened the door?'
 ];
+var prompt = null;
+var morse_difficulty = null;
+var beep_chain = null;
+var end_beep_early = false;
+var beep_in_progress = false;
 
 function startBeeper(){
     audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -37,7 +42,6 @@ function stopTone() {
     if (audioCtx.state == 'running'){ audioCtx.suspend(); }
 }
 
-var prompt = null;
 
 function answer(){
     answer_text = $("#answerTextbox").val().replace(/[^A-Za-z ]/g, '').toLowerCase()
@@ -61,10 +65,16 @@ function PlayMorse(play_again){
     }
 }
 
+function change_difficulty(difficulty) {
+    headerSelected("#" + difficulty, '#header-div2');
+    morse_difficulty = difficulty;
+    $('#Practice-start-control').show()
+    window.scrollTo(0, document.body.scrollHeight);
+}
+
+
 function getPrompt(){
-    promptType =  $('input:radio[name=morse_difficulty]:checked').val();
-    console.log(promptType);
-    switch (promptType){
+    switch (morse_difficulty){
         case 'letters':
             return alphabet[~~(Math.random() * alphabet.length)];
             break;
@@ -75,17 +85,6 @@ function getPrompt(){
             return sentence_list[~~(Math.random() * sentence_list.length)].replace(/[^A-Za-z ]/g, '').toLowerCase();
             break;
     }
-}
-
-function PlayMorseSound(input_string) {
-    morseArray = string_to_morse_array(input_string)
-
-    beep_chain = Promise.resolve();
-    morseArray.forEach((beep_type) => {
-        beep_chain = beep_chain.then(()=>play_beep(beep_type))
-    });
-    beep_chain = beep_chain.then(()=>play_beep('end'));
-    return beep_chain;
 }
 
 char_to_morse = new Map();
@@ -153,36 +152,81 @@ function string_to_morse_array(input_string) {
             }
         })
     })
-    console.log(morseArray);
     return morseArray;
+}
+
+function StopMorseSound(input_string) {
+    end_beep_early = true;
+}
+
+function PlayMorseSound(input_string) {
+    morseArray = string_to_morse_array(input_string);
+    if (beep_in_progress){
+        end_beep_early = true;
+    }
+    beep_in_progress = true;
+    beep_chain = Promise.resolve();
+    morseArray.forEach((beep_type) => {
+        beep_chain = beep_chain.then(()=>{
+            if (end_beep_early) {
+                end_beep_early = false;
+                throw Error('ending prematurely')
+            }
+            return play_beep(beep_type);
+        })
+    });
+    beep_chain = beep_chain.then(()=>play_beep('end')).catch((e) => console.log(e)).finally(() => { beep_in_progress=false; } );
+    return beep_chain;
 }
 
 function play_beep(beep_type){
     console.log(beep_type);
     switch(beep_type) {
         case 'dit':
-            return new Promise(r => { audioCtx.resume(); r(); })
-                        .then(r => { setTimeout( function(){ audioCtx.suspend(); }, 200); } )
-                        .then(pause(400));
+//            return new Promise(r => { audioCtx.resume(); r(); })
+//                        .then(r => { setTimeout( function(){ audioCtx.suspend(); }, 200); } )
+//                        .then(pause_promise(400));
+            return beep(200).then(unbeep_promise(200));
             break;
         case 'dah':
-            return new Promise(r => { audioCtx.resume(); r();})
-                        .then(r => { setTimeout(() => { audioCtx.suspend(); }, 400); } )
-                        .then(pause(400));
+//            return new Promise(r => { audioCtx.resume(); r();})
+//                        .then(r => { setTimeout(() => { audioCtx.suspend(); }, 400); } )
+//                        .then(pause_promise(400));
+            return beep(400).then(unbeep_promise(200));
             break;
         case 'pause':
-            return new Promise(r => setTimeout(r, 200));
+            return pause(400);
+//            return pause(8000);
             break;
         case 'long_pause':
-            return new Promise(r => setTimeout(r, 800));
+            return pause(800);
+//            return pause(8000);
             break;
         default:
             return audioCtx.suspend();
     }
 }
 
+function beep(ms) {
+    return audioCtx.resume().then(pause_promise(ms))
+}
+
+function beep_promise(ms) {
+    return () => { return beep(ms) };
+}
+
+function unbeep(ms) {
+    return audioCtx.suspend().then(pause_promise(ms))
+}
+
+function unbeep_promise(ms) {
+    return () => { return unbeep(ms) };
+}
+
 function pause(ms) {
-    return function(x) {
-        return new Promise(resolve => setTimeout(() => resolve(x), ms));
-    };
+    return new Promise((r) => setTimeout(() => r(), ms));
+}
+
+function pause_promise(ms) {
+    return () => { return pause(ms) };
 }
