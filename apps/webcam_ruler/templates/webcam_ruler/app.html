@@ -10,15 +10,15 @@
 
     <div id='button-control' class='center-flex' style="display: none;">
         <button id="startBtn" class="app-button" onclick="startRecording()">Start Detecting</button>
-        <button id="stopBtn" class="app-button" style="display: none;" onclick="stopRecording()">
-            <i id="recordingIcon" class="fa fa-circle text-danger Blink" style="display: none;"></i> Stop Recording
-        </button>
 
         <div id='vidsContainer' style="display: none;">
-            <h3>Feed</h3>
+            <button id="stopBtn" class="app-button" onclick="stopRecording()">
+                <i id="recordingIcon" class="fa fa-circle text-danger Blink"></i> Stop Recording
+            </button>
+
             <video id="outputFeedVid" muted></video>
             <p>Note: this app isn't meant to be accurate it's a rough estimation and are dependent on camera focal lengths.</p>
-            <p>Additionally this app uses webrtc connection and you might not be able to get it working as it does not use a dedicated TURN servers to learn more about webRTC please see this <a href="https://bloggeek.me/webrtc-turn/">article</a>.</p>
+            <p>Additionally this app uses webrtc connection, and you might not be able to get it working as it does not use a dedicated TURN servers to learn more about webRTC please see this <a href="https://bloggeek.me/webrtc-turn/">article</a>.</p>
         </div>
     </div>
 </div>

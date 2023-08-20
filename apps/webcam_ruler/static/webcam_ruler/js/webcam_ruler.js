@@ -21,10 +21,7 @@ function change_detector_type(detector_type) {
 
 
 function startRecording(){
-    $("#startBtn").hide()
-    $("#stopBtn").show()
-    $("#recordingIcon").show()
-
+    $("#startBtn").text("Starting...")
 
     var ws_scheme = window.location.protocol == "https:" ? "wss://" : "ws://";
     var cam_signaling_ws_endpoint = ws_scheme + window.location.host + '/ws/webcam_ruler_signaling/'
@@ -37,6 +34,8 @@ function startRecording(){
             output_feed_vid.addEventListener("loadedmetadata", () => {
                 output_feed_vid.play();
                 $('#vidsContainer').css('display', 'flex')
+                $("#startBtn").hide()
+                $("#startBtn").text('Start Detecting')
             });
 
             webrtc_obj = init_webrtc(input_media_stream, signalingSocket, output_feed_vid)
@@ -53,7 +52,6 @@ function startRecording(){
 function stopRecording(){
     $("#startBtn").show()
     $("#stopBtn").hide()
-    $("#recordingIcon").hide()
     $('#vidsContainer').css('display', 'none')
 
     input_track.getTracks().forEach((track) => { track.stop(); });

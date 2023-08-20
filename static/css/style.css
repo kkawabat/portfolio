@@ -13,6 +13,8 @@ body {
   margin: 1em;
 }
 
+.project h3, h4, h5 { color: orange; }
+
 .project-div {
     display: flex;
     flex-direction: column;
@@ -72,6 +74,8 @@ body {
     justify-content: center;
 }
 
+.header-div h3, h4, h5 { color: white; }
+
 .header-div h3:hover, h5:hover {
     color: orange;
     cursor: pointer;
@@ -86,11 +90,7 @@ body {
     margin: auto;
 }
 
-#content-div img {
-    max-width:100%;
-}
-
-.project h3, h4, h5 { color: orange; }
+#content-div img { max-width:100%; }
 
 .subheader {
     margin: 1em auto;
@@ -100,8 +100,8 @@ body {
 
 a { color: orange; }
 
-.active { color: orange; }
-.deactive { color: #666; }
+.active { color: orange !important; }
+.deactive { color: #666 !important; }
 
 #jumpToTopBtn {
   display: none;
