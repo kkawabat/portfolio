@@ -1,0 +1,24 @@
+{% extends "project_base.html" %}
+{% load static %}
+{% block title %}Chat Highlights{% endblock title %}
+{% block ref %}
+<link rel="stylesheet" type="text/css" href="{% static 'chat_highlights/css/chat_highlights.css' %}">
+<script type="application/javascript" src="{% static 'chat_highlights/js/chat_highlights.js' %}"></script>
+
+{% endblock ref %}
+
+{% block body %}
+<div class="project-div fade-in-right">
+    <h1>Chat Highlights</h1>
+    <div id="header-div1" class='header-div project-header-div'>
+        <h3 id='header-details' class='header' onclick="select_nav('details', '#header-div1');">Details</h3>
+        <h3 id='header-app' class='header' onclick="select_nav('app', '#header-div1');">App</h3>
+    </div>
+
+    <div id="content-div" style="display:none;">
+        {% include 'chat_highlights/details.html' %}
+        {% include 'chat_highlights/app.html' %}
+    </div>
+</div>
+
+{% endblock body %}

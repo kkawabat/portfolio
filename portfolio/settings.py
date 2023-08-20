@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'apps.morse_code',
     'apps.webcam_ruler',
     'apps.web_soundboard',
+    'apps.chat_highlights',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

@@ -1,7 +1,6 @@
 from django.contrib.staticfiles.storage import staticfiles_storage
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from django.urls import reverse
 
 from apps.main.models import Post
 
@@ -14,15 +13,14 @@ def favicon(_):
 
 def main_view(request):
     blog_list = Post.objects.filter(status=1, content_type=0).order_by('-created_on')
-    project_list = Post.objects.filter(status=1, content_type=1).order_by('-created_on')
+    project_list = Post.objects.filter(content_type=1).order_by('-created_on')
     return render(request, 'new_main/index.html', context={'blogs': blog_list,
-                                                           'projects': project_list,
-                                                           })
+                                                           'projects': project_list})
 
 
 def about_view(request):
     blog_list = Post.objects.filter(status=1, content_type=0).order_by('-created_on')
-    project_list = Post.objects.filter(status=1, content_type=1).order_by('-created_on')
+    project_list = Post.objects.filter(content_type=1).order_by('-created_on')
     return render(request, 'new_main/index.html', context={'blogs': blog_list,
                                                            'projects': project_list,
                                                            'anchor': 'about'})
@@ -30,7 +28,7 @@ def about_view(request):
 
 def projects_view(request):
     blog_list = Post.objects.filter(status=1, content_type=0).order_by('-created_on')
-    project_list = Post.objects.filter(status=1, content_type=1).order_by('-created_on')
+    project_list = Post.objects.filter(content_type=1).order_by('-created_on')
     return render(request, 'new_main/index.html', context={'blogs': blog_list,
                                                            'projects': project_list,
                                                            'anchor': 'projects'})
@@ -38,7 +36,7 @@ def projects_view(request):
 
 def blogs_view(request):
     blog_list = Post.objects.filter(status=1, content_type=0).order_by('-created_on')
-    project_list = Post.objects.filter(status=1, content_type=1).order_by('-created_on')
+    project_list = Post.objects.filter(content_type=1).order_by('-created_on')
     return render(request, 'new_main/index.html', context={'blogs': blog_list,
                                                            'projects': project_list,
                                                            'anchor': 'blogs'})
@@ -53,7 +51,7 @@ def blog_post_view(request, slug_id):
 
 def contacts_view(request):
     blog_list = Post.objects.filter(status=1, content_type=0).order_by('-created_on')
-    project_list = Post.objects.filter(status=1, content_type=1).order_by('-created_on')
+    project_list = Post.objects.filter(content_type=1).order_by('-created_on')
     return render(request, 'new_main/index.html', context={'blogs': blog_list,
                                                            'projects': project_list,
                                                            'anchor': 'contacts'})
@@ -78,11 +76,13 @@ def project_post_view(_, slug_id):
         return redirect('whistle-detector')
     elif slug_id.startswith('web-soundboard'):
         return redirect('web-soundboard')
+    elif slug_id.startswith('chat-highlight'):
+        return redirect('chat-highlight')
 
 
 def socials_view(request):
     blog_list = Post.objects.filter(status=1, content_type=0).order_by('-created_on')
-    project_list = Post.objects.filter(status=1, content_type=1).order_by('-created_on')
+    project_list = Post.objects.filter(content_type=1).order_by('-created_on')
     return render(request, 'new_main/index.html', context={'blogs': blog_list,
                                                            'projects': project_list,
                                                            'anchor': 'socials'})

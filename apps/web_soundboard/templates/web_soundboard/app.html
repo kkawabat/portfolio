@@ -88,7 +88,6 @@ function toggle_sound(sound_button){
         audio_elem.currentTime = 0;
         audio_elem.play();
         audio_elem.onended = function(){sound_button.removeClass('se-active');};
-
     } else {
         sound_button.removeClass('se-active')
         audio_elem.pause();

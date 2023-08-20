@@ -1,14 +1,14 @@
 Here is a list of resources I found useful while working on this project. They have helped give me context and insight.  this list isn't exhaustive as sometimes I forget to update it. 
 
 
-### django starting point
-- https://www.digitalocean.com/community/tutorials/how-to-set-up-django-with-postgres-nginx-and-gunicorn-on-ubuntu-18-04#step-6-testing-gunicorn-s-ability-to-serve-the-project  
-- https://www.youtube.com/watch?v=Jyvffr3aCp0&ab_channel=WebDevSimplified  
-- https://djangocentral.com/building-a-blog-application-with-django/  
+### general django
+- https://djangocentral.com/building-a-blog-application-with-django/  # django's own tutorial good entry point for general understanding  
 - https://stackoverflow.com/a/35244323/4231985  # SO thread about django folder structures
+- https://brntn.me/blog/six-things-i-do-every-time-i-start-a-django-project/  # checklist for starting django projects 
 
 
 ### production server related
+- https://www.digitalocean.com/community/tutorials/how-to-set-up-django-with-postgres-nginx-and-gunicorn-on-ubuntu-18-04#step-6-testing-gunicorn-s-ability-to-serve-the-project  # starting point for getting django setup in production server
 - https://plainenglish.io/blog/how-deploy-an-asgi-django-application-with-nginx-gunicorn-daphne-and-supervisor-on-ubuntu-server # gunicorn + daphne server configuration help  
 - http://www.learningaboutelectronics.com/Articles/How-to-create-a-gunicorn-service-file-in-linux.php  
 - https://www.digitalocean.com/community/questions/502-bad-gateway-nginx-2  # useful debugging comment
@@ -33,11 +33,11 @@ Here is a list of resources I found useful while working on this project. They h
 - https://stackoverflow.com/questions/48933972/webrtc-python-implementation  # this question on SO finally lead to what I wanted (i.e. client-server connection using WebRTC)
 - https://stackoverflow.com/questions/70554961/webrtc-vs-websockets-server-to-client-s-one-to-many-live-video-streaming-from  # more insight into what tech is out here for client-server connection
 - https://stackoverflow.com/questions/76515691/how-to-setup-webrtc-connection-between-django-server-and-browser-using-aiortc  # more insight into what tech is out here for client-server connection
-- https://www.youtube.com/watch?v=MBOlZMLaQ8g&ab_channel=TauhidCodes  # youtube tutorial on websocket and p2p webrtc usage
+- https://www.youtube.com/watch?v=MBOlZMLaQ8g&ab_channel=TauhidCodes  # YouTube tutorial on websocket and p2p webrtc usage
 - https://www.reddit.com/r/django/comments/on8fh1/how_to_deploy_opencv_video_feed_cam_with_my/  # reddit thread that seems to be a good lead
 - https://michaelsusanto81.medium.com/real-time-app-with-websocket-through-django-channels-adb436e9a17a  # medium article about using websocket to stream video
 - https://stackoverflow.com/questions/53813696/sending-webrtc-video-stream-to-server-with-django-channels  # another webrtc question/lead 
-- https://github.com/aiortc/aiortc/issues/447  # opencv frame to webrtc sampel code
+- https://github.com/aiortc/aiortc/issues/447  # opencv frame to webrtc sample code
 - https://www.youtube.com/watch?v=Y1mx7cx6ckI  # google talk about server component of webrtc
 - https://www.youtube.com/watch?v=8I2axE6j204  # another pretty accessible talk about webrtc
 - https://niccoloterreri.com/webrtc-with-transceivers  # webrtc with transceivers
@@ -56,24 +56,32 @@ Here is a list of resources I found useful while working on this project. They h
 - https://ralzohairi.medium.com/audio-recording-in-javascript-96eed45b75ee  # audio demo
 - https://github.com/cwilso/WebAudio/tree/master  # very cool web audio playground
 - https://codepen.io/brianchirls/pen/YLrgoR  # sample code for web audio output test
-
-
-### css/javascript
-- https://www.youtube.com/@KevinPowell  # a pretty helpful youtuber for css  
-- https://thoughtbot.com/blog/transitions-and-transforms  # transition/transforms explaination  
-- https://codepen.io/dcode-software/pen/abZPmRb  # button with loading spinner  
 - https://ralzohairi.medium.com/audio-recording-in-javascript-96eed45b75ee  # audio recording js  
+
+
+### css
+- https://www.youtube.com/@KevinPowell  # a pretty helpful youtuber for css
+- https://matthewjamestaylor.com/holy-grail-layout  # css layout
+- https://thoughtbot.com/blog/transitions-and-transforms  # transition/transforms explanation
+- https://developer.mozilla.org/en-US/docs/Web/CSS/animation  # animation documentation
+- https://stackoverflow.com/a/19989633/4231985  # cancel animation
+- https://www.queness.com/post/356/create-a-vertical-horizontal-and-diagonal-sliding-content-website-with-jquery  # tutorial on page transitions
+- https://css-tricks.com/snippets/css/typewriter-effect/  # typewriter-effect
+
+
+### javascript 
+- https://codepen.io/dcode-software/pen/abZPmRb  # button with loading spinner
 - https://codepen.io/dcode-software/pen/xxwpLQo  # drag-dropzone  
 - https://www.w3schools.com/howto/tryit.asp?filename=tryhow_js_scroll_to_top  # scroll to top example  
 - https://codepen.io/cathydutton/pen/xxpOOw  # stopwatch
 - https://stackoverflow.com/a/39987136/4231985  # oscillator demo
-- https://css-tricks.com/snippets/css/typewriter-effect/  # typewriter-effect
 - https://codepen.io/jakejarvis/pen/pBZWZw  # hand wave-effect
-- https://developer.mozilla.org/en-US/docs/Web/CSS/animation  # animation documentation
-- https://stackoverflow.com/a/19989633/4231985  # cancel animation 
-- https://www.queness.com/post/356/create-a-vertical-horizontal-and-diagonal-sliding-content-website-with-jquery  # tutorial on page transitions
-- https://matthewjamestaylor.com/holy-grail-layout  # css layout
 - https://web.dev/read-files/  # reading files in javascript
+- https://jsfiddle.net/ojrtn0g4/  # client side storage of audio files
+
+
+### html 
+- https://stackoverflow.com/a/60363693/4231985  # how to use markdown in html
 
 
 ### htmx related

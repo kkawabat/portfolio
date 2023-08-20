@@ -5,7 +5,7 @@ Hello this is my repo for my website at kankawabata.com.
 This repo contains:
 - main page
   - details about myself
-- web interfaces for some of my personal projects  
+- web interfaces/apps for some of my personal projects  
   - magic eye generator
   - whistle to midi app
   - etc.
@@ -17,7 +17,7 @@ This repo contains:
 - ffmpeg
 
 ### installation for local development
-this might be a bit of a trial and error process but in general you should be able to:  
+There might be a bit of a trial and error process, but you should be able to get it running locally with:  
 
 - clone this repo with `git clone https://github.com/kkawabat/portfolio.git`
 - run `poetry install`
