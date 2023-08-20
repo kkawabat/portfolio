@@ -30,7 +30,15 @@
 <script>
 var custom_effect_count = 0;
 
-init_dropzones();
+function on_audio_drop(event){
+    if(event.dataTransfer.files[0]){
+        file = event.dataTransfer.files[0];
+        add_blob_as_sound_effect(file)
+    }
+}
+
+soundeffect_dz = document.getElementById('soundeffect-dropzone')
+init_dropzones(soundeffect_dz, false, on_audio_drop);
 
 function record_sound_effect() {
     if (audioRecorder.status == 'paused'){
@@ -70,20 +78,19 @@ function add_blob_as_sound_effect(audioBlob) {
         soundboardDiv.insertBefore(newDiv, recorderDiv);
     }
     reader.readAsDataURL(audioBlob);
-
 }
 
 
 function toggle_sound(sound_button){
     audio_elem = sound_button.children('audio')[0]
     if (audio_elem.paused ) {
-        sound_button.addClass('active')
+        sound_button.addClass('se-active')
         audio_elem.currentTime = 0;
         audio_elem.play();
-        audio_elem.onended = function(){console.log('ended'); sound_button.removeClass('active');};
+        audio_elem.onended = function(){sound_button.removeClass('se-active');};
 
     } else {
-        sound_button.removeClass('active')
+        sound_button.removeClass('se-active')
         audio_elem.pause();
     };
 }

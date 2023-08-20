@@ -1,10 +1,12 @@
 Here is a list of resources I found useful while working on this project. They have helped give me context and insight.  this list isn't exhaustive as sometimes I forget to update it. 
 
+
 ### django starting point
 - https://www.digitalocean.com/community/tutorials/how-to-set-up-django-with-postgres-nginx-and-gunicorn-on-ubuntu-18-04#step-6-testing-gunicorn-s-ability-to-serve-the-project  
 - https://www.youtube.com/watch?v=Jyvffr3aCp0&ab_channel=WebDevSimplified  
 - https://djangocentral.com/building-a-blog-application-with-django/  
 - https://stackoverflow.com/a/35244323/4231985  # SO thread about django folder structures
+
 
 ### production server related
 - https://plainenglish.io/blog/how-deploy-an-asgi-django-application-with-nginx-gunicorn-daphne-and-supervisor-on-ubuntu-server # gunicorn + daphne server configuration help  
@@ -12,10 +14,12 @@ Here is a list of resources I found useful while working on this project. They h
 - https://www.digitalocean.com/community/questions/502-bad-gateway-nginx-2  # useful debugging comment
 - https://wolfx.io/how-to-serve-static-and-media-files-in-nginx  # staticfile
 
+
 ### python packaging
 - https://towardsdatascience.com/create-your-custom-python-package-that-you-can-pip-install-from-your-git-repository-f90465867893
 - https://blog.ionelmc.ro/2014/05/25/python-packaging/#the-structure
 - https://kiwidamien.github.io/making-a-python-package.html
+
 
 ### real time application related
 - https://stackoverflow.com/a/63418292  # insightful stackoverflow comment on the handshake process in webrtc
@@ -53,6 +57,7 @@ Here is a list of resources I found useful while working on this project. They h
 - https://github.com/cwilso/WebAudio/tree/master  # very cool web audio playground
 - https://codepen.io/brianchirls/pen/YLrgoR  # sample code for web audio output test
 
+
 ### css/javascript
 - https://www.youtube.com/@KevinPowell  # a pretty helpful youtuber for css  
 - https://thoughtbot.com/blog/transitions-and-transforms  # transition/transforms explaination  
@@ -68,11 +73,14 @@ Here is a list of resources I found useful while working on this project. They h
 - https://stackoverflow.com/a/19989633/4231985  # cancel animation 
 - https://www.queness.com/post/356/create-a-vertical-horizontal-and-diagonal-sliding-content-website-with-jquery  # tutorial on page transitions
 - https://matthewjamestaylor.com/holy-grail-layout  # css layout
+- https://web.dev/read-files/  # reading files in javascript
+
 
 ### htmx related
 - https://www.mattlayman.com/blog/2021/how-to-htmx-django/
 - https://juliensalinas.com/en/htmx-intercoolerjs-django-nlpcloud/#allow-manual-page-reloading  # solution relating to manually loading 
 - https://www.ratfactor.com/htmx/index  # neat webpage that shows what the htmx elements do
+
 
 ### face recognition
 - https://github.com/opencv/opencv_contrib/blob/4.8.0/modules/face/samples/landmarks_demo.py  # sample code from opencv website for face landmark detection 

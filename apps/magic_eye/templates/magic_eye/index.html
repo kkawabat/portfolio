@@ -23,15 +23,21 @@
         {% include 'magic_eye/details.html' %}
         {% include 'magic_eye/construct.html' %}
         {% include 'magic_eye/deconstruct.html' %}
-        <div id="img-popup" class="modal">
+        <div id="img-popup" class="popup-modal">
             <span class="close">&times;</span>
-            <div id="img_holder"> </div>
+            <div id="img-holder" class="img-holder"> </div>
         </div>
     </div>
 </div>
 
 <script>
-    init_dropzones();
+    decode_dz = document.getElementById("decodableDropzone");
+    init_dropzones(decode_dz);
+    texture_dz = document.getElementById("textureDropzone");
+    init_dropzones(texture_dz);
+    depth_dz = document.getElementById("depthmapDropzone");
+    init_dropzones(depth_dz);
+
     $('#genForm').on( "submit", function( event ) {
         event.preventDefault();
         var $form = $( this ),
@@ -58,7 +64,7 @@
                     alert(response['error'])
                 }
                 else{
-                    $('#img_holder').empty().append('<img style="max-width: 100%;" src="'+response['image_url']+'" />')
+                    $('#img-holder').empty().append('<img style="max-width: 100%;" src="'+response['image_url']+'" />')
                     popup('img-popup')
                 }
             },
@@ -96,10 +102,9 @@
                     alert(response['error'])
                 }
                 else{
-                    $('#img_holder').empty().append('<img style="max-width: 100%;" src="'+response['image_url']+'" />')
+                    $('#img-holder').empty().append('<img style="max-width: 100%;" src="'+response['image_url']+'" />')
                     popup('img-popup')
                 }
-
             },
             error: function (request, status, error) {
                 console.log('failed')
