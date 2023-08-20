@@ -87,10 +87,13 @@ body {
     gap: 5%;
     color: #fff;
     max-width: 40em;
-    margin: auto;
+    margin: 1em auto 4em auto;
 }
 
-#content-div img { max-width:100%; }
+#content-div img {
+    max-width:100%;
+    margin-bottom: 1em;
+}
 
 .subheader {
     margin: 1em auto;

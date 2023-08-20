@@ -22,10 +22,6 @@
 
 #header-div2 { flex-direction: column; }
 
-.header {
-    white-space: nowrap;
-}
-
 .fab {
     padding: 20px;
     font-size: 30px;
@@ -35,9 +31,9 @@
     text-decoration: none;
 }
 
-.Social-media{
+.Social-media {
   display: flex;
-  justify-content: flex-start;
+  justify-content: center;
   gap: 10%
 }
 
