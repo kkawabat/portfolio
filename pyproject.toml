@@ -21,6 +21,10 @@ morse-code-util = {git = "https://github.com/kkawabat/Morse-Code-Util.git"}
 opencv-cam-distance-measurer = {git = "https://github.com/kkawabat/opencv_cam_distance_measurer.git"}
 aiortc = "^1.5.0"
 av = "^10.0.0"
+google-api-python-client = "^2.97.0"
+google-auth-oauthlib = "^1.0.0"
+chat-downloader = "^0.2.7"
+pandas = "^2.0.3"
 
 [build-system]
 requires = ["poetry-core"]

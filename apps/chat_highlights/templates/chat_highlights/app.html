@@ -1,4 +1,12 @@
 {% load static %}
 <div id="content-app" class="content-div project">
-<!--Put your app html here-->
+    <h3>link a YouTube Video with live chat</h3>
+    <input type="url" id="youtube-link" name="youtube-link">
+    <button class='app-button'
+            hx-post="{% url 'chat-highlight-get-history' %}"
+            hx-target="#chat-history"
+            hx-include="[name='youtube-link']">
+        Analyze history!
+    </button>
+    <div id="chat-history"></div>
 </div>
