@@ -3,13 +3,12 @@ var audioRecorder = {
     mediaRecorder: null,
     streamBeingCaptured: null,
     status: 'paused',
-
-    start: function () {
+    start: function (deviceId = 'default') {
         if (!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia)) {
             return Promise.reject(new Error('mediaDevices API or getUserMedia method is not supported in this browser.'));
         }
 
-        return navigator.mediaDevices.getUserMedia({ audio: true })
+        return navigator.mediaDevices.getUserMedia({ audio: {deviceId: {exact: deviceId} } })
             .then(stream => {
                 audioRecorder.streamBeingCaptured = stream;
                 audioRecorder.mediaRecorder = new MediaRecorder(stream);
@@ -18,11 +17,11 @@ var audioRecorder = {
                 audioRecorder.mediaRecorder.addEventListener("dataavailable", event => {
                     audioRecorder.audioBlobs.push(event.data);
                 });
+
                 audioRecorder.mediaRecorder.start();
                 audioRecorder.status = 'started';
             });
-        },
-
+    },
     stop: function () {
         return new Promise(resolve => {
             let mimeType = audioRecorder.mediaRecorder.mimeType;

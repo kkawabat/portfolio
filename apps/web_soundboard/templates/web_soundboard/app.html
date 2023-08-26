@@ -2,13 +2,13 @@
 <div id="content-app" class="content-div project">
 
     <div style="margin: 2em;">
-        <div style="display:none;">
-            <h4 style="color: orange;">input devices</h4>
-            <select onchange="set_output_device(this.value);" id="inputDevice" disabled><option value="">Default</option></select>
-        </div>
-        <div>
-            <h4 style="color: orange; width: fit-content; margin: 1em auto;">output devices</h4>
+        <div class="device-select-div">
+            <h4>output devices</h4>
             <select onchange="set_output_device(this.value);" id="outputDevice" disabled><option value="">Default</option></select>
+        </div>
+        <div class="device-select-div">
+            <h4>input devices (set this for recording)</h4>
+            <select onchange="set_input_device(this.value);" id="inputDevice" disabled><option value="">Default</option></select>
         </div>
     </div>
 
@@ -29,25 +29,25 @@
     </div>
 <script>
 var custom_effect_count = 0;
+var soundboardDiv = document.getElementById("soundboard");
+var soundeffect_dz = document.getElementById('soundeffect-dropzone');
+init_dropzones(soundeffect_dz, false, on_audio_drop);
 
 function on_audio_drop(event){
     if(event.dataTransfer.files[0]){
-        file = event.dataTransfer.files[0];
-        add_blob_as_sound_effect(file)
+        var file = event.dataTransfer.files[0];
+        add_blob_as_sound_effect(file);
     }
 }
-
-soundeffect_dz = document.getElementById('soundeffect-dropzone')
-init_dropzones(soundeffect_dz, false, on_audio_drop);
 
 function record_sound_effect() {
     if (audioRecorder.status == 'paused'){
         $('#recorder-label').text('recording in progress..');
-        audioRecorder.start()
+        audioRecorder.start(activeAudioInputDeviceId)
             .then(() => { console.log("recorder started"); })
-            .catch(e => { console.log(error.message) });
+            .catch(e => { console.log(error.message); });
     } else {
-        $('#recorder-label').text('record your own!')
+        $('#recorder-label').text('record your own!');
         audioRecorder.stop().then(audioBlob => {
             add_blob_as_sound_effect(audioBlob);
         });
@@ -56,40 +56,39 @@ function record_sound_effect() {
 
 function add_blob_as_sound_effect(audioBlob) {
     custom_effect_count += 1;
-    reader = new FileReader();
+    var reader = new FileReader();
     reader.onload = (e) => {
         base64URL = e.target.result;
-        newAudio = document.createElement("audio");
+        var newAudio = document.createElement("audio");
         newAudio.src = base64URL;
         newAudio.load();
 
-        newLabel = document.createElement("h3");
+        var newLabel = document.createElement("h3");
         newLabel.textContent = "Custom Effect #" + custom_effect_count;
 
-        newDiv = document.createElement("div");
+        var newDiv = document.createElement("div");
         newDiv.id = "custom-effect" + custom_effect_count;
         newDiv.class="sound-btn";
-        newDiv.addEventListener("click", ()=>{toggle_sound($("#" + newDiv.id));})
+        newDiv.addEventListener("click", () => { toggle_sound($("#" + newDiv.id)); })
         newDiv.appendChild(newAudio);
         newDiv.appendChild(newLabel);
 
-        soundboardDiv = document.getElementById("soundboard");
+
         recorderDiv = document.getElementById("recorder-div");
         soundboardDiv.insertBefore(newDiv, recorderDiv);
     }
     reader.readAsDataURL(audioBlob);
 }
 
-
 function toggle_sound(sound_button){
-    audio_elem = sound_button.children('audio')[0]
+    var audio_elem = sound_button.children('audio')[0];
     if (audio_elem.paused ) {
-        sound_button.addClass('se-active')
+        sound_button.addClass('se-active');
         audio_elem.currentTime = 0;
         audio_elem.play();
-        audio_elem.onended = function(){sound_button.removeClass('se-active');};
+        audio_elem.onended = () => { sound_button.removeClass('se-active'); };
     } else {
-        sound_button.removeClass('se-active')
+        sound_button.removeClass('se-active');
         audio_elem.pause();
     };
 }
