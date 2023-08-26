@@ -1,7 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render
 
-from apps.chat_highlights.chat_highlight_business_logic import parse_chat, fetch_youtube_chat_logs
+from apps.chat_highlights.business_logic import parse_chat, fetch_youtube_chat_logs
 
 
 def index_view(request):

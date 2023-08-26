@@ -89,6 +89,7 @@ Here is a list of resources I found useful while working on this project. They h
 - https://juliensalinas.com/en/htmx-intercoolerjs-django-nlpcloud/#allow-manual-page-reloading  # solution relating to manually loading 
 - https://www.ratfactor.com/htmx/index  # neat webpage that shows what the htmx elements do
 - https://github.com/adamchainz/django-htmx  # django htmx example
+- https://www.youtube.com/watch?v=XdZoYmLkQ4w&ab_channel=BugBytes  # tutorial on htmx + django
 
 
 ### face recognition
@@ -102,6 +103,6 @@ Here is a list of resources I found useful while working on this project. They h
 - http://square.github.io/cubism/  # really cool demo of horizon plots 
 - https://kmandov.github.io/d3-horizon-chart/  # horizon chart plugin for d3
 - https://observablehq.com/@d3/realtime-horizon-chart  # horizon chart 
-- https://www.youtube.com/watch?v=TOJ9yjvlapY&ab_channel=Academind  # d3 js introduction youtube video i found
+- https://www.youtube.com/watch?v=TOJ9yjvlapY&ab_channel=Academind  # d3 js introduction YouTube video I found
 - https://medium.com/free-code-camp/d3-and-canvas-in-3-steps-8505c8b27444  # d3 and canvas tutorial
 - https://talk.observablehq.com/t/i-want-to-learn-d3-i-don-t-want-to-learn-observable-is-that-ok/1957/60  # found this thread that helped me convert observable to plain javascript

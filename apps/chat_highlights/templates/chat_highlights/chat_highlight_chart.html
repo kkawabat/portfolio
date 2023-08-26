@@ -1,11 +1,11 @@
 {% load static %}
-<div id="chat-history">
-    <div class="container"></div>
-    <script src="{% static 'chat_highlights/js/chat_highlights.js' %}"></script>
+<div id="chat-highlight-div">
+    <div id="chart-div"></div>
+    <p>Hover and click to go to timestamp!</p>
     <script>
-        //const period = 250;
-        //data = genData();
-        //var chart = genChart('.container',data)
-        //setInterval(update, period)
+<!--        const period = 250;-->
+        data = genData();
+        var chart = genChart('#chart-div',data)
+<!--        setInterval(update, period)-->
     </script>
 </div>
