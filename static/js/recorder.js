@@ -8,7 +8,13 @@ var audioRecorder = {
             return Promise.reject(new Error('mediaDevices API or getUserMedia method is not supported in this browser.'));
         }
 
-        return navigator.mediaDevices.getUserMedia({ audio: {deviceId: {exact: deviceId} } })
+        constraints = {deviceId: {exact: deviceId},
+                        autoGainControl: {ideal: false},
+                        noiseSuppression: {ideal: false},
+                        echoCancellation: {ideal: false}
+                        }
+
+        return navigator.mediaDevices.getUserMedia({ audio:  constraints})
             .then(stream => {
                 audioRecorder.streamBeingCaptured = stream;
                 audioRecorder.mediaRecorder = new MediaRecorder(stream);
