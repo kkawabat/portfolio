@@ -1,11 +1,10 @@
 {% load static %}
 <div id="chat-highlight-div">
-    <div id="chart-div"></div>
     <p>Hover and click to go to timestamp!</p>
+    <div id="chart-div"></div>
+    {{ data|json_script:"highlight-data" }}
     <script>
-<!--        const period = 250;-->
-        data = genData();
-        var chart = genChart('#chart-div',data)
-<!--        setInterval(update, period)-->
+        var data = JSON.parse(document.getElementById('highlight-data').textContent);
+        var chart = genHighlightChart('#chart-div',data);
     </script>
 </div>

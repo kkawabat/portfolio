@@ -4,6 +4,7 @@
     <button class='app-button'
             hx-post="{% url 'chat-highlight-get-history' %}"
             hx-target="#chat-highlight-div"
+            hx-swap="outerHTML"
             hx-include="[name='youtube-link']"
             >
         Analyze history!
