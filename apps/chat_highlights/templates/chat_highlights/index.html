@@ -2,8 +2,6 @@
 {% load static %}
 {% block title %}Chat Highlights{% endblock title %}
 {% block ref %}
-<!--<script src="https://d3js.org/d3.v4.js"></script>-->
-<!--<script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>-->
 <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
 <link rel="stylesheet" type="text/css" href="{% static 'chat_highlights/css/chat_highlights.css' %}">
 
@@ -11,7 +9,7 @@
 
 {% block body %}
 <div class="project-div fade-in-right">
-    <h1>Chat Highlights (WIP)</h1>
+    <h1>Chat Highlights </h1>
     <div id="header-div1" class='header-div project-header-div'>
         <h3 id='header-details' class='header' onclick="select_nav('details', '#header-div1');">Details</h3>
         <h3 id='header-app' class='header' onclick="select_nav('app', '#header-div1');">App</h3>

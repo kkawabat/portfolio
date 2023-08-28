@@ -2,6 +2,7 @@
 
 function genHighlightChart(chart_div_id, data) {
     url = data.url;
+    youtube_id = data.youtube_id;
     lol_timestamps = [data.lol_ts];
     total_stream_duration = data.total_duration;
 
@@ -106,8 +107,15 @@ function genHighlightChart(chart_div_id, data) {
     svg.on("mouseup touchend", (event) => {
         const xx = d3.pointer(event, svg.node())[0] + 0.5;
         timestamp = x.invert(xx)/1000;
-        timestamped_url = url + '&t=' + Math.round(timestamp);
-        window.open(timestamped_url, "_blank");
+
+        if (player !== null) {
+            player.seekTo(Math.round(timestamp));
+        } else {
+            timestamped_url = url + '&t=' + Math.round(timestamp);
+            window.open(timestamped_url, "_blank");
+        }
+
+
     });
 
     return div.node();

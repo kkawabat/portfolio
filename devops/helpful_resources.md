@@ -98,6 +98,7 @@ Here is a list of resources I found useful while working on this project. They h
 
 ### youtube api
 - https://blog.hubspot.com/website/how-to-get-youtube-api-key  # getting youtube api
+- https://developers.google.com/youtube/iframe_api_reference  # youtube embed player api 
 
 ### data visualization
 - http://square.github.io/cubism/  # really cool demo of horizon plots 
