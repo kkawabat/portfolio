@@ -1,7 +1,6 @@
-from django.http import HttpResponse
 from django.shortcuts import render
 
-from apps.chat_highlights.business_logic import parse_youtube_chat_logs_from_url, fetch_youtube_chat_logs
+from apps.chat_highlights.business_logic import parse_youtube_chat_logs_from_url
 
 
 def index_view(request):
@@ -9,16 +8,29 @@ def index_view(request):
 
 
 def details_view(request):
-    return render(request, "chat_highlights/index.html")
+    return render(request, "chat_highlights/index.html", context={'anchor': 'details'})
 
 
 def app_view(request):
-    return render(request, "chat_highlights/index.html")
+    return render(request, "chat_highlights/index.html", context={'anchor': 'app'})
 
 
 def get_history_view(request):
-    youtube_url = request.POST['youtube-link']
-    youtube_url = 'https://www.youtube.com/watch?v=NrY0kCOc-zw&list=PLFs19LVskfNzQLZkGG_zf6yfYTp_3v_e6&ab_channel=Destiny'
-    highlight_data = parse_youtube_chat_logs_from_url(youtube_url)
-    highlight_data['url'] = youtube_url
-    return render(request, "chat_highlights/chat_highlight_chart.html", context={'data': highlight_data})
+    try:
+        youtube_url = request.POST['youtube-link']
+
+        # sample url used for testing purposes
+        # youtube_url = 'https://www.youtube.com/watch?v=NrY0kCOc-zw'
+
+        if len(youtube_url) == 0:
+            raise Exception("Please link a valid youtube video")
+
+        youtube_url = youtube_url.split('&')[0]
+        highlight_data = parse_youtube_chat_logs_from_url(youtube_url)
+        highlight_data['url'] = youtube_url
+        return render(request, "chat_highlights/chat_highlight_chart.html", context={'data': highlight_data})
+
+    except Exception as e:
+        return render(request, "chat_highlights/chat_highlight_chart.html", context={'error': e})
+
+

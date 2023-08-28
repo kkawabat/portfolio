@@ -1,10 +1,16 @@
 {% load static %}
-<div id="chat-highlight-div">
-    <p>Hover and click to go to timestamp!</p>
-    <div id="chart-div"></div>
-    {{ data|json_script:"highlight-data" }}
-    <script>
-        var data = JSON.parse(document.getElementById('highlight-data').textContent);
-        var chart = genHighlightChart('#chart-div',data);
-    </script>
-</div>
+
+{% if error %}
+    <script>alert("{{error}}");</script>
+    <div id="chat-highlight-div"></div>
+{% else %}
+    <div id="chat-highlight-div">
+        <p>Hover and click to go to timestamp!</p>
+        <div id="chart-div"></div>
+        {{ data|json_script:"highlight-data" }}
+        <script>
+            var data = JSON.parse(document.getElementById('highlight-data').textContent);
+            var chart = genHighlightChart('#chart-div',data);
+        </script>
+    </div>
+{% endif %}
