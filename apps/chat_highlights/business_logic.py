@@ -5,6 +5,13 @@ from os.path import join, abspath, dirname, exists
 import matplotlib.pyplot as plt
 import pandas as pd
 from chat_downloader import ChatDownloader
+import os
+
+import dotenv
+from googleapiclient.discovery import build
+
+scopes = ["https://www.googleapis.com/auth/youtube.readonly"]
+dotenv.load_dotenv()
 
 CHAT_LOG_DIR = join(dirname(abspath(__file__)), 'static', 'chat_logs')
 CAPITALIZED_WORDS_REGEX = re.compile(r'\b([A-Z]{2,}(?:[-\'][A-Z]+)+|[A-Z]{2,})\b')
@@ -12,13 +19,12 @@ PUNCTUATION_SUFFIX_REGEX = re.compile(r"\b[!?.]+")
 LOL_REGEX = re.compile(r'(l+m+(?:f+)?a+o+)|(l+o+l+w?)|(l+u+l+w?)|((?:ha)+)|(k+e+k+w?)')
 
 
-def analyze_chat_logs(output_path):
+def analyze_chat_logs(chat_logs):
     def parse_emote_name(emote_data):
         if isinstance(emote_data, list):
             return set(e['name'] for e in emote_data)
         return emote_data
 
-    chat_logs = pd.read_json(output_path)
     chat_logs['timestamp'] = chat_logs['timestamp'].apply(pd.Timestamp)
     chat_logs = chat_logs.set_index(pd.DatetimeIndex(chat_logs['timestamp']))
 
@@ -54,22 +60,16 @@ def detect_lols(message):
     return match is not None
 
 
-def fetch_youtube_chat_logs(url):
-    vid_id = url.split('.com/watch?v=')[-1].split('&')[0]
-    output_path = join(CHAT_LOG_DIR, f'{vid_id}.json')
-    if not exists(output_path):
-        downloader = ChatDownloader()
-        try:
-            chat_log_list = []
-            for chat in downloader.get_chat(url):
-                chat_log_list.append(chat)
-            with open(output_path, 'w') as ofile:
-                json.dump(chat_log_list, ofile)
-        except Exception as e:
-            pass
-        finally:
-            downloader.close()
-    return output_path
+def fetch_youtube_chat_logs(url, duration=None):
+    downloader = ChatDownloader()
+    try:
+        chat_log_list = []
+        for chat in downloader.get_chat(url, start_time=0, end_time=duration):
+            chat_log_list.append(chat)
+        chat_log_df = pd.DataFrame(chat_log_list)
+    finally:
+        downloader.close()
+    return chat_log_df
 
 
 def plot_lols(chat_logs):
@@ -81,20 +81,78 @@ def plot_lols(chat_logs):
 
 
 def parse_youtube_chat_logs_from_url(url):
-    output_path = fetch_youtube_chat_logs(url)
-    log_stats = analyze_chat_logs(output_path)
+    vid_url = url.split('&')[0]
+    vid_id = vid_url.split('watch?v=')[-1]
+    log_output_path = join(CHAT_LOG_DIR, f'{vid_id}.csv')
+    if not exists(log_output_path):
+        vid_metadata = fetch_youtube_vid_metadata(vid_id)
+
+        published_time = pd.to_datetime(vid_metadata['snippet']['publishedAt'])
+
+        duration = None
+        if vid_metadata['snippet']['liveBroadcastContent'] == 'live':  # if the video is live only get chat up to current time
+            endtime = pd.Timestamp.utcnow().value - published_time.value
+            duration = endtime - published_time
+
+        chat_logs = fetch_youtube_chat_logs(url, duration)
+
+        # there's a bug with ChatDownloader timestamps, recreating my own based off of some of the time_in_seconds and published_time column
+        chat_logs['timestamp'] = chat_logs['time_in_seconds'].apply(lambda x: published_time + pd.to_timedelta(x, unit='s'))
+        chat_logs.to_csv(log_output_path, index=False)
+    else:
+        chat_logs = pd.read_csv(log_output_path)
+
+    log_stats = analyze_chat_logs(chat_logs)
     log_stats = log_stats[log_stats['time_in_seconds'] > 0]
-    lol_ts_series = log_stats[['has_lols']].resample('10s')\
-                                            .sum().fillna(0)\
-                                            .rolling(window=15, min_periods=1).mean()\
-                                            .interpolate(method='cubic')
+
+    lol_ts_series = log_stats[['has_lols']].resample('10s') \
+        .sum().fillna(0) \
+        .rolling(window=10, min_periods=1).mean() \
+        .interpolate(method='cubic')
+
     lol_ts_series.index = (lol_ts_series.index - lol_ts_series.index[0]).total_seconds() * 1000
 
     lol_ts_list = [{"timestamp": ts, "value": lols} for ts, lols in zip(lol_ts_series.index.to_list(), lol_ts_series['has_lols'].to_list())]
 
     log_highlights = {'lol_ts': lol_ts_list,
-                      'total_duration': log_stats.iloc[-1]['time_in_seconds']}
+                      'total_duration': log_stats.iloc[-1]['time_in_seconds'],
+                      'url': vid_url,
+                      'youtube_id': vid_id}
     return log_highlights
+
+
+def fetch_youtube_vid_metadata(vid_id):
+    youtube = build("youtube", version="v3", developerKey=os.environ['YOUTUBE_API_KEY'])
+
+    request = youtube.videos().list(part="snippet", id=vid_id)
+    response = request.execute()
+    if len(response.get('items')) != 0:
+        return response.get('items')[0]
+    raise Exception(f"video with id {vid_id} does not exist")
+
+
+def test():
+    chat_logs = pd.read_csv(r'C:\Users\kkawa\PycharmProjects\portfolio\apps\chat_highlights\static\chat_logs\testing_na-cQuub-QU.csv')
+    log_stats = analyze_chat_logs(chat_logs)
+    log_stats = log_stats[log_stats['time_in_seconds'] > 0]
+
+    lol_ts_series = log_stats[['has_lols']].resample('10s') \
+        .sum().fillna(0) \
+        .rolling(window=15, min_periods=1).mean() \
+        .interpolate(method='cubic')
+
+    lol_ts_series.index = (lol_ts_series.index - lol_ts_series.index[0]).total_seconds() * 1000
+
+    a = pd.read_json(r'C:\Users\kkawa\PycharmProjects\portfolio\apps\chat_highlights\static\chat_logs\testing_na-cQuub-QU.json')
+    log_stats2 = analyze_chat_logs(a)
+    log_stats2 = log_stats2[log_stats2['time_in_seconds'] > 0]
+
+    lol_ts_series2 = log_stats2[['has_lols']].resample('10s') \
+        .sum().fillna(0) \
+        .rolling(window=15, min_periods=1).mean() \
+        .interpolate(method='cubic')
+
+    lol_ts_series2.index = (lol_ts_series2.index - lol_ts_series2.index[0]).total_seconds() * 1000
 
 
 if __name__ == "__main__":

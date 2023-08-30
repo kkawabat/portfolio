@@ -25,11 +25,7 @@ def get_history_view(request):
         if len(youtube_url) == 0:
             raise Exception("Please link a valid youtube video")
 
-        youtube_url = youtube_url.split('&')[0]
-        youtube_id = youtube_url.split('v=')[-1]
         highlight_data = parse_youtube_chat_logs_from_url(youtube_url)
-        highlight_data['url'] = youtube_url
-        highlight_data['youtube_id'] = youtube_id
 
         return render(request, "chat_highlights/chat_highlight_chart.html", context={'data': highlight_data})
 

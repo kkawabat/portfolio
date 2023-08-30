@@ -48,7 +48,7 @@ function genHighlightChart(chart_div_id, data) {
         const {length: k} = d;
         context.fillStyle = "#333";
         context.fillRect(0, 0, width, graph_heights);
-        const second_width = width/d.length;
+        const second_width = 10*width/d.length;
 
         for (let i = 0; i < bands; ++i) {
             context.save();
@@ -109,7 +109,7 @@ function genHighlightChart(chart_div_id, data) {
         timestamp = x.invert(xx)/1000;
 
         if (player !== null) {
-            player.seekTo(Math.round(timestamp));
+            player.seekTo(Math.round(timestamp), true);
         } else {
             timestamped_url = url + '&t=' + Math.round(timestamp);
             window.open(timestamped_url, "_blank");
