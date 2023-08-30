@@ -10,6 +10,25 @@
         Analyze Chat!
     </button>
     <div id="chat-highlight-div"></div>
+
+    <div id="player" style="margin-top:3em; display:none;"></div>
+    <script id="youtubeApiScript">
+        var player;
+        var tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        var firstScriptTag = document.getElementById('youtubeApiScript');
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('player', {
+                height: '390', width: '640',
+                playerVars: { 'playsinline': 1,},
+                events: { 'onReady': onPlayerReady, }
+            });
+        }
+        function onPlayerReady(event) { event.target.playVideo(); }
+    </script>
+
     <div style="margin-top: 3em;">
         <h3>paste some sample URLs here</h3>
         <ul>

@@ -4,6 +4,7 @@ function genHighlightChart(chart_div_id, data) {
     url = data.url;
     youtube_id = data.youtube_id;
     lol_timestamps = [data.lol_ts];
+    lol_ts_arr =  lol_timestamps[0].map(a => a.timestamp);
     total_stream_duration = data.total_duration;
 
     // Specify the chart’s dimensions.
@@ -48,7 +49,7 @@ function genHighlightChart(chart_div_id, data) {
         const {length: k} = d;
         context.fillStyle = "#333";
         context.fillRect(0, 0, width, graph_heights);
-        const second_width = 10*width/d.length;
+        const second_width = 2 * width/d.length;
 
         for (let i = 0; i < bands; ++i) {
             context.save();
@@ -85,7 +86,7 @@ function genHighlightChart(chart_div_id, data) {
         .data(lol_timestamps)
         .join("text")
             .attr("x", 4)
-            .attr("y", marginTop)
+            .attr("y", 10)
             .attr("dy", "0.35em")
             .attr("fill", "orange")
             .attr('font-size', "2em")
@@ -94,24 +95,51 @@ function genHighlightChart(chart_div_id, data) {
     // Create a moving rule that follows the mouse.
     const rule = svg.append("line")
         .attr("stroke", "orange")
-        .attr("y1", 0)
+        .attr("y1", marginTop)
         .attr("y2", height + marginTop)
         .attr("x1", 0.5)
         .attr("x2", 0.5);
 
+
+    const rule_ts = svg.append("g").append('text')
+        .attr("x", .6)
+        .attr("y", marginTop + 5)
+        .attr("dy", "0.35em")
+        .attr("fill", "orange")
+        .attr('font-size', "1em")
+        .text( "Timestamp" );
+
+    const rule_val = svg.append("g").append('text')
+        .attr('text-anchor', 'end')
+        .attr("x", .4)
+        .attr("y", marginTop + 5)
+        .attr("dy", "0.35em")
+        .attr("fill", "orange")
+        .attr('font-size', "1em")
+        .text( "Value" );
+
     svg.on("mousemove touchmove", (event) => {
         const xx = d3.pointer(event, svg.node())[0] + 0.5;
+        timestamp = Math.round(x.invert(xx)/1000);
+
+        timestamp_str = new Date(timestamp * 1000).toISOString().substring(11, 19);
         rule.attr("x1", xx).attr("x2", xx);
+
+        rule_ts.attr("x", xx + 5).text(timestamp_str);
+
+        i = d3.bisectCenter(lol_ts_arr, timestamp * 1000);
+        val = lol_timestamps[0][i].value
+        rule_val.attr("x", xx - 5).text(val);
     });
 
     svg.on("mouseup touchend", (event) => {
         const xx = d3.pointer(event, svg.node())[0] + 0.5;
-        timestamp = x.invert(xx)/1000;
+        timestamp = Math.round(x.invert(xx)/1000);
 
         if (player !== null) {
-            player.seekTo(Math.round(timestamp), true);
+            player.seekTo(timestamp, true);
         } else {
-            timestamped_url = url + '&t=' + Math.round(timestamp);
+            timestamped_url = url + '&t=' + timestamp;
             window.open(timestamped_url, "_blank");
         }
 

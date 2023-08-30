@@ -108,3 +108,4 @@ Here is a list of resources I found useful while working on this project. They h
 - https://medium.com/free-code-camp/d3-and-canvas-in-3-steps-8505c8b27444  # d3 and canvas tutorial
 - https://talk.observablehq.com/t/i-want-to-learn-d3-i-don-t-want-to-learn-observable-is-that-ok/1957/60  # found this thread that helped me convert observable to plain javascript
 - https://codepen.io/Dvdscot/pen/zYjpzVP  # demo for zoom in d3
+- https://blocks.roadtolarissa.com/1wheel/7131712d289897355a1ac93e93a05cbc  # gallery of d3.js 

@@ -63,6 +63,7 @@ def detect_lols(message):
 def fetch_youtube_chat_logs(url, duration=None):
     downloader = ChatDownloader()
     try:
+        print(f"fetching youtube chat...")
         chat_log_list = []
         for chat in downloader.get_chat(url, start_time=0, end_time=duration):
             chat_log_list.append(chat)
