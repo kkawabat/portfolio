@@ -20,9 +20,10 @@ function genHighlightChart(chart_div_id, data) {
     // Create the scales.
     timestamp_domain = [new Date(0), new Date(lol_timestamps[0][lol_timestamps[0].length-1].timestamp)];
     const x = d3.scaleTime().domain(timestamp_domain).range([0, width]);
+    var zoomedX = x;
 
     value_domain = d3.extent(lol_timestamps[0], (d) => d.value);
-    const y = d3.scaleLinear()
+    var y = d3.scaleLinear()
                 .domain(value_domain)
                 .rangeRound([0, -bands * graph_heights]);
 
@@ -31,7 +32,7 @@ function genHighlightChart(chart_div_id, data) {
     // Create the container and append a canvas for each series.
     const div = d3.select(chart_div_id).style("position", "relative");
 
-    const canvas = div.selectAll("canvas")
+    var canvas = div.selectAll("canvas")
         .data(lol_timestamps)
         .enter().append("canvas")
             .attr("width", width)
@@ -66,22 +67,17 @@ function genHighlightChart(chart_div_id, data) {
     }
 
     // Create a SVG container for the axis and the interaction.
-    const svg = div.append("svg")
+    var svg = div.append("svg")
         .attr("width", width)
         .attr("height", height+ 20)
         .style("position", "relative")
         .style("font", "10px sans-serif");
 
-    const xAxis = d3.axisBottom(x).tickFormat(HHMMSS_timestamp).tickSizeOuter(0)
+    var xAxis = d3.axisBottom(x).tickFormat((d) => d.toISOString().slice(11, 19)).tickSizeOuter(0)
 
-    const gX = svg.append("g")
+    var gX = svg.append("g")
         .attr("transform", `translate(0, ${height})`)
         .call(xAxis)
-
-    function HHMMSS_timestamp(date){
-        // https://stackoverflow.com/a/25279340/4231985
-        return date.toISOString().slice(11, 19);
-    }
 
     // Create the y axis.
     svg.append("g")
@@ -122,7 +118,7 @@ function genHighlightChart(chart_div_id, data) {
 
     svg.on("mousemove touchmove", (event) => {
         const xx = d3.pointer(event, svg.node())[0] + 0.5;
-        timestamp = Math.round(x.invert(xx)/1000);
+        timestamp = Math.round(zoomedX.invert(xx)/1000);
 
         timestamp_str = new Date(timestamp * 1000).toISOString().substring(11, 19);
         rule.attr("x1", xx).attr("x2", xx);
@@ -136,7 +132,7 @@ function genHighlightChart(chart_div_id, data) {
 
     svg.on("mouseup touchend", (event) => {
         const xx = d3.pointer(event, svg.node())[0] + 0.5;
-        timestamp = Math.round(x.invert(xx)/1000);
+        timestamp = Math.round(zoomedX.invert(xx)/1000);
 
         if (player !== null) {
             player.seekTo(timestamp, true);
@@ -153,7 +149,7 @@ function genHighlightChart(chart_div_id, data) {
         .on("zoom", zoomBehavior);
 
     function preventDefaultZoomBehavior(event) {
-        event.preventDefault();
+        event.preventDefault()
         return (!event.ctrlKey || event.type === 'wheel') && !event.button;
     }
 
@@ -167,10 +163,10 @@ function genHighlightChart(chart_div_id, data) {
 
     function zoomBehavior({ transform }) {
         zoomRect.attr("transform", transform);
-        newX = transform.rescaleX(x);
-        gX.call(xAxis.scale(newX));
+        zoomedX = transform.rescaleX(x);
+        gX.call(xAxis.scale(zoomedX));
         context = canvas.node().getContext("2d");
-        drawHighlights(lol_timestamps[0], context, newX);
+        drawHighlights(lol_timestamps[0], context, zoomedX);
     }
 
     return div.node();
