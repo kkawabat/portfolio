@@ -27,7 +27,6 @@ function genHighlightChart(chart_div_id, data) {
                 .rangeRound([0, -bands * graph_heights]);
 
     var color = d3.scaleLinear().domain([0, bands-1]).range(["orange", "white"])
-//    color = i =>["rgb(12,25,67)", "rgb(72,0,67)", "rgb(72,90,0)"][i]
 
     // Create the container and append a canvas for each series.
     const div = d3.select(chart_div_id).style("position", "relative");
@@ -46,18 +45,21 @@ function genHighlightChart(chart_div_id, data) {
     // This function draws each band in turn. There is no need to clip, since we’re working on a canvas.
     function horizon(d) {
         const {context} = this;
-        const {length: k} = d;
+        drawHighlights(d, context, x);
+    }
+
+    function drawHighlights(data, context, _xAxis) {
+        const {length: k} = data;
         context.fillStyle = "#333";
         context.fillRect(0, 0, width, graph_heights);
-        const second_width = 2 * width/d.length;
-
+        const second_width = 5.1 * width/data.length;
         for (let i = 0; i < bands; ++i) {
             context.save();
             context.translate(0, i * graph_heights);
             context.fillStyle = color(i);
             for (let j = 0; j < k; ++j) {
-                const timestamp = new Date(d[j].timestamp);
-                context.fillRect(x(timestamp), graph_heights, second_width, y(d[j].value));
+                const timestamp = new Date(data[j].timestamp);
+                context.fillRect(_xAxis(timestamp), graph_heights, second_width, y(data[j].value));
             }
             context.restore();
         }
@@ -70,10 +72,11 @@ function genHighlightChart(chart_div_id, data) {
         .style("position", "relative")
         .style("font", "10px sans-serif");
 
-    // Create a container for the axis.
+    const xAxis = d3.axisBottom(x).tickFormat(HHMMSS_timestamp).tickSizeOuter(0)
+
     const gX = svg.append("g")
-        .attr("transform", `translate(0, ${height })`)
-        .call(d3.axisBottom(x).tickFormat(HHMMSS_timestamp).tickSizeOuter(0))
+        .attr("transform", `translate(0, ${height})`)
+        .call(xAxis)
 
     function HHMMSS_timestamp(date){
         // https://stackoverflow.com/a/25279340/4231985
@@ -99,7 +102,6 @@ function genHighlightChart(chart_div_id, data) {
         .attr("y2", height + marginTop)
         .attr("x1", 0.5)
         .attr("x2", 0.5);
-
 
     const rule_ts = svg.append("g").append('text')
         .attr("x", .6)
@@ -142,9 +144,34 @@ function genHighlightChart(chart_div_id, data) {
             timestamped_url = url + '&t=' + timestamp;
             window.open(timestamped_url, "_blank");
         }
-
-
     });
+
+    var zoom = d3.zoom()
+        .scaleExtent([1, 5])
+        .extent([[0, 0], [width, height]])
+        .filter(preventDefaultZoomBehavior)
+        .on("zoom", zoomBehavior);
+
+    function preventDefaultZoomBehavior(event) {
+        event.preventDefault();
+        return (!event.ctrlKey || event.type === 'wheel') && !event.button;
+    }
+
+    zoomRect = svg.append("rect")
+        .attr("width", width)
+        .attr("height", height)
+        .style("fill", "none")
+        .style("pointer-events", "all")
+        .attr('transform', 'translate(' + marginLeft + ',' + marginTop + ')')
+        .call(zoom);
+
+    function zoomBehavior({ transform }) {
+        zoomRect.attr("transform", transform);
+        newX = transform.rescaleX(x);
+        gX.call(xAxis.scale(newX));
+        context = canvas.node().getContext("2d");
+        drawHighlights(lol_timestamps[0], context, newX);
+    }
 
     return div.node();
 }
