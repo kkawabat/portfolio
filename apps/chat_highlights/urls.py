@@ -6,5 +6,4 @@ urlpatterns = [
     path('details', details_view, name='chat-highlight-details'),
     path('app', app_view, name='chat-highlight-app'),
     path('get_history', get_history_view, name='chat-highlight-get-history'),
-
 ]

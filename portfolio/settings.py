@@ -14,12 +14,10 @@ import mimetypes
 import os
 from pathlib import Path
 
-
 load_dotenv()
 
 mimetypes.add_type("text/css", ".css", True)
 mimetypes.add_type("text/javascript", ".js", True)
-
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -30,7 +28,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 APPEND_SLASH = True
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY',  'django-insecure-c^$=z@s8rfzi^b=$2_^t&bn%1%+#*m9g^zys&_*=&zk8#%g4wq')
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-c^$=z@s8rfzi^b=$2_^t&bn%1%+#*m9g^zys&_*=&zk8#%g4wq')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DJANGO_DEBUG', False) == 'True'
@@ -96,9 +94,6 @@ CHANNEL_LAYERS = {
 
 WSGI_APPLICATION = 'portfolio.wsgi.application'
 
-
-"channels.layers.InMemoryChannelLayer"
-
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
@@ -113,18 +108,10 @@ DATABASES = {
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
+    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator', },
+    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator', },
+    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator', },
+    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator', },
 ]
 
 # Internationalization

@@ -15,10 +15,10 @@ This repo contains:
 - poetry 
 - dependencies for pyaudio
 - ffmpeg
+- npm
 
-### installation for local development
-There might be a bit of a trial and error process, but you should be able to get it running locally with:  
+### installation for local development 
 
 - clone this repo with `git clone https://github.com/kkawabat/portfolio.git`
 - run `poetry install`
-- `python manage.py runserver`
+- run `python manage.py runserver`
