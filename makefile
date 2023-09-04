@@ -18,5 +18,4 @@ update:
 	git pull
 	poetry install
 	poetry run python manage.py collectstatic --no-input
-	systemctl restart gunicorn
-	systemctl restart daphne
+	sudo sh -c 'systemctl restart gunicorn;	systemctl restart daphne'

@@ -1,23 +1,23 @@
 {% extends "project_base.html" %}
 {% load static %}
-{% block title %}{{app_name}}{% endblock title %}
+{% block title %}Speech Transcriber{% endblock title %}
 {% block ref %}
-<link rel="stylesheet" type="text/css" href="{% static '{{app_name}}/css/{{app_name}}.css' %}">
-<script type="application/javascript" src="{% static '{{app_name}}/js/{{app_name}}.js' %}"></script>
+<link rel="stylesheet" type="text/css" href="{% static 'speech_transcriber/css/speech_transcriber.css' %}">
+<script type="application/javascript" src="{% static 'speech_transcriber/js/speech_transcriber.js' %}"></script>
 
 {% endblock ref %}
 
 {% block body %}
 <div class="project-div fade-in-right">
-    <h1>{{app_name}}</h1>
+    <h1>Speech Transcriber</h1>
     <div id="header-div1" class='header-div project-header-div'>
         <h3 id='header-details' class='header' onclick="select_nav('details', '#header-div1');">Details</h3>
         <h3 id='header-app' class='header' onclick="select_nav('app', '#header-div1');">App</h3>
     </div>
 
     <div id="content-div" style="display:none;">
-        {% include '{{app_name}}/details.html' %}
-        {% include '{{app_name}}/app.html' %}
+        {% include 'speech_transcriber/details.html' %}
+        {% include 'speech_transcriber/app.html' %}
     </div>
 </div>
 
