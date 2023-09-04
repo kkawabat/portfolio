@@ -5,7 +5,7 @@ Here is a list of resources I found useful while working on this project. They h
 - https://djangocentral.com/building-a-blog-application-with-django/  # django's own tutorial good entry point for general understanding  
 - https://stackoverflow.com/a/35244323/4231985  # SO thread about django folder structures
 - https://brntn.me/blog/six-things-i-do-every-time-i-start-a-django-project/  # checklist for starting django projects 
-
+- https://www.youtube.com/playlist?list=PL6gx4Cwl9DGDYbs0jJdGefNN8eZRSwWqy  # advanced django 
 
 ### production server related
 - https://www.digitalocean.com/community/tutorials/how-to-set-up-django-with-postgres-nginx-and-gunicorn-on-ubuntu-18-04#step-6-testing-gunicorn-s-ability-to-serve-the-project  # starting point for getting django setup in production server
@@ -111,8 +111,13 @@ Here is a list of resources I found useful while working on this project. They h
 - https://blocks.roadtolarissa.com/1wheel/7131712d289897355a1ac93e93a05cbc  # gallery of d3.js
 
 ### celery
-- https://nickjanetakis.com/blog/4-use-cases-for-when-to-use-celery-in-a-flask-application celery use case
+- https://nickjanetakis.com/blog/4-use-cases-for-when-to-use-celery-in-a-flask-application  # celery use case
 
 ### optimization 
-- https://medium.com/uva-mobile-devhub/set-up-react-in-your-django-project-with-webpack-4fe1f8455396 webpack + django
-- https://github.com/django-compressor/django-compressor library to compress css and js
+- https://medium.com/uva-mobile-devhub/set-up-react-in-your-django-project-with-webpack-4fe1f8455396  # webpack + django
+- https://github.com/django-compressor/django-compressor  # library to compress css and js
+
+### makefile
+- https://makefiletutorial.com/  # tutorial 
+- https://blog.mathieu-leplatre.info/tips-for-your-makefile-with-python.html  # tutorial 2
+- https://gist.github.com/magopian/4077998  # helpful template
