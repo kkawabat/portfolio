@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'apps.magic_eye',
     'apps.whistle_detector',
     'apps.morse_code',
+    'apps.speech_transcriber',
     'apps.webcam_ruler',
     'apps.web_soundboard',
     'apps.chat_highlights',

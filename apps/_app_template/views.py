@@ -6,8 +6,8 @@ def index_view(request):
 
 
 def details_view(request):
-    return render(request, "{{app_name}}/index.html")
+    return render(request, "{{app_name}}/index.html", context={'anchor': 'details'})
 
 
 def app_view(request):
-    return render(request, "{{app_name}}/index.html")
+    return render(request, "{{app_name}}/index.html", context={'anchor': 'app'})

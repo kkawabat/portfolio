@@ -1,6 +1,7 @@
 from django.contrib.staticfiles.storage import staticfiles_storage
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseNotFound
 from django.shortcuts import render, redirect
+from django.urls import NoReverseMatch
 
 from apps.main.models import Post
 
@@ -66,18 +67,10 @@ def cv_pdf(_):
 
 
 def project_post_view(_, slug_id):
-    if slug_id.startswith('webcam-ruler'):
-        return redirect('webcam-ruler')
-    elif slug_id.startswith('magic-eye'):
-        return redirect('magic-eye')
-    elif slug_id.startswith('morse-code'):
-        return redirect('morse-code')
-    elif slug_id.startswith('whistle-detector'):
-        return redirect('whistle-detector')
-    elif slug_id.startswith('web-soundboard'):
-        return redirect('web-soundboard')
-    elif slug_id.startswith('chat-highlight'):
-        return redirect('chat-highlight')
+    try:
+        return redirect(slug_id)
+    except NoReverseMatch:
+        return HttpResponseNotFound(f"No project with id {slug_id} found")
 
 
 def socials_view(request):

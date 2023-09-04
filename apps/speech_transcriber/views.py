@@ -6,8 +6,8 @@ def index_view(request):
 
 
 def details_view(request):
-    return render(request, "speech_transcriber/index.html")
+    return render(request, "speech_transcriber/index.html", context={'anchor': 'details'})
 
 
 def app_view(request):
-    return render(request, "speech_transcriber/index.html")
+    return render(request, "speech_transcriber/index.html", context={'anchor': 'app'})
