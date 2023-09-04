@@ -183,24 +183,16 @@ function play_beep(beep_type){
     console.log(beep_type);
     switch(beep_type) {
         case 'dit':
-//            return new Promise(r => { audioCtx.resume(); r(); })
-//                        .then(r => { setTimeout( function(){ audioCtx.suspend(); }, 200); } )
-//                        .then(pause_promise(400));
             return beep(200).then(unbeep_promise(200));
             break;
         case 'dah':
-//            return new Promise(r => { audioCtx.resume(); r();})
-//                        .then(r => { setTimeout(() => { audioCtx.suspend(); }, 400); } )
-//                        .then(pause_promise(400));
             return beep(400).then(unbeep_promise(200));
             break;
         case 'pause':
             return pause(400);
-//            return pause(8000);
             break;
         case 'long_pause':
             return pause(800);
-//            return pause(8000);
             break;
         default:
             return audioCtx.suspend();

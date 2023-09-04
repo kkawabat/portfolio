@@ -49,13 +49,6 @@ let selected_prompt;
 let transcribed_prompt;
 
 
-function speedtest_on_message_handler() {
-    $('#STMorse').text(result['morse']);
-    $('#STText').text(result['text']);
-    update_prompt(result['text']);
-}
-
-
 function update_prompt(decoded_text) {
     matched_str = "";
     matched_str_span = "";
@@ -91,52 +84,14 @@ function update_prompt(decoded_text) {
     }
 }
 
-//function update_prompt(decoded_text) {
-//    matched_str = "";
-//    unmatched_str = selected_prompt;
-//    err = false;
-//    i = 0;
-//    while (i < decoded_text.length) {
-//        if (unmatched_str.length == 0){ break; }
-//
-//        if (!!unmatched_str[0].match(/^[.,:!?']/)){
-//            matched_str += unmatched_str[0];
-//            unmatched_str = unmatched_str.slice(1);
-//        }
-//
-//        if (unmatched_str[0] === decoded_text[i]){
-//            matched_str += decoded_text[i];
-//            unmatched_str = unmatched_str.slice(1);
-//            err = false;
-//        } else { err = true; }
-//        i++;
-//    }
-//
-//    if (err){ $('#prompt').html('<span class="green">' + matched_str + '</span>' + '<span class="red">' + unmatched_str[0] + '</span>' + unmatched_str.slice(1)); }
-//    else { $('#prompt').html('<span class="green">' + matched_str + '</span>' + unmatched_str); }
-//
-//    if (unmatched_str.length === 0){
-//        stopTimer();
-//        stopTone();  // stops the beep if pressed twice
-//        total_duration = (seconds + (tens/100)).toFixed(3);
-//        alert("you did it! \n" +
-//            "total time: " + total_duration + "\n" +
-//            "tapping rate: " + (selected_prompt.length/total_duration).toFixed(3) + " characters per second\n" +
-//            "error rate: " + (((decoded_text.length-selected_prompt.length)/selected_prompt.length)*100).toFixed(1)) + "%";
-//
-//    }
-//}
-
 function SpeedTestStartMorseRecording() {
     $('#Speedtap-start-control').hide();
     $('#Speedtap-stop-control').show();
     $('#Speedtap-stop-control')[0].scrollIntoView(false);
     $('#STTapBtn').mousedown(btn_down_handler);
     $('#STTapBtn').mouseup(btn_up_handler);
-
-    connectSocket(speedtest_on_message_handler);
     startTimer();
-    morse_signal = "";
+    morse_signal = [];
     random_prompt_idx = ~~(Math.random() * prompt_list.length);
     selected_prompt = prompt_list[random_prompt_idx].replace(/[^A-Za-z ]/g, '').toLowerCase();
     $('#prompt').text(selected_prompt);
@@ -149,12 +104,10 @@ function SpeedTestStartMorseRecording() {
     window.scrollTo(0, document.body.scrollHeight);
 }
 
-
 function SpeedTestStopMorseRecording() {
     $('#Speedtap-start-control').show();
     $('#Speedtap-stop-control').hide();
     resetTimer();
-    disconnectSocket();
     $('#STTapBtn').unbind("mousedown");
     $('#STTapBtn').unbind("mouseup");
     document.removeEventListener('keydown', down_handler);
@@ -163,36 +116,6 @@ function SpeedTestStopMorseRecording() {
     $('#STText').text("");
     stopTone();
 }
-
-function practice_on_message_handler() {
-    $('#PMorse').text(result['morse']);
-    $('#PText').text(result['text']);
-}
-
-function PracticeStartMorseRecording() {
-    $('#Practice-start-control').hide();
-    $('#Practice-stop-control').show();
-    $('#Practice-stop-control')[0].scrollIntoView(false);
-    $('#PTapBtn').mousedown(btn_down_handler);
-    $('#PTapBtn').mouseup(btn_up_handler);
-    connectSocket(practice_on_message_handler);
-    morse_signal = "";
-    up_time = Date.now();
-    document.addEventListener('keydown', down_handler);
-    document.addEventListener('keyup', up_handler);
-}
-
-
-function PracticeStopMorseRecording() {
-    $('#Practice-start-control').show();
-    $('#Practice-stop-control').hide();
-    $('#STTapBtn').unbind("mousedown");
-    $('#STTapBtn').unbind("mouseup");
-    disconnectSocket();
-    document.removeEventListener('keydown', down_handler);
-    document.removeEventListener('keyup', up_handler);
-}
-
 
 function down_handler(e) {
     if (e.repeat) { return }
@@ -219,55 +142,68 @@ function btn_up_handler(e) {
 };
 
 function down_behavior(){
-    down_time = Date.now();
-    morse_signal += Math.round((down_time - up_time)/10).toString() + 'U';
     startTone();
-    send_data(morse_signal);
+    down_time = Date.now();
+    morse_signal.push( Math.round((down_time - up_time)/10) );
+    parse_signal(morse_signal);
 }
 
 function up_behavior(){
-    up_time = Date.now();
-    morse_signal += Math.round((up_time - down_time)/10).toString() + 'D';
     stopTone();
-    send_data(morse_signal);
+    up_time = Date.now();
+    morse_signal.push( Math.round((up_time - down_time)/10) );
+    parse_signal(morse_signal);
 }
 
-function send_data(morse_signal){
-    morseSocket.send(JSON.stringify({type: 'decode', data: morse_signal}));
+
+const tappingSpeed = 20;
+const shortDurationThreshold = tappingSpeed;
+const shortPauseDurationThreshold = tappingSpeed * 1;
+const longPauseDurationThreshold = tappingSpeed * 4;
+
+const CHAR_TO_MORSE_MAP = {'a': '.-', 'b': '-...', 'c': '-.-.', 'd': '-..', 'e': '.', 'f': '..-.', 'g': '--.',
+                           'h': '....', 'i': '..', 'j': '.---', 'k': '-.-', 'l': '.-..', 'm': '--', 'n': '-.',
+                           'o': '---', 'p': '.--.', 'q': '--.-', 'r': '.-.', 's': '...', 't': '-', 'u': '..-',
+                           'v': '...-', 'w': '.--', 'x': '-..-', 'y': '-.--', 'z': '--..',
+                           '0': '-----', '1': '.----', '2': '..---', '3': '...--', '4': '....-', '5': '.....',
+                           '6': '-....', '7': '--...', '8': '---..', '9': '----.', ' ': '/', '':''};
+
+const MORSE_TO_CHAR_MAP = Object.fromEntries(Object.entries(CHAR_TO_MORSE_MAP).map(([key, value]) => [value, key]));
+
+function parse_signal(signal_durations) {
+    const morse = signal_to_morse(signal_durations);
+    const morse_text = morse_to_text(morse);
+    result = {'morse': morse, 'text': morse_text}
+
+    $('#STMorse').text(result['morse']);
+    $('#STText').text(result['text']);
+    update_prompt(result['text']);
 }
 
-
-function connectSocket(on_message_handler) {
-    let ws_scheme = window.location.protocol == "https:" ? "wss://" : "ws://";
-    let morse_ws_endpoint = ws_scheme + window.location.host + '/ws/morse/'
-
-    morseSocket = new WebSocket( morse_ws_endpoint );
-    morseSocket.onmessage = (response) =>{
-        result = JSON.parse(response.data);
-        if ('disconnected' in result){ stopMorseRecording(); }
-        else{ on_message_handler(); }
-    }
-}
-
-function disconnectSocket() {
-    morseSocket.onclose = function () {};
-    morseSocket.close();
-}
-
-//  from https://stackoverflow.com/a/8809472/4231985
-function generateUUID() { // Public Domain/MIT
-    var d = new Date().getTime();//Timestamp
-    var d2 = ((typeof performance !== 'undefined') && performance.now && (performance.now()*1000)) || 0;//Time in microseconds since page-load or 0 if unsupported
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-        var r = Math.random() * 16;//random number between 0 and 16
-        if(d > 0){//Use timestamp until depleted
-            r = (d + r)%16 | 0;
-            d = Math.floor(d/16);
-        } else {//Use microseconds since page-load if supported
-            r = (d2 + r)%16 | 0;
-            d2 = Math.floor(d2/16);
-        }
-        return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+function signal_to_morse(signal_durations) {
+    const up_signals = signal_durations.filter((element, index) => {return index % 2 === 0;})
+    const down_signals = signal_durations.filter((element, index) => {return index % 2 === 1;})
+    const up = up_signals.map((dur) => {
+        if (dur <= shortPauseDurationThreshold) { return ""; }
+        else if (dur <= longPauseDurationThreshold) { return " "; }
+        else { return " / "; }
     });
+
+    const down = down_signals.map((dur) => {
+        if (dur <= shortDurationThreshold) { return "."; }
+        else { return "-"; }
+    });
+
+    morse_str = up.flatMap((up_val, idx) => [up_val, down[idx]]).join('')
+    return morse_str
 }
 
+function morse_to_text(morse_str) {
+    morse_text = morse_str.trim().split(" ").map((v) => (v in MORSE_TO_CHAR_MAP) ? MORSE_TO_CHAR_MAP[v]: '�');
+    return morse_text
+}
+
+function text_to_morse(text) {
+    morse = morse.map((v) => (v in CHAR_TO_MORSE_MAP) ? CHAR_TO_MORSE_MAP[v]: '').join(' ');
+    return morse
+}

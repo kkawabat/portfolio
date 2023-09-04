@@ -15,7 +15,6 @@ from channels.routing import ProtocolTypeRouter, URLRouter
 from django.core.asgi import get_asgi_application
 
 import apps.webcam_ruler.routing
-import apps.morse_code.routing
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'portfolio.settings')
 
@@ -25,7 +24,6 @@ application = ProtocolTypeRouter({
   "http": get_asgi_application(),
   "websocket": AuthMiddlewareStack(
         URLRouter(
-            apps.morse_code.routing.websocket_urlpatterns +
             apps.webcam_ruler.routing.websocket_urlpatterns
         )
     ),

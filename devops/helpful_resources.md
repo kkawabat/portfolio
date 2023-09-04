@@ -113,5 +113,6 @@ Here is a list of resources I found useful while working on this project. They h
 ### celery
 - https://nickjanetakis.com/blog/4-use-cases-for-when-to-use-celery-in-a-flask-application celery use case
 
-### webpack 
+### optimization 
 - https://medium.com/uva-mobile-devhub/set-up-react-in-your-django-project-with-webpack-4fe1f8455396 webpack + django
+- https://github.com/django-compressor/django-compressor library to compress css and js
