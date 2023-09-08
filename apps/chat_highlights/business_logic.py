@@ -1,4 +1,3 @@
-import json
 import re
 from os.path import join, abspath, dirname, exists
 
@@ -60,17 +59,32 @@ def detect_lols(message):
     return match is not None
 
 
-def fetch_youtube_chat_logs(url, duration=None):
+def fetch_youtube_chat_logs(url):
     downloader = ChatDownloader()
+    full_log = True
     try:
         print(f"fetching youtube chat...")
+        cur_time = pd.Timestamp.utcnow().value / 1000
         chat_log_list = []
-        for chat in downloader.get_chat(url, start_time=0, end_time=duration):
+        for chat in downloader.get_chat(url, start_time="00:00:00"):
+            # by default the loop doesn't end until reaching the end of the video
+            # but if we are fetching from a live broadcast this loop exits once we reach the end
+            if cur_time < chat['timestamp']:
+                full_log = False
+                break
+            print(pd.Timestamp(chat['timestamp']*1000))
             chat_log_list.append(chat)
+
         chat_log_df = pd.DataFrame(chat_log_list)
+        chat_log_df['timestamp'] = chat_log_df['timestamp'] * 1000  # convert chatDownloader's timestamp to standard
+
+        if 'time_in_seconds' not in chat_log_df.columns:
+            # todo the start time is not accurate atm this is the best I can do on a live session
+            start_time = pd.Timestamp(chat_log_df.iloc[0]['timestamp'])
+            chat_log_df['time_in_seconds'] = (chat_log_df['timestamp'].apply(pd.Timestamp) - start_time).iloc[0].total_seconds()
     finally:
         downloader.close()
-    return chat_log_df
+    return chat_log_df, full_log
 
 
 def plot_lols(chat_logs):
@@ -86,25 +100,14 @@ def parse_youtube_chat_logs_from_url(url):
     vid_id = vid_url.split('watch?v=')[-1]
     log_output_path = join(CHAT_LOG_DIR, f'{vid_id}.csv')
     if not exists(log_output_path):
-        vid_metadata = fetch_youtube_vid_metadata(vid_id)
-
-        published_time = pd.to_datetime(vid_metadata['snippet']['publishedAt'])
-
-        duration = None
-        if vid_metadata['snippet']['liveBroadcastContent'] == 'live':  # if the video is live only get chat up to current time
-            endtime = pd.Timestamp.utcnow().value - published_time.value
-            duration = endtime - published_time
-
-        chat_logs = fetch_youtube_chat_logs(url, duration)
-
-        # there's a bug with ChatDownloader timestamps, recreating my own based off of some of the time_in_seconds and published_time column
-        chat_logs['timestamp'] = chat_logs['time_in_seconds'].apply(lambda x: published_time + pd.to_timedelta(x, unit='s'))
+        chat_logs, all_chat = fetch_youtube_chat_logs(url)
+        if not all_chat:
+            log_output_path = log_output_path.replace('.csv', '-partial.csv')
         chat_logs.to_csv(log_output_path, index=False)
     else:
         chat_logs = pd.read_csv(log_output_path)
 
     log_stats = analyze_chat_logs(chat_logs)
-    log_stats = log_stats[log_stats['time_in_seconds'] > 0]
 
     lol_ts_series = log_stats[['has_lols']].resample('10s') \
         .sum().fillna(0) \

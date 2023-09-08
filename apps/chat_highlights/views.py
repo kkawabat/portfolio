@@ -18,15 +18,10 @@ def app_view(request):
 def get_history_view(request):
     try:
         youtube_url = request.POST['youtube-link']
-
-        # sample url used for testing purposes
-        # youtube_url = 'https://www.youtube.com/watch?v=NrY0kCOc-zw'
-
         if len(youtube_url) == 0:
             raise Exception("Please link a valid youtube video")
 
         highlight_data = parse_youtube_chat_logs_from_url(youtube_url)
-
         return render(request, "chat_highlights/chat_highlight_chart.html", context={'data': highlight_data})
 
     except Exception as e:
