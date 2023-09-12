@@ -109,6 +109,7 @@ Here is a list of resources I found useful while working on this project. They h
 - https://talk.observablehq.com/t/i-want-to-learn-d3-i-don-t-want-to-learn-observable-is-that-ok/1957/60  # found this thread that helped me convert observable to plain javascript
 - https://codepen.io/Dvdscot/pen/zYjpzVP  # demo for zoom in d3
 - https://blocks.roadtolarissa.com/1wheel/7131712d289897355a1ac93e93a05cbc  # gallery of d3.js
+- https://wavesurfer-js.org/examples/  # wavesurfer-js, waveform visualization library examples
 
 ### celery
 - https://nickjanetakis.com/blog/4-use-cases-for-when-to-use-celery-in-a-flask-application  # celery use case
@@ -121,3 +122,7 @@ Here is a list of resources I found useful while working on this project. They h
 - https://makefiletutorial.com/  # tutorial 
 - https://blog.mathieu-leplatre.info/tips-for-your-makefile-with-python.html  # tutorial 2
 - https://gist.github.com/magopian/4077998  # helpful template
+
+### aws
+- https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/transcribe/client/start_transcription_job.html  # transcription api
+- https://docs.aws.amazon.com/transcribe/latest/dg/example_transcribe_Scenario_GettingStartedTranscriptionJobs_section.html  # transcription sample code

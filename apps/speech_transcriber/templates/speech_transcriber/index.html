@@ -1,14 +1,18 @@
 {% extends "project_base.html" %}
 {% load static %}
 {% block title %}Speech Transcriber{% endblock title %}
+
 {% block ref %}
+<script src="https://unpkg.com/wavesurfer.js@7"></script>
+<script src="https://unpkg.com/wavesurfer.js@7/dist/plugins/regions.min.js"></script>
+
 <link rel="stylesheet" type="text/css" href="{% static 'speech_transcriber/css/speech_transcriber.css' %}">
 <script type="application/javascript" src="{% static 'speech_transcriber/js/speech_transcriber.js' %}"></script>
 <script type="application/javascript" src="{% static 'js/recorder.js' %}"></script>
-
 {% endblock ref %}
 
 {% block body %}
+<input id="csrf_token" type="hidden" value="{{ csrf_token }}">
 <div class="project-div fade-in-right">
     <h1>Speech Transcriber</h1>
     <div id="header-div1" class='header-div project-header-div'>
@@ -21,5 +25,4 @@
         {% include 'speech_transcriber/details.html' %}
     </div>
 </div>
-
 {% endblock body %}

@@ -1,7 +1,9 @@
 {% load static %}
-<div id="content-app" class="content-div project">
+<div id="content-app" class="content-div project", style="width: 100%;">
     <button id="startBtn" class="app-button" onclick="startRecording()">Start Recording</button>
-    <button id="stopBtn" class="app-button" onclick="stopRecording()">
+    <button id="stopBtn" class="app-button" onclick="stopRecording()" style="display: none;">
         <i id="recordingIcon" class="fa fa-circle text-danger Blink"></i> Stop Recording
     </button>
+    <div id="waveform"></div>
+    <div id="transcript-div"></div>
 </div>

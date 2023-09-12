@@ -22,6 +22,7 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path("__debug__/", include("debug_toolbar.urls")),
     path('old_main/', include('apps.main.urls')),
     path('', include('apps.new_main.urls')),
     path('projects/web_soundboard/', include('apps.web_soundboard.urls')),
