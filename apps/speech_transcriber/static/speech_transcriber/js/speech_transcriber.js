@@ -1,10 +1,35 @@
 var wavesurfer = null;
 var wsRegions = null;
 
-function startRecording() {
-    audioRecorder.start();
+
+function recording_state(){
     $("#startBtn").hide();
     $("#stopBtn").show();
+    $("#loading_div").hide();
+}
+
+function loading_state(){
+    $("#startBtn").hide();
+    $("#stopBtn").hide();
+    $("#loading_div").show();
+}
+
+function start_state(){
+    $("#startBtn").show();
+    $("#stopBtn").hide();
+    $("#loading_div").hide();
+}
+
+
+function finished_state(){
+    $("#startBtn").hide();
+    $("#stopBtn").hide();
+    $("#loading_div").hide();
+}
+
+function startRecording() {
+    audioRecorder.start();
+    recording_state();
 }
 
 
@@ -13,9 +38,15 @@ function stopRecording() {
         transcribe(audioBlob);
         load_waveform(URL.createObjectURL(audioBlob));
     });
-    $("#startBtn").show();
-    $("#stopBtn").hide();
+    loading_state();
 }
+
+$('#submitForm').on( "submit", function( event ) {
+    event.preventDefault();
+    audio_file = $( this ).find( "input[name='audioFile']" )[0].files[0]
+    transcribe(audioBlob);
+
+});
 
 function transcribe(audioBlob){
     var csrf_token = $('#csrf_token').val();
@@ -33,19 +64,16 @@ function transcribe(audioBlob){
         cache: false,
         processData: false,
         contentType: false,
-        success: function(response) {process_response(response); },
+        success: function(response) {
+            if ('error' in response) {
+                alert(response['error']);
+                start_state();
+                return;
+            }
+            display_transcribed_view(response, audioBlob);
+        },
         error: function (request, status, error) { console.log('failed ' + error); }
     });
-}
-
-
-function process_response(response) {
-    if ('error' in response) {
-        alert(response['error']);
-        return;
-    }
-    load_ws_region(response['word_items']);
-    $("#transcript-div").html(response['transcript_view']);
 }
 
 function load_waveform(audio_uri) {
@@ -85,4 +113,17 @@ function seek(time) {
 
 function playRegion(idx) {
     wsRegions.regions[idx].play();
+}
+
+function sampleRun(){
+    sample_transcript =
+    sample_audio =
+    display_transcribed_view(transcript, audio)
+}
+
+function displayTranscribedView(transcript, audio) {
+    finished_state();
+    load_waveform(URL.createObjectURL(audioBlob));
+    load_ws_region(transcript['word_items']);
+    $("#transcript-div").html(transcript['transcript_view']);
 }

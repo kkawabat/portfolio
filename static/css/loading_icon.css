@@ -1,7 +1,14 @@
+#loading_div {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
 .lds-dual-ring {
   display: inline-block;
   width: 80px;
   height: 80px;
+  margin-right: 1em;
 }
 .lds-dual-ring:after {
   content: " ";
@@ -22,3 +29,4 @@
     transform: rotate(360deg);
   }
 }
+

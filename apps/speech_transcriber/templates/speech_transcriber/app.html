@@ -1,9 +1,27 @@
 {% load static %}
-<div id="content-app" class="content-div project", style="width: 100%;">
-    <button id="startBtn" class="app-button" onclick="startRecording()">Start Recording</button>
-    <button id="stopBtn" class="app-button" onclick="stopRecording()" style="display: none;">
-        <i id="recordingIcon" class="fa fa-circle text-danger Blink"></i> Stop Recording
-    </button>
+<div id="content-app" class="content-div project" style="width: 100%;">
+    <div id="control-panel">
+        <button id="startBtn" class="app-button" onclick="startRecording()">Start Recording</button>
+        <button id="stopBtn" class="app-button" onclick="stopRecording()" style="display: none;">
+            <i id="recordingIcon" class="fa fa-circle text-danger Blink"></i> Stop Recording
+        </button>
+
+        <h1>or</h1>
+
+        <form id="submitForm" action="{% url 'speech-transcriber-submit' %}">
+            {% csrf_token %}
+            <div id="audioDropzone" class="drop-zone">
+                    <span class="drop-zone__prompt">drag or click here to upload an audio file</span>
+                    <input type="file" id="audioFile" name="audioFile" class="drop-zone__input" accept="audio/*">
+            </div>
+        </form>
+
+        <h1>or</h1>
+
+        <button id="testBtn" class="app-button" onclick="sampleRun()">Use a sample transcript</button>
+    </div>
+
+    {% include 'loading_icon.html' with message="Waiting for transcription to finish..." %}
     <div id="waveform"></div>
     <div id="transcript-div"></div>
 </div>

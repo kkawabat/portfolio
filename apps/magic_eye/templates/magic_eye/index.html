@@ -40,7 +40,7 @@
 
     $('#genForm').on( "submit", function( event ) {
         event.preventDefault();
-        var $form = $( this ),
+        var $form = $( this );
         url = $form.attr( "action" );
         texture_image = $form.find( "input[name='textureFile']" )[0].files[0]
         depth_image = $form.find( "input[name='depthMapFile']" )[0].files[0]
@@ -79,7 +79,7 @@
 
         $("#decodeSubmitBtn").prop("value", "Decoding in progress...");
 
-        var $form = $( this ),
+        var $form = $( this );
         url = $form.attr( "action" );
         input_image = $form.find( "input[name='decodableFile']" )[0].files[0]
 

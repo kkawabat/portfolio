@@ -3,7 +3,7 @@
     {% if item.type == "pronunciation" %}
         <span style="opacity: {{item.confidence}}" onclick="playRegion({{item.word_idx}})">{{item.text}}</span>
     {% else %}
-        <span style="opacity: {{item.confidence}}">{{item.text}}</span>
+        <span>{{item.text}}</span>
     {% endif %}
 {% endfor %}
 </div>

@@ -22,3 +22,10 @@ This repo contains:
 - clone this repo with `git clone https://github.com/kkawabat/portfolio.git`
 - run `poetry install`
 - run `python manage.py runserver`
+
+Below is some commands and notes for running my personal server. This will not be applicable to other users
+
+### Server commands and notes
+
+how to access server:
+`ssh XXXXXXXXX@kankawabata.com` where XXXXXXXXX is my username

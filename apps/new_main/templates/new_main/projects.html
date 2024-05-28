@@ -4,7 +4,7 @@
             {% if project.status == 1 %}
                 <h3 class='header' onclick="window.location.href='{% url 'project_post' slug_id=project.slug %}'">{{project.title}}</h3>
             {% else %}
-                <h3 class='header' onclick="window.location.href='{% url 'project_post' slug_id=project.slug %}'">{{project.title}} (Work In Progress)</h3>
+                <h3 class='header' onclick="window.location.href='{% url 'project_post' slug_id=project.slug %}'">{{project.title}}</h3>
             {% endif %}
         {% endfor %}
     </div>
