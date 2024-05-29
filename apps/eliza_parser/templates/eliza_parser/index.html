@@ -1,0 +1,24 @@
+{% extends "project_base.html" %}
+{% load static %}
+{% block title %}Eliza Parser{% endblock title %}
+{% block ref %}
+<link rel="stylesheet" type="text/css" href="{% static 'eliza_parser/css/eliza_parser.css' %}">
+<script type="application/javascript" src="{% static 'eliza_parser/js/eliza_parser.js' %}"></script>
+
+{% endblock ref %}
+
+{% block body %}
+<div class="project-div fade-in-right">
+    <h1>Eliza Parser</h1>
+    <div id="header-div1" class='header-div project-header-div'>
+        <h3 id='header-details' class='header' onclick="select_nav('details', '#header-div1');">Details</h3>
+        <h3 id='header-app' class='header' onclick="select_nav('app', '#header-div1');">App</h3>
+    </div>
+
+    <div id="content-div" style="display:none;">
+        {% include 'eliza_parser/app.html' %}
+        {% include 'eliza_parser/details.html' %}
+    </div>
+</div>
+
+{% endblock body %}

@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'apps.webcam_ruler',
     'apps.web_soundboard',
     'apps.chat_highlights',
+    'apps.eliza_parser',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -143,6 +144,7 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'apps', 'morse_code', 'static'),
     os.path.join(BASE_DIR, 'apps', 'webcam_ruler', 'static'),
     os.path.join(BASE_DIR, 'apps', 'web_soundboard', 'static'),
+    os.path.join(BASE_DIR, 'apps', 'eliza_parser', 'static'),
 )
 
 # Default primary key field type
