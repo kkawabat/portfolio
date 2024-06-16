@@ -1,0 +1,56 @@
+#eliza-div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+#eliza-div textarea {
+    background-color: transparent;
+    outline: 2px solid orange;
+    width: 100%;
+    min-height: 10rem;
+    color: orange;
+}
+
+#eliza-div input[type=text] {
+    background-color: transparent;
+    outline: 2px solid orange;
+    caret-color: orange;
+    color: orange;
+}
+
+#eliza-div input[type=button] {
+    background-color: orange;
+    border: none;
+}
+
+.bar.positive {
+  fill: steelblue;
+}
+
+.bar.negative {
+  fill: brown;
+}
+
+/* Style tab links */
+.tablink {
+  background-color: #555;
+  color: white;
+  cursor: pointer;
+  padding: 14px 16px;
+  font-size: 17px;
+  white-space: nowrap;
+}
+
+.tablink:hover {
+  background-color: #777;
+}
+
+#PasteBin {
+    background-color: transparent;
+    outline: 2px solid orange;
+    width: 100%;
+    min-height: 10rem;
+    color: orange;
+}

@@ -1,4 +1,28 @@
 {% load static %}
 <div id="content-app" class="content-div project">
-<!--Put your app html here-->
+    <div style="width:50em;margin:2em;">
+        <button class="tablink" onclick="openPage('eliza-div', this)" id="defaultOpen">Eliza</button>
+        <button class="tablink" onclick="openPage('PasteBin-div', this)" >Paste Bin</button>
+    </div>
+    <div id="eliza-div" class="tabcontent">
+        <textarea id="transcript-txt" readonly></textarea>
+        <div style="margin:1em 0em">
+            <input id="dialog-txt" type="text">
+            <input id="chat-btn" type="button" value="Chat">
+            <input id="reset-btn" type="button" value="Reset">
+
+        </div>
+        <button class="app-button" id="analyze-btn">Analyze Chat</button>
+        <input id="csrf_token" type="hidden" value="{{ csrf_token }}">
+    </div>
+
+    <div id="PasteBin-div" class="tabcontent" style="flex-direction: column; align-items:center;">
+        <div id="PasteBin"  contentEditable='true'>
+            Paste your text here and click analyze.
+        </div>
+        <button class="app-button" id="analyze2-btn">Analyze Chat</button>
+    </div>
+
+    <div id="analysis-result-div">
+    </div>
 </div>
