@@ -1,5 +1,6 @@
 import json
 
+import torch
 from django.http import JsonResponse
 from django.shortcuts import render
 from transformers import pipeline
@@ -21,7 +22,7 @@ def app_view(request):
 def analyze(request):
     global SENTIMENT_PIPELINE
     if SENTIMENT_PIPELINE is None:
-        SENTIMENT_PIPELINE = pipeline("sentiment-analysis", model='distilbert-base-uncased-finetuned-sst-2-english')
+        SENTIMENT_PIPELINE = pipeline("sentiment-analysis", model='distilbert-base-uncased-finetuned-sst-2-english', torch_dtype=torch.bfloat16)
 
     output = []
     dialog_list = json.loads(request.body.decode('utf8'))
