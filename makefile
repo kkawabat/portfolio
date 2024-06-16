@@ -16,6 +16,6 @@ startapp:
 # target: update - pull changes from github, install changes, collectstatic and restart servers
 update:
 	git pull
-	poetry install
+	poetry install --no-cache  # no cache to prevent oom on server
 	poetry run python manage.py collectstatic --no-input
 	sudo sh -c 'systemctl restart gunicorn;	systemctl restart daphne'
