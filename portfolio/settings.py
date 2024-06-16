@@ -33,7 +33,7 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-c^$=z@s8rfzi^b
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DJANGO_DEBUG', False) == 'True'
 
-ALLOWED_HOSTS = ['kankawabata.com', 'localhost', '127.0.0.1', '0.0.0.0', '24.199.113.236']
+ALLOWED_HOSTS = ['kankawabata.com', 'localhost', '127.0.0.1', '0.0.0.0']
 
 # Application definition
 
@@ -159,6 +159,9 @@ LOGGING = {
     'disable_existing_loggers': False,
     'handlers': {
         'file': {
+            'when': 'D',
+            'interval': 1,
+            'backupCount': 3,
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
             'filename': os.path.join(BASE_DIR, 'debug.log'),

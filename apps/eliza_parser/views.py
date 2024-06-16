@@ -1,6 +1,5 @@
 import json
 
-import torch
 from django.http import JsonResponse
 from django.shortcuts import render
 from transformers import pipeline
