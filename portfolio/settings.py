@@ -163,7 +163,7 @@ LOGGING = {
             'interval': 1,
             'backupCount': 3,
             'level': 'DEBUG',
-            'class': 'logging.FileHandler',
+            'class': 'logging.handlers.TimedRotatingFileHandler',
             'filename': os.path.join(BASE_DIR, 'debug.log'),
         },
     },
