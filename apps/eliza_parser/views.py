@@ -1,5 +1,6 @@
 import json
 
+import torch
 from django.http import JsonResponse
 from django.shortcuts import render
 from transformers import pipeline
@@ -22,8 +23,8 @@ def analyze(request):
     global SENTIMENT_PIPELINE
     if SENTIMENT_PIPELINE is None:
         # distilbert-base-uncased-finetuned-sst-2-english was too large for my small server =( had to use a smaller model
-        # SENTIMENT_PIPELINE = pipeline("sentiment-analysis", model='distilbert-base-uncased-finetuned-sst-2-english', torch_dtype=torch.bfloat16)
-        SENTIMENT_PIPELINE = pipeline('sentiment-analysis', model='AlexAnge/small-sentiment-model')
+        SENTIMENT_PIPELINE = pipeline("sentiment-analysis", model='distilbert-base-uncased-finetuned-sst-2-english')
+        # SENTIMENT_PIPELINE = pipeline('sentiment-analysis', model='AlexAnge/small-sentiment-model')
     output = []
     dialog_list = json.loads(request.body.decode('utf8'))
     sentiments = SENTIMENT_PIPELINE(dialog_list)
