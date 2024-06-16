@@ -24,7 +24,7 @@ def analyze(request):
     if SENTIMENT_PIPELINE is None:
         # distilbert-base-uncased-finetuned-sst-2-english was too large for my small server =( had to use a smaller model
         # SENTIMENT_PIPELINE = pipeline("sentiment-analysis", model='distilbert-base-uncased-finetuned-sst-2-english', torch_dtype=torch.bfloat16)
-        SENTIMENT_PIPELINE = pipeline('sentiment-analysis', model='AlexAnge/small-sentiment-model', torch_dtype=torch.bfloat16)
+        SENTIMENT_PIPELINE = pipeline('sentiment-analysis', model='AlexAnge/small-sentiment-model')
     output = []
     dialog_list = json.loads(request.body.decode('utf8'))
     sentiments = SENTIMENT_PIPELINE(dialog_list)
