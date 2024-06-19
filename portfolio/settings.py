@@ -157,6 +157,12 @@ INTERNAL_IPS = ["127.0.0.1", ]
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
+    'formatters': {
+        'timestamp': {
+            'format': '{asctime} {levelname} {message}',
+            'style': '{',
+        },
+    },
     'handlers': {
         'file': {
             'when': 'D',
