@@ -171,6 +171,7 @@ LOGGING = {
             'level': 'DEBUG',
             'class': 'logging.handlers.TimedRotatingFileHandler',
             'filename': os.path.join(BASE_DIR, 'debug.log'),
+            'formatter': 'timestamp'
         },
     },
     'loggers': {
