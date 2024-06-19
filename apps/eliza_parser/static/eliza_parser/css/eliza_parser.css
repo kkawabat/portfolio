@@ -25,14 +25,6 @@
     border: none;
 }
 
-.bar.positive {
-  fill: steelblue;
-}
-
-.bar.negative {
-  fill: brown;
-}
-
 /* Style tab links */
 .tablink {
   background-color: #555;

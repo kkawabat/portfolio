@@ -41,11 +41,7 @@ function analyze(event){
         data = chat_history
     }else if (event.srcElement.id == 'analyze2-btn'){
         // from https://stackoverflow.com/a/4163827
-        var ce = $("<pre />").html($('#PasteBin').html());
-        ce.find("div").replaceWith(function() { return "\n" + this.innerHTML; });
-        ce.find("p").replaceWith(function() { return this.innerHTML + "<br>"; });
-        ce.find("br").replaceWith("\n");
-        var raw_data = ce.text().split('\n');
+        var raw_data = $("#PasteBin").val().split('\n')
         data = [];
         for (i in raw_data){
             if (raw_data[i].trim() != ''){
@@ -79,16 +75,16 @@ function display_sentiment_results(raw_data){
     var margin = {top: 30, right: 10, bottom: 10, left: 60},
         width = 500 - margin.left - margin.right,
         height = 500 - margin.top - margin.bottom;
+    var num_turns = data.length /3
 
-
-  var y = d3.scaleLinear()
+    var y = d3.scaleLinear()
         .domain([-1, 1])
         .range([height, 0])
         .nice();
 
-    var x_bandwidth = width/data.length /2
+    var x_bandwidth = width/num_turns /2
     var x = d3.scaleBand()
-        .domain(d3.range(0, data.length, 1))
+        .domain(d3.range(0, num_turns, 1))
         .range([0, width])
 
     svg.attr("width", width + margin.left + margin.right)
@@ -100,11 +96,23 @@ function display_sentiment_results(raw_data){
     main_g.selectAll(".bar")
         .data(data)
       .enter().append("rect")
-        .attr("class", function(d) { return d.value > 0 ? "bar negative" : "bar positive"; })
+        .attr("fill", function(d) {
+            if (d.label == 'neg'){
+                return 'steelblue'
+            }
+            else if (d.label == 'neu'){
+                return 'grey'
+            }
+            else {
+                return 'red'
+            }
+        })
         .attr('stroke-width', 3)
-        .attr("y", function(d) { return  height - y(Math.min(0, -d.value)); })
-        .attr("x", function(d, i) { return x(i)+ x_bandwidth/2; })
-        .attr("height", function(d) { return Math.abs(y(-d.value) - y(0)); })
+        .attr("y", function(d) {
+            return y(d.position)
+        })
+        .attr("x", function(d, i) { return x(d.turn)+ x_bandwidth/2; })
+        .attr("height", function(d) { return y(0)-y(d.value) })
         .attr("width", x_bandwidth)
         .on("mouseover", onover)
         .on("mousemove", onmove)
@@ -116,8 +124,8 @@ function display_sentiment_results(raw_data){
         .call(yAxis);
 
     var xAxis = d3.axisBottom(x)
-                  .ticks(data.length)
-                  .tickValues(d3.range(0, data.length, 1) )
+                  .ticks(num_turns)
+                  .tickValues(d3.range(0, num_turns, 1) )
     main_g.append("g")
         .attr("class", "x axis")
         .attr("transform", "translate(0, " +  (height/2) + ")")
@@ -140,6 +148,7 @@ function display_sentiment_results(raw_data){
     .attr("x", width + 10)
     .attr("y", height/2 + 20)
     .text("turn #");
+    console.log(data)
 }
 
 
@@ -150,10 +159,12 @@ var onover = function(e, d) {
             .style("opacity", 1)
     }
 var onmove = function(e, d) {
-    if (d.label == "NEGATIVE"){
-        var prefix = "[<span style='color: blue;'>NEGATIVE</span> " + d.value.toFixed(3) + "] "
-    }else{
-        var prefix = "[<span style='color: red;'>POSITIVE</span> " + d.value.toFixed(3) + "] "
+    if (d.label == "neg"){
+        var prefix = "[<span style='color: blue;'>NEGATIVE</span> " + d.value.toFixed(2) + "] "
+    }else if (d.label == 'pos'){
+        var prefix = "[<span style='color: red;'>POSITIVE</span> " + d.value.toFixed(2) + "] "
+    }else {
+        var prefix = "[<span style='color: grey;'>NEUTRAL</span> " + d.value.toFixed(2) + "] "
     }
     Tooltip
         .html(prefix + d.text)
