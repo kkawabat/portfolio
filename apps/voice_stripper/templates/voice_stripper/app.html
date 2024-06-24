@@ -1,6 +1,7 @@
 {% load static %}
-<div id="content-app" class="content-div project">
+<div id="content-app" class="content-div project" style="width:40em; display: flex; flex-direction: column; align-items: center;">
     <input id="csrf_token" type="hidden" value="{{ csrf_token }}">
-    <input type="url" id="youtube-link" name="youtube-link" placeholder="link a YouTube song with vocal here...">
+    <input type="url" id="youtube-link" name="youtube-link" placeholder="link a YouTube song with vocal here..." value="https://www.youtube.com/watch?v=r2gRJbKUh-I&list=PLHPfyr5itAvsXOUomW_dwxjUIfxyhQplx&index=1&ab_channel=AudioKings">
     <button class='app-button' id="strip-btn">Strip Vocal!</button>
+    <audio id="stripped-audio" controls hidden></audio>
 </div>

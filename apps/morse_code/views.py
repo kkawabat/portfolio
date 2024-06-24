@@ -1,7 +1,5 @@
 from django.shortcuts import render
 
-from apps.main.models import Post
-
 
 def morse_code_app_view(request):
     return render(request, 'morse_code/index.html')
