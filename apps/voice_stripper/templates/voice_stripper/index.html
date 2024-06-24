@@ -1,0 +1,24 @@
+{% extends "project_base.html" %}
+{% load static %}
+{% block title %}Voice Stripper{% endblock title %}
+{% block ref %}
+<link rel="stylesheet" type="text/css" href="{% static 'voice_stripper/css/voice_stripper.css' %}">
+
+{% endblock ref %}
+
+{% block body %}
+<div class="project-div fade-in-right">
+    <h1>Voice Stripper</h1>
+    <div id="header-div1" class='header-div project-header-div'>
+        <h3 id='header-details' class='header' onclick="select_nav('details', '#header-div1');">Details</h3>
+        <h3 id='header-app' class='header' onclick="select_nav('app', '#header-div1');">App</h3>
+    </div>
+
+    <div id="content-div" style="display:none;">
+        {% include 'voice_stripper/app.html' %}
+        {% include 'voice_stripper/details.html' %}
+    </div>
+</div>
+
+<script type="application/javascript" src="{% static 'voice_stripper/js/voice_stripper.js' %}"></script>
+{% endblock body %}

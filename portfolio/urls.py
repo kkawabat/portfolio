@@ -25,6 +25,7 @@ urlpatterns = [
     path("__debug__/", include("debug_toolbar.urls")),
     path('old_main/', include('apps.main.urls')),
     path('', include('apps.new_main.urls')),
+    path('projects/voice_stripper/', include('apps.voice_stripper.urls')),
     path('projects/eliza_parser/', include('apps.eliza_parser.urls')),
     path('projects/web_soundboard/', include('apps.web_soundboard.urls')),
     path('projects/chat_highlights/', include('apps.chat_highlights.urls')),

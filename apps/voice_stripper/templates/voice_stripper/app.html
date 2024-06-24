@@ -1,0 +1,6 @@
+{% load static %}
+<div id="content-app" class="content-div project">
+    <input id="csrf_token" type="hidden" value="{{ csrf_token }}">
+    <input type="url" id="youtube-link" name="youtube-link" placeholder="link a YouTube song with vocal here...">
+    <button class='app-button' id="strip-btn">Strip Vocal!</button>
+</div>

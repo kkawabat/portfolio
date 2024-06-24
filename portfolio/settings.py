@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'apps.morse_code',
     'apps.speech_transcriber',
     'apps.webcam_ruler',
+    'apps.voice_stripper',
     'apps.web_soundboard',
     'apps.chat_highlights',
     'apps.eliza_parser',
@@ -154,31 +155,59 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 INTERNAL_IPS = ["127.0.0.1", ]
 
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'formatters': {
-        'timestamp': {
-            'format': '{asctime} {levelname} {message}',
-            'style': '{',
+if DEBUG:
+    DEBUG_PROPAGATE_EXCEPTIONS = True
+    LOGGING = {
+        'version': 1,
+        'disable_existing_loggers': False,
+        'formatters': {
+            'timestamp': {
+                'format': '{asctime} {levelname} {message}',
+                'style': '{',
+            },
         },
-    },
-    'handlers': {
-        'file': {
-            'when': 'D',
-            'interval': 1,
-            'backupCount': 3,
-            'level': 'DEBUG',
-            'class': 'logging.handlers.TimedRotatingFileHandler',
-            'filename': os.path.join(BASE_DIR, 'debug.log'),
-            'formatter': 'timestamp'
+        'handlers': {
+            'file': {
+                'level': 'DEBUG',
+                'class': 'logging.FileHandler',
+                'filename': os.path.join(BASE_DIR, 'debug.log'),
+                'formatter': 'timestamp'
+            },
         },
-    },
-    'loggers': {
-        'django': {
-            'handlers': ['file'],
-            'level': 'DEBUG',
-            'propagate': True,
+        'loggers': {
+            'django': {
+                'handlers': ['file'],
+                'level': 'DEBUG',
+                'propagate': True,
+            },
         },
-    },
-}
+    }
+else:
+    LOGGING = {
+        'version': 1,
+        'disable_existing_loggers': False,
+        'formatters': {
+            'timestamp': {
+                'format': '{asctime} {levelname} {message}',
+                'style': '{',
+            },
+        },
+        'handlers': {
+            'file': {
+                'when': 'D',
+                'interval': 1,
+                'backupCount': 3,
+                'level': 'DEBUG',
+                'class': 'logging.handlers.TimedRotatingFileHandler',
+                'filename': os.path.join(BASE_DIR, 'debug.log'),
+                'formatter': 'timestamp'
+            },
+        },
+        'loggers': {
+            'django': {
+                'handlers': ['file'],
+                'level': 'DEBUG',
+                'propagate': True,
+            },
+        },
+    }

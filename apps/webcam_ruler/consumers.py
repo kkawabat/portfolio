@@ -27,6 +27,7 @@ class CamHandshake(AsyncJsonWebsocketConsumer):
 
 
 class FaceDistanceTrack(VideoTransformTrack):
+
     def __init__(self, detector_type='face'):
         super().__init__()
         self.detector_type = detector_type
