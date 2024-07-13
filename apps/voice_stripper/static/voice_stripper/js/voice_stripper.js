@@ -24,7 +24,7 @@ function strip_vocal(event){
         if (response.status === 200) {
             return response.json();
         }
-        return Promise.reject(response.text())
+        return response.text()
     }).then((data) => {
         $("#strip-btn").text("Strip Vocal!")
         if ('error' in data){
