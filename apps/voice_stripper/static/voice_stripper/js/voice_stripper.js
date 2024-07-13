@@ -20,8 +20,12 @@ function strip_vocal(event){
         method: "POST",
         credentials: "same-origin",
         body: JSON.stringify({'vid_url': $("#youtube-link").val()}),
-    }).then((response) => response.json()
-    ).then((data) => {
+    }).then((response) => {
+        if (response.status === 200) {
+            return response.json();
+        }
+        return Promise.reject(response.text())
+    }).then((data) => {
         $("#strip-btn").text("Strip Vocal!")
         if ('error' in data){
             alert(data['error']);
@@ -35,7 +39,7 @@ function strip_vocal(event){
         audio[0].load()
         audio[0].oncanplaythrough = audio[0].play()
     })
-    .catch((error) => {
-        console.log(error)
+    .catch((response_text) => {
+        console.log(response_text)
     });
 }
