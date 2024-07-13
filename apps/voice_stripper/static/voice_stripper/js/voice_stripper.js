@@ -24,7 +24,9 @@ function strip_vocal(event){
         if (response.status === 200) {
             return response.json();
         }
-        return response.text()
+        else if (response.status === 502){
+            throw new Error('Sorry this operation takes too much memory and wasn\'t able to finish');
+        }
     }).then((data) => {
         $("#strip-btn").text("Strip Vocal!")
         if ('error' in data){
@@ -39,7 +41,7 @@ function strip_vocal(event){
         audio[0].load()
         audio[0].oncanplaythrough = audio[0].play()
     })
-    .catch((response_text) => {
-        console.log(response_text)
+    .catch((error) => {
+        alert(error.message)
     });
 }
