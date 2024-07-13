@@ -34,5 +34,8 @@ function strip_vocal(event){
         audio[0].pause()
         audio[0].load()
         audio[0].oncanplaythrough = audio[0].play()
+    })
+    .catch((error) => {
+        console.log(error)
     });
 }
