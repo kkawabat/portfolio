@@ -197,7 +197,7 @@ else:
                 'when': 'D',
                 'interval': 1,
                 'backupCount': 3,
-                'level': 'DEBUG',
+                'level': 'INFO',
                 'class': 'logging.handlers.TimedRotatingFileHandler',
                 'filename': os.path.join(BASE_DIR, 'debug.log'),
                 'formatter': 'timestamp'
@@ -206,7 +206,7 @@ else:
         'loggers': {
             'django': {
                 'handlers': ['file'],
-                'level': 'DEBUG',
+                'level': 'INFO',
                 'propagate': True,
             },
         },
