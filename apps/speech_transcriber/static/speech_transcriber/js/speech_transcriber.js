@@ -70,7 +70,7 @@ function transcribe(audioBlob){
                 start_state();
                 return;
             }
-            display_transcribed_view(response, audioBlob);
+            displayTranscribedView(response, audioBlob);
         },
         error: function (request, status, error) { console.log('failed ' + error); }
     });
