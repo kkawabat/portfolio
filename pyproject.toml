@@ -8,7 +8,6 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = "^3.11"
 magic-eye-util = {git = "https://github.com/kkawabat/MagicEyeUtil.git"}
-whistle-detector = {git = "https://github.com/kkawabat/WhistleDetector.git"}
 django = "^4.2.3"
 pillow = "^10.0.0"
 python-dotenv = "^1.0.0"
@@ -33,6 +32,7 @@ accelerate = "^0.31.0"
 vadersentiment = "^3.3.2"
 yt-dlp = "^2024.5.27"
 pydub = "^0.25.1"
+whistle-detector = {git = "https://github.com/kkawabat/WhistleDetector.git"}
 
 [build-system]
 requires = ["poetry-core"]

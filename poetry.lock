@@ -1332,7 +1332,7 @@ pyaudio = "*"
 
 [package.source]
 type = "git"
-url = "ssh://git@github.com/kkawabat/KaudioLibrary.git"
+url = "https://github.com/kkawabat/KaudioLibrary.git"
 reference = "HEAD"
 resolved_reference = "e90241130975453a70ed04ba7d24ce4a056b87ee"
 
@@ -3273,30 +3273,30 @@ optional = ["python-socks", "wsaccel"]
 test = ["websockets"]
 
 [[package]]
-name = "whistle_detector"
-version = "1.0.0"
-description = "This project tries to convert your whistle into a midi file"
+name = "whistle-detector"
+version = "0.1.0"
+description = ""
 optional = false
-python-versions = "*"
+python-versions = ">=3.11"
 groups = ["main"]
 files = []
 develop = false
 
 [package.dependencies]
-ffmpeg-python = "*"
-kaudio-library = {git = "ssh://git@github.com/kkawabat/KaudioLibrary.git"}
-matplotlib = "*"
-MIDIUtil = "*"
-numpy = "*"
-PyAudio = "*"
-scipy = "*"
-sounddevice = "*"
+ffmpeg-python = ">=0.2.0,<0.3.0"
+kaudio-library = {git = "https://github.com/kkawabat/KaudioLibrary.git"}
+matplotlib = ">=3.10.3,<4.0.0"
+midiutil = ">=1.2.1,<2.0.0"
+numpy = ">=2.3.1,<3.0.0"
+pyaudio = ">=0.2.14,<0.3.0"
+scipy = ">=1.16.0,<2.0.0"
+sounddevice = ">=0.5.2,<0.6.0"
 
 [package.source]
 type = "git"
 url = "https://github.com/kkawabat/WhistleDetector.git"
 reference = "HEAD"
-resolved_reference = "2d3caf909c9620e167ab255c3027033f00642f52"
+resolved_reference = "67f460e473da204ae184d66a336f6e40175e87b5"
 
 [[package]]
 name = "whitenoise"

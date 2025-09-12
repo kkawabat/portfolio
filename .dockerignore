@@ -74,4 +74,40 @@ devops/
 node_modules/
 
 # Poetry
-poetry.lock 
+# poetry.lock - commented out to allow Docker build
+
+# Docker
+Dockerfile
+.dockerignore
+docker-compose.yml
+
+# Development and testing
+tests/
+test_*
+*_test.py
+pytest.ini
+tox.ini
+
+# Large files and directories
+*.mp4
+*.avi
+*.mov
+*.wav
+*.mp3
+*.zip
+*.tar.gz
+*.rar
+
+# Database files
+*.db
+*.sqlite
+
+# Logs
+logs/
+*.log
+
+# Cache directories
+.cache/
+__pycache__/
+*.pyc
+*.pyo 

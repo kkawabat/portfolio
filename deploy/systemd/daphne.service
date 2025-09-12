@@ -1,0 +1,30 @@
+[Unit]
+Description=Portfolio Daphne ASGI Server
+After=network.target
+Wants=network.target
+
+[Service]
+Type=notify
+User=www-data
+Group=www-data
+RuntimeDirectory=daphne
+WorkingDirectory=/app
+Environment=DJANGO_SETTINGS_MODULE=portfolio.settings
+Environment=PYTHONPATH=/app
+ExecStart=/usr/local/bin/poetry run daphne -b 127.0.0.1 -p 8001 portfolio.asgi:application
+ExecReload=/bin/kill -s HUP $MAINPID
+KillMode=mixed
+TimeoutStopSec=5
+PrivateTmp=true
+Restart=always
+RestartSec=10
+
+# Security settings
+NoNewPrivileges=true
+PrivateDevices=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/app /var/log/daphne /var/run/daphne
+
+[Install]
+WantedBy=multi-user.target 

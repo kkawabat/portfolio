@@ -11,6 +11,11 @@ ENV POETRY_CACHE_DIR='/var/cache/pypoetry'
 ENV PIP_TIMEOUT=300
 ENV PIP_RETRIES=3
 
+# Force CPU-only versions of ML libraries
+ENV TORCH_CUDA_ARCH_LIST=""
+ENV FORCE_CUDA="0"
+ENV CUDA_VISIBLE_DEVICES=""
+
 # Add Poetry to PATH
 ENV PATH="$POETRY_VENV/bin:$PATH"
 
@@ -34,7 +39,13 @@ COPY pyproject.toml poetry.lock ./
 # Configure Poetry to not create virtual environment
 RUN poetry config virtualenvs.create false
 
-# Install Python dependencies only
+# Install CPU-only versions of heavy packages first
+RUN pip install --no-cache-dir \
+    torch==2.3.1+cpu -f https://download.pytorch.org/whl/torch_stable.html \
+    torchvision==0.18.1+cpu -f https://download.pytorch.org/whl/torch_stable.html \
+    torchaudio==2.3.1+cpu -f https://download.pytorch.org/whl/torch_stable.html
+
+# Install Python dependencies only (excluding torch which we installed above)
 RUN poetry config installer.max-workers 1 && \
     poetry install --only main --no-interaction --no-ansi --no-root --no-cache
 
@@ -50,6 +61,11 @@ ENV POETRY_VENV="/opt/poetry/venv"
 ENV POETRY_CACHE_DIR='/var/cache/pypoetry'
 ENV PIP_TIMEOUT=300
 ENV PIP_RETRIES=3
+
+# Force CPU-only versions
+ENV TORCH_CUDA_ARCH_LIST=""
+ENV FORCE_CUDA="0"
+ENV CUDA_VISIBLE_DEVICES=""
 
 # Add Poetry to PATH
 ENV PATH="$POETRY_VENV/bin:$PATH"
@@ -85,6 +101,18 @@ RUN poetry config virtualenvs.create false
 
 # Install the project itself (if needed)
 RUN poetry install --only main --no-interaction --no-ansi
+
+# Clean up unnecessary files to reduce image size
+RUN find /usr/local/lib/python3.11/site-packages -name "*.pyc" -delete && \
+    find /usr/local/lib/python3.11/site-packages -name "__pycache__" -type d -exec rm -rf {} + 2>/dev/null || true && \
+    find /usr/local/lib/python3.11/site-packages -name "tests" -type d -exec rm -rf {} + 2>/dev/null || true && \
+    find /usr/local/lib/python3.11/site-packages -name "test" -type d -exec rm -rf {} + 2>/dev/null || true && \
+    find /usr/local/lib/python3.11/site-packages -name "*.so" -exec strip {} \; 2>/dev/null || true
+
+# Remove NVIDIA/CUDA related packages if they exist
+RUN find /usr/local/lib/python3.11/site-packages -name "*nvidia*" -type d -exec rm -rf {} + 2>/dev/null || true && \
+    find /usr/local/lib/python3.11/site-packages -name "*cuda*" -type d -exec rm -rf {} + 2>/dev/null || true && \
+    find /usr/local/lib/python3.11/site-packages -name "*triton*" -type d -exec rm -rf {} + 2>/dev/null || true
 
 # Collect static files
 RUN poetry run python manage.py collectstatic --noinput

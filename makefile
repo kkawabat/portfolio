@@ -19,3 +19,40 @@ update:
 	poetry install --no-cache  # no cache to prevent oom on server
 	poetry run python manage.py collectstatic --no-input
 	sudo sh -c 'systemctl restart gunicorn;	systemctl restart daphne'
+
+# target: docker-build - Build optimized Docker image
+docker-build:
+	docker build --target production -t portfolio:latest .
+
+# target: docker-build-optimized - Build size-optimized Docker image
+docker-build-optimized:
+	docker build -f Dockerfile.optimized --target production -t portfolio:optimized .
+
+# target: docker-analyze - Analyze Docker image size
+docker-analyze:
+	./scripts/analyze-docker-size.sh portfolio
+
+# target: docker-build-dev - Build development Docker image
+docker-build-dev:
+	docker build --target builder -t portfolio:dev .
+
+# target: docker-run - Run production Docker container
+docker-run:
+	docker run -p 8000:8000 portfolio:latest
+
+# target: docker-run-dev - Run development Docker container
+docker-run-dev:
+	docker run -p 8001:8000 -v $(PWD):/app portfolio:dev
+
+# target: docker-compose-up - Start services with docker-compose
+docker-compose-up:
+	docker-compose up -d
+
+# target: docker-compose-up-dev - Start development services
+docker-compose-up-dev:
+	docker-compose --profile dev up -d
+
+# target: docker-clean - Clean up Docker images and containers
+docker-clean:
+	docker system prune -f
+	docker image prune -f

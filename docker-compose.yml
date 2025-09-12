@@ -2,12 +2,16 @@ version: '3.8'
 
 services:
   web:
-    build: .
+    build: 
+      context: .
+      dockerfile: Dockerfile
+      target: production
     ports:
       - "8000:8000"
     environment:
       - DJANGO_DEBUG=False
       - DJANGO_SECRET_KEY=your-secret-key-here
+      - PYTHONUNBUFFERED=1
     volumes:
       - ./staticfiles:/app/staticfiles
       - ./media:/app/media
@@ -17,4 +21,30 @@ services:
       interval: 30s
       timeout: 10s
       retries: 3
-      start_period: 40s 
+      start_period: 40s
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+        reservations:
+          memory: 1G
+
+  # Development service with hot reload
+  web-dev:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+      target: builder
+    ports:
+      - "8001:8000"
+    environment:
+      - DJANGO_DEBUG=True
+      - DJANGO_SECRET_KEY=dev-secret-key
+      - PYTHONUNBUFFERED=1
+    volumes:
+      - .:/app
+      - /app/__pycache__
+      - /app/.pytest_cache
+    command: ["poetry", "run", "python", "manage.py", "runserver", "0.0.0.0:8000"]
+    profiles:
+      - dev 
