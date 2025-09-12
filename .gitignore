@@ -1,7 +1,9 @@
 /venv/
 /.idea/
+/.cursor/
 /staticfiles/
-/portfolio/.env
 /temp/
-/.env
+.env
 /_build/
+Caddyfile
+logs/

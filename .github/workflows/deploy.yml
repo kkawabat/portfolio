@@ -1,0 +1,84 @@
+name: Deploy to Droplet
+
+on:
+  push:
+    branches: [ main, master ]
+    paths-ignore:
+      - 'reverse-proxy/**'
+  pull_request:
+    branches: [ main, master ]
+    paths-ignore:
+      - 'reverse-proxy/**'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Build Docker image
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        push: false
+        tags: portfolio:latest
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
+
+    - name: Deploy to Droplet
+      if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+      uses: appleboy/ssh-action@v1.0.3
+      with:
+        host: ${{ secrets.DROPLET_HOST }}
+        username: ${{ secrets.DROPLET_USER }}
+        key: ${{ secrets.DROPLET_SSH_KEY }}
+        port: ${{ secrets.DROPLET_PORT || 22 }}
+        script: |
+          # Navigate to project directory
+          cd /opt/portfolio
+          
+          # Pull latest changes
+          git pull origin main
+          
+          # Create .env file with secrets
+          cat > .env << EOF
+          DJANGO_SECRET_KEY=${{ secrets.DJANGO_SECRET_KEY }}
+          DJANGO_DEBUG=False
+          ALLOWED_HOSTS=${{ secrets.ALLOWED_HOSTS }}
+          YOUTUBE_API_KEY=${{ secrets.YOUTUBE_API_KEY }}
+          AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION=us-east-1
+          EOF
+          
+          # Stop existing container
+          docker-compose down
+          
+          # Pull latest image (if using registry) or build locally
+          docker-compose build --no-cache
+          
+          # Start the application
+          docker-compose up -d
+          
+          # Clean up old images to save space
+          docker image prune -f
+          
+          # Show container status
+          docker-compose ps
+          
+          # Show logs for verification
+          docker-compose logs --tail=50
+
+    - name: Notify deployment status
+      if: always()
+      run: |
+        if [ "${{ job.status }}" == "success" ]; then
+          echo "✅ Deployment successful!"
+        else
+          echo "❌ Deployment failed!"
+        fi

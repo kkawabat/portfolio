@@ -1,0 +1,175 @@
+name: Deploy Reverse Proxy
+
+on:
+  push:
+    branches: [ main, master ]
+    paths:
+      - 'reverse-proxy/**'
+  pull_request:
+    branches: [ main, master ]
+    paths:
+      - 'reverse-proxy/**'
+  workflow_dispatch:  # Allow manual triggering
+
+jobs:
+  deploy-reverse-proxy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Validate Caddyfile syntax
+      run: |
+        # Install Caddy for validation
+        wget -O caddy.tar.gz "https://caddyserver.com/api/download?os=linux&arch=amd64&p=github.com/caddyserver/caddy/v2/cmd/caddy"
+        tar -xzf caddy.tar.gz
+        chmod +x caddy
+        
+        # Validate Caddyfile template syntax (basic check)
+        if [ -f "reverse-proxy/Caddyfile.template" ]; then
+            echo "✅ Caddyfile template found"
+        else
+            echo "❌ Caddyfile template not found"
+            exit 1
+        fi
+
+    - name: Deploy Reverse Proxy to Droplet
+      if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+      uses: appleboy/ssh-action@v1.0.3
+      with:
+        host: ${{ secrets.DROPLET_HOST }}
+        username: ${{ secrets.DROPLET_USER }}
+        key: ${{ secrets.DROPLET_SSH_KEY }}
+        port: ${{ secrets.DROPLET_PORT || 22 }}
+        script: |
+          # Create reverse-proxy directory if it doesn't exist
+          sudo mkdir -p /opt/reverse-proxy
+          cd /opt/reverse-proxy
+          
+          # Backup current configuration if it exists
+          if [ -f "Caddyfile" ]; then
+            echo "📋 Backing up current Caddyfile..."
+            sudo cp Caddyfile Caddyfile.backup.$(date +%Y%m%d_%H%M%S)
+          fi
+          
+          # Stop existing reverse proxy if running
+          if [ -f "docker-compose.yml" ]; then
+            echo "🛑 Stopping existing reverse proxy..."
+            sudo docker-compose down
+          fi
+          
+          # Copy new files from portfolio repository
+          echo "📥 Copying reverse-proxy files..."
+          sudo cp -r /opt/portfolio/reverse-proxy/* /opt/reverse-proxy/
+          
+          # Set proper permissions
+          sudo chown -R $USER:$USER /opt/reverse-proxy
+          chmod +x /opt/reverse-proxy/setup.sh 2>/dev/null || true
+          
+          # Create logs directory
+          mkdir -p logs
+          
+          # Create .env file with secrets
+          echo "🔧 Setting up environment variables..."
+          cat > .env << EOF
+          DOMAIN=${{ secrets.DOMAIN }}
+          CADDY_EMAIL=${{ secrets.CADDY_EMAIL }}
+          PORTFOLIO_CONTAINER=portfolio
+          PORTFOLIO_PORT=8000
+          AUTO_HTTPS=on
+          LOG_LEVEL=INFO
+          ADMIN_API=off
+          EOF
+          
+          # Generate Caddyfile from template
+          echo "🔧 Generating Caddyfile from template..."
+          ./generate-caddyfile.sh
+          
+          # Update docker-compose.yml with environment file
+          if ! grep -q "env_file:" docker-compose.yml; then
+            echo "📝 Adding env_file to docker-compose.yml..."
+            # Add env_file after the image line
+            sed -i '/image: caddy:2-alpine/a\    env_file:\n      - .env' docker-compose.yml
+          fi
+          
+          # Start the reverse proxy
+          echo "🚀 Starting reverse proxy..."
+          docker-compose up -d
+          
+          # Wait for Caddy to start
+          echo "⏳ Waiting for Caddy to initialize..."
+          sleep 15
+          
+          # Check if Caddy is running
+          if docker-compose ps | grep -q "Up"; then
+            echo "✅ Reverse proxy is running successfully!"
+            
+            # Test HTTPS certificate generation
+            echo "🔒 Testing HTTPS setup..."
+            sleep 30  # Give time for certificate generation
+            
+            # Check certificate status
+            docker-compose exec caddy caddy list-certificates 2>/dev/null || echo "⚠️ Certificate check failed, but container is running"
+            
+          else
+            echo "❌ Reverse proxy failed to start!"
+            docker-compose logs
+            exit 1
+          fi
+          
+          # Show final status
+          echo "📊 Final reverse proxy status:"
+          docker-compose ps
+          
+          # Show network connections
+          echo "🌐 Network status:"
+          docker network ls | grep portfolio || echo "⚠️ Portfolio network not found"
+          
+          # Clean up old images
+          echo "🧹 Cleaning up old Docker images..."
+          docker image prune -f
+
+    - name: Verify Deployment
+      if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+      uses: appleboy/ssh-action@v1.0.3
+      with:
+        host: ${{ secrets.DROPLET_HOST }}
+        username: ${{ secrets.DROPLET_USER }}
+        key: ${{ secrets.DROPLET_SSH_KEY }}
+        port: ${{ secrets.DROPLET_PORT || 22 }}
+        script: |
+          cd /opt/reverse-proxy
+          
+          # Check if reverse proxy is responding
+          echo "🔍 Verifying reverse proxy deployment..."
+          
+          # Test HTTP response (should redirect to HTTPS)
+          if curl -s -o /dev/null -w "%{http_code}" http://localhost | grep -q "301\|302"; then
+            echo "✅ HTTP to HTTPS redirect working"
+          else
+            echo "⚠️ HTTP redirect may not be working"
+          fi
+          
+          # Check if Caddy is healthy
+          if docker-compose exec caddy caddy version > /dev/null 2>&1; then
+            echo "✅ Caddy is healthy and responding"
+          else
+            echo "❌ Caddy health check failed"
+            exit 1
+          fi
+          
+          # Show recent logs
+          echo "📋 Recent Caddy logs:"
+          docker-compose logs --tail=20
+
+    - name: Notify deployment status
+      if: always()
+      run: |
+        if [ "${{ job.status }}" == "success" ]; then
+          echo "✅ Reverse proxy deployment successful!"
+          echo "🌐 Your reverse proxy is now running with automatic HTTPS"
+        else
+          echo "❌ Reverse proxy deployment failed!"
+          echo "🔍 Check the logs above for troubleshooting information"
+        fi

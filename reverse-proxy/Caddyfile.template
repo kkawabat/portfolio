@@ -1,0 +1,102 @@
+# Caddyfile Template for reverse proxy with automatic HTTPS
+# This file routes traffic to different Docker containers based on domain/subdomain
+# 
+# SECURITY NOTE: This is a template file. The actual Caddyfile is generated
+# during deployment with environment variables to avoid exposing sensitive information.
+
+# Main portfolio domain
+{$DOMAIN:localhost} {
+    # Enable compression
+    encode gzip
+    
+    # Security headers
+    header {
+        # Enable HSTS
+        Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+        # Prevent clickjacking
+        X-Frame-Options "SAMEORIGIN"
+        # XSS protection
+        X-XSS-Protection "1; mode=block"
+        # Prevent MIME sniffing
+        X-Content-Type-Options "nosniff"
+        # Referrer policy
+        Referrer-Policy "strict-origin-when-cross-origin"
+        # Content Security Policy
+        Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' wss: https:; media-src 'self' data: blob:;"
+    }
+    
+    # Route to portfolio container
+    reverse_proxy {$PORTFOLIO_CONTAINER:portfolio}:{$PORTFOLIO_PORT:8000} {
+        # Health check
+        health_uri /health
+        health_interval 30s
+        health_timeout 10s
+        
+        # Load balancing (if you scale up later)
+        lb_policy round_robin
+        
+        # Headers to pass through
+        header_up Host {host}
+        header_up X-Real-IP {remote}
+        header_up X-Forwarded-For {remote}
+        header_up X-Forwarded-Proto {scheme}
+    }
+    
+    # Logging
+    log {
+        output file /var/log/caddy/portfolio.log {
+            roll_size 100mb
+            roll_keep 5
+            roll_keep_for 720h
+        }
+        format json
+    }
+}
+
+# WWW redirect
+www.{$DOMAIN:localhost} {
+    redir https://{$DOMAIN:localhost}{uri} permanent
+}
+
+# Example subdomain for other projects
+# Uncomment and modify as needed for your other projects
+# {$API_SUBDOMAIN:api}.{$DOMAIN:localhost} {
+#     reverse_proxy {$API_CONTAINER:api-container}:{$API_PORT:8080} {
+#         health_uri /health
+#         health_interval 30s
+#         health_timeout 10s
+#     }
+#     
+#     # API-specific headers
+#     header {
+#         Access-Control-Allow-Origin "*"
+#         Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
+#         Access-Control-Allow-Headers "Content-Type, Authorization"
+#     }
+# }
+
+# Example for a different project
+# {$APP_SUBDOMAIN:app}.{$DOMAIN:localhost} {
+#     reverse_proxy {$APP_CONTAINER:app-container}:{$APP_PORT:8080} {
+#         health_uri /health
+#         health_interval 30s
+#         health_timeout 10s
+#     }
+# }
+
+# Global options
+{
+    # Email for Let's Encrypt (required for automatic HTTPS)
+    email {$CADDY_EMAIL:admin@example.com}
+    
+    # Auto HTTPS settings
+    auto_https {$AUTO_HTTPS:on}
+    
+    # Log level
+    log {
+        level {$LOG_LEVEL:INFO}
+    }
+    
+    # Admin API (disable in production for security)
+    admin {$ADMIN_API:off}
+}
