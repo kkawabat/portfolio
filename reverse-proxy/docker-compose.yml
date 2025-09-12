@@ -17,8 +17,10 @@ services:
       # Logs
       - ./logs:/var/log/caddy
     environment:
-      # Email for Let's Encrypt
-      - CADDY_EMAIL=kkawabat@asu.edu
+      # Email for Let's Encrypt (from .env file)
+      - CADDY_EMAIL=${CADDY_EMAIL}
+    env_file:
+      - .env
     # Connect to the same network as your other projects
     networks:
       - portfolio_network

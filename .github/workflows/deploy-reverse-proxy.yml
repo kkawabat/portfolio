@@ -70,17 +70,38 @@ jobs:
           # Create logs directory
           mkdir -p logs
           
-          # Create .env file with secrets
+          # Create .env file with secrets (preserve existing subdomain configs)
           echo "🔧 Setting up environment variables..."
+          
+          # Backup existing .env if it exists
+          if [ -f ".env" ]; then
+            echo "📋 Backing up existing .env file..."
+            cp .env .env.backup.$(date +%Y%m%d_%H%M%S)
+          fi
+          
+          # Create new .env file with core configuration
           cat > .env << EOF
+          # Domain configuration
           DOMAIN=${{ secrets.DOMAIN }}
+          
+          # Caddy configuration
           CADDY_EMAIL=${{ secrets.CADDY_EMAIL }}
-          PORTFOLIO_CONTAINER=portfolio
-          PORTFOLIO_PORT=8000
           AUTO_HTTPS=on
           LOG_LEVEL=INFO
           ADMIN_API=off
+          
+          # Portfolio container configuration
+          PORTFOLIO_CONTAINER=portfolio
+          PORTFOLIO_PORT=8000
           EOF
+          
+          # Preserve existing subdomain configurations if they exist
+          if [ -f "subdomains.conf" ]; then
+            echo "✅ Preserving existing subdomain configurations..."
+            echo "# Subdomain configurations preserved from subdomains.conf" >> .env
+          else
+            echo "ℹ️ No existing subdomain configurations found"
+          fi
           
           # Generate Caddyfile from template
           echo "🔧 Generating Caddyfile from template..."

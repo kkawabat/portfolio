@@ -41,9 +41,33 @@ if [ ! -f ".env" ]; then
     echo "🔧 Creating .env file..."
     cat > .env << EOF
 # Caddy Reverse Proxy Environment Variables
-CADDY_EMAIL=user@email
+
+# Domain configuration (required)
+DOMAIN=mydomain.com
+
+# Email for Let's Encrypt certificates (required)
+CADDY_EMAIL=your-email@domain.com
+
+# Portfolio container configuration
+PORTFOLIO_CONTAINER=portfolio
+PORTFOLIO_PORT=8000
+
+# HTTPS and security settings
+AUTO_HTTPS=on
+LOG_LEVEL=INFO
+ADMIN_API=off
+
+# Optional: API subdomain configuration
+API_SUBDOMAIN=api
+API_CONTAINER=api-container
+API_PORT=8080
+
+# Optional: App subdomain configuration
+APP_SUBDOMAIN=app
+APP_CONTAINER=app-container
+APP_PORT=8080
 EOF
-    echo "⚠️ Please edit .env file and set your email address for Let's Encrypt"
+    echo "⚠️ Please edit .env file and set your domain and email address"
 fi
 
 # Check if Docker is installed

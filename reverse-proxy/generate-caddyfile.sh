@@ -41,6 +41,50 @@ echo "  Admin API: $ADMIN_API"
 # Generate Caddyfile from template
 envsubst < Caddyfile.template > Caddyfile
 
+# Add subdomain configurations if they exist
+if [ -f "subdomains.conf" ] && [ -s "subdomains.conf" ]; then
+    echo "🔧 Adding subdomain configurations..."
+    
+    # Create temporary file for subdomain blocks
+    local temp_file=$(mktemp)
+    
+    # Filter out comments and empty lines, then generate subdomain blocks
+    grep -v '^#' subdomains.conf | grep -v '^$' | grep '=' | while IFS='=' read -r subdomain container_port; do
+        cat >> "$temp_file" << EOF
+
+# Subdomain: $subdomain
+$subdomain.{$DOMAIN:localhost} {
+    reverse_proxy $container_port {
+        health_uri /health
+        health_interval 30s
+        health_timeout 10s
+    }
+    
+    # Logging
+    log {
+        output file /var/log/caddy/${subdomain}.log {
+            roll_size 100mb
+            roll_keep 5
+            roll_keep_for 720h
+        }
+        format json
+    }
+}
+EOF
+    done
+    
+    # Append subdomain configurations to Caddyfile
+    if [ -s "$temp_file" ]; then
+        cat "$temp_file" >> Caddyfile
+        echo "✅ Added $(grep -c '^[a-zA-Z0-9_-]*=' subdomains.conf) subdomain configurations"
+    fi
+    
+    # Clean up temporary file
+    rm -f "$temp_file"
+else
+    echo "ℹ️ No subdomain configurations found"
+fi
+
 echo "✅ Caddyfile generated successfully!"
 
 # Validate the generated Caddyfile

@@ -1,0 +1,25 @@
+# Environment variables (contains sensitive data)
+.env
+
+# Generated Caddyfile (contains sensitive data)
+Caddyfile
+
+# Subdomain configurations (contains domain-specific data)
+subdomains.conf
+
+# Log files
+logs/
+*.log
+
+# Docker volumes
+caddy_data/
+caddy_config/
+
+# Backup files
+*.backup
+*.bak
+
+# Temporary files
+*.tmp
+*.temp
+
