@@ -13,6 +13,8 @@ RUN apt-get update && apt-get install -y \
     libgomp1 \
     libgstreamer1.0-0 \
     libgstreamer-plugins-base1.0-0 \
+    portaudio19-dev \
+    libasound2-dev \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Poetry
@@ -45,6 +47,8 @@ RUN apt-get update && apt-get install -y \
     libgomp1 \
     libgstreamer1.0-0 \
     libgstreamer-plugins-base1.0-0 \
+    libportaudio2 \
+    libasound2 \
     && rm -rf /var/lib/apt/lists/*
 
 # Create non-root user for security
