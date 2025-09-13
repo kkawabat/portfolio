@@ -1,11 +1,11 @@
 # Multi-stage build for optimized image size
-FROM python:3.11-slim as builder
+FROM python:3.11-slim AS builder
 
 # Install system dependencies for building Python packages
 RUN apt-get update && apt-get install -y \
     build-essential \
     git \
-    libgl1-mesa-glx \
+    libgl1-mesa-dri \
     libglib2.0-0 \
     libsm6 \
     libxext6 \
@@ -33,11 +33,11 @@ COPY pyproject.toml poetry.lock ./
 RUN poetry install --only=main --no-dev && rm -rf $POETRY_CACHE_DIR
 
 # Production stage
-FROM python:3.11-slim as production
+FROM python:3.11-slim AS production
 
 # Install runtime dependencies only
 RUN apt-get update && apt-get install -y \
-    libgl1-mesa-glx \
+    libgl1-mesa-dri \
     libglib2.0-0 \
     libsm6 \
     libxext6 \
