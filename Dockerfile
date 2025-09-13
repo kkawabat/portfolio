@@ -20,9 +20,9 @@ RUN apt-get update && apt-get install -y \
 # Install Poetry
 RUN pip install poetry==1.7.1
 
-# Configure Poetry: Don't create virtual environment (we're in a container)
+# Configure Poetry: Install to system Python (we're in a container)
 ENV POETRY_NO_INTERACTION=1 \
-    POETRY_VENV_IN_PROJECT=1 \
+    POETRY_VENV_IN_PROJECT=0 \
     POETRY_CACHE_DIR=/tmp/poetry_cache
 
 # Set work directory
@@ -31,8 +31,10 @@ WORKDIR /app
 # Copy Poetry files
 COPY pyproject.toml poetry.lock ./
 
-# Install dependencies
-RUN poetry install --only=main --no-dev && rm -rf $POETRY_CACHE_DIR
+# Install dependencies to system Python
+RUN poetry config virtualenvs.create false && \
+    poetry install --only=main --no-dev && \
+    rm -rf $POETRY_CACHE_DIR
 
 # Production stage
 FROM python:3.11-slim AS production
@@ -57,11 +59,9 @@ RUN groupadd -r portfolio && useradd -r -g portfolio portfolio
 # Set work directory
 WORKDIR /app
 
-# Copy Python dependencies from builder stage
-COPY --from=builder /app/.venv /app/.venv
-
-# Make sure we use the virtual environment
-ENV PATH="/app/.venv/bin:$PATH"
+# Copy Python packages from builder stage
+COPY --from=builder /usr/local/lib/python3.11/site-packages /usr/local/lib/python3.11/site-packages
+COPY --from=builder /usr/local/bin /usr/local/bin
 
 # Copy application code
 COPY . .
