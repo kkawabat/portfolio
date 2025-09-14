@@ -21,12 +21,21 @@ jobs:
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3
 
-    - name: Build Docker image
+    - name: Log in to GitHub Container Registry
+      uses: docker/login-action@v3
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Build and push Docker image
       uses: docker/build-push-action@v5
       with:
         context: .
-        push: false
-        tags: portfolio:latest
+        push: true
+        tags: |
+          ghcr.io/${{ github.repository_owner }}/portfolio:latest
+          ghcr.io/${{ github.repository_owner }}/portfolio:${{ github.sha }}
         cache-from: type=gha
         cache-to: type=gha,mode=max
 
@@ -40,7 +49,7 @@ jobs:
         port: ${{ secrets.DROPLET_PORT || 22 }}
         script: |
           # Navigate to project directory
-          cd /opt/portfolio
+          cd ~/apps/portfolio
           
           # Pull latest changes
           git pull origin main
@@ -54,25 +63,58 @@ jobs:
           AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_DEFAULT_REGION=us-east-1
+          MPLCONFIGDIR=/app/.config/matplotlib
+          PYTHONUNBUFFERED=1
           EOF
           
+          # Backup current deployment
+          echo "📦 Creating backup of current deployment..."
+          if docker-compose ps | grep -q "Up"; then
+            docker tag portfolio_portfolio portfolio_portfolio:backup-$(date +%Y%m%d_%H%M%S) || true
+          fi
+          
           # Stop existing container
+          echo "🛑 Stopping existing container..."
           docker-compose down
           
-          # Pull latest image (if using registry) or build locally
-          docker-compose build --no-cache
+          # Pull the pre-built image from GitHub Container Registry
+          echo "📥 Pulling pre-built image from registry..."
+          docker pull ghcr.io/${{ github.repository_owner }}/portfolio:latest
+          
+          # Tag the image for docker-compose
+          docker tag ghcr.io/${{ github.repository_owner }}/portfolio:latest portfolio_portfolio:latest
           
           # Start the application
+          echo "▶️ Starting application..."
           docker-compose up -d
           
-          # Clean up old images to save space
-          docker image prune -f
+          # Wait for container to be healthy
+          echo "⏳ Waiting for container to be healthy..."
+          sleep 30
           
-          # Show container status
-          docker-compose ps
-          
-          # Show logs for verification
-          docker-compose logs --tail=50
+          # Check if deployment was successful
+          if docker-compose ps | grep -q "Up"; then
+            echo "✅ Deployment successful!"
+            # Clean up old images to save space
+            docker image prune -f
+            # Show container status
+            docker-compose ps
+          else
+            echo "❌ Deployment failed! Rolling back..."
+            # Rollback to previous version
+            docker-compose down
+            if docker images | grep -q "portfolio_portfolio:backup"; then
+              LATEST_BACKUP=$(docker images --format "table {{.Repository}}:{{.Tag}}" | grep "portfolio_portfolio:backup" | head -1)
+              docker tag $LATEST_BACKUP portfolio_portfolio:latest
+              docker-compose up -d
+              echo "🔄 Rolled back to previous version"
+            else
+              echo "⚠️ No backup found, cannot rollback"
+            fi
+            # Show logs for debugging
+            docker-compose logs --tail=50
+            exit 1
+          fi
 
     - name: Notify deployment status
       if: always()

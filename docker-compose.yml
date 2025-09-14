@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   portfolio:
-    build: .
+    image: portfolio_portfolio:latest
     container_name: portfolio-app
     restart: unless-stopped
     ports:
