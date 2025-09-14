@@ -5,16 +5,40 @@ FROM python:3.11-slim AS builder
 RUN apt-get update && apt-get install -y \
     build-essential \
     git \
+    # OpenGL and graphics
     libgl1-mesa-dri \
     libglib2.0-0 \
     libsm6 \
     libxext6 \
     libxrender-dev \
     libgomp1 \
+    # GStreamer
     libgstreamer1.0-0 \
     libgstreamer-plugins-base1.0-0 \
+    # Audio
     portaudio19-dev \
     libasound2-dev \
+    # OpenCV
+    libopencv-dev \
+    libgtk-3-dev \
+    libavcodec-dev \
+    libavformat-dev \
+    libswscale-dev \
+    # PyTorch and ML
+    libopenblas-dev \
+    liblapack-dev \
+    libhdf5-dev \
+    libffi-dev \
+    # Image processing (Pillow)
+    libjpeg-dev \
+    libpng-dev \
+    libtiff-dev \
+    libfreetype6-dev \
+    # FFmpeg (for av package)
+    ffmpeg \
+    libavutil-dev \
+    # Additional math libraries
+    libblas-dev \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Poetry
@@ -41,16 +65,42 @@ FROM python:3.11-slim AS production
 
 # Install runtime dependencies only
 RUN apt-get update && apt-get install -y \
+    # OpenGL and graphics
     libgl1-mesa-dri \
     libglib2.0-0 \
     libsm6 \
     libxext6 \
     libxrender1 \
     libgomp1 \
+    # GStreamer
     libgstreamer1.0-0 \
     libgstreamer-plugins-base1.0-0 \
+    # Audio
     libportaudio2 \
     libasound2 \
+    # OpenCV runtime
+    libopencv-core4.5 \
+    libopencv-imgproc4.5 \
+    libopencv-imgcodecs4.5 \
+    libopencv-videoio4.5 \
+    libgtk-3-0 \
+    # PyTorch and ML runtime
+    libopenblas0 \
+    liblapack3 \
+    libhdf5-103 \
+    # Image processing runtime
+    libjpeg62-turbo \
+    libpng16-16 \
+    libtiff5 \
+    libfreetype6 \
+    # FFmpeg runtime
+    ffmpeg \
+    libavcodec58 \
+    libavformat58 \
+    libavutil56 \
+    libswscale5 \
+    # Additional math libraries
+    libblas3 \
     && rm -rf /var/lib/apt/lists/*
 
 # Create non-root user for security
