@@ -5,26 +5,15 @@ FROM python:3.11-slim AS builder
 RUN apt-get update && apt-get install -y \
     build-essential \
     git \
-    # OpenGL and graphics
-    libgl1-mesa-dri \
+    # Essential graphics (minimal for OpenCV)
     libglib2.0-0 \
-    libsm6 \
-    libxext6 \
-    libxrender-dev \
     libgomp1 \
-    # GStreamer
-    libgstreamer1.0-0 \
-    libgstreamer-plugins-base1.0-0 \
-    # Audio
+    # Audio (for pyaudio)
     portaudio19-dev \
     libasound2-dev \
-    # OpenCV
+    # OpenCV (minimal set)
     libopencv-dev \
-    libgtk-3-dev \
-    libavcodec-dev \
-    libavformat-dev \
-    libswscale-dev \
-    # PyTorch and ML
+    # PyTorch and ML (minimal)
     libopenblas-dev \
     liblapack-dev \
     libhdf5-dev \
@@ -32,11 +21,9 @@ RUN apt-get update && apt-get install -y \
     # Image processing (Pillow)
     libjpeg-dev \
     libpng-dev \
-    libtiff-dev \
     libfreetype6-dev \
     # FFmpeg (for av package)
     ffmpeg \
-    libavutil-dev \
     # Additional math libraries
     libblas-dev \
     && rm -rf /var/lib/apt/lists/*
@@ -65,16 +52,9 @@ FROM python:3.11-slim AS production
 
 # Install runtime dependencies only
 RUN apt-get update && apt-get install -y \
-    # OpenGL and graphics
-    libgl1-mesa-dri \
+    # Essential graphics (minimal)
     libglib2.0-0 \
-    libsm6 \
-    libxext6 \
-    libxrender1 \
     libgomp1 \
-    # GStreamer
-    libgstreamer1.0-0 \
-    libgstreamer-plugins-base1.0-0 \
     # Audio
     libportaudio2 \
     libasound2 \
@@ -85,7 +65,7 @@ RUN apt-get update && apt-get install -y \
     # Basic math libraries
     libblas3 \
     liblapack3 \
-    # FFmpeg (let Python packages handle their own dependencies)
+    # FFmpeg
     ffmpeg \
     && rm -rf /var/lib/apt/lists/*
 
