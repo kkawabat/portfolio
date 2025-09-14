@@ -78,27 +78,27 @@ RUN apt-get update && apt-get install -y \
     # Audio
     libportaudio2 \
     libasound2 \
-    # OpenCV runtime
-    libopencv-core4.5 \
-    libopencv-imgproc4.5 \
-    libopencv-imgcodecs4.5 \
-    libopencv-videoio4.5 \
+    # OpenCV runtime (generic package names)
+    libopencv-core \
+    libopencv-imgproc \
+    libopencv-imgcodecs \
+    libopencv-videoio \
     libgtk-3-0 \
     # PyTorch and ML runtime
     libopenblas0 \
     liblapack3 \
-    libhdf5-103 \
+    libhdf5-0 \
     # Image processing runtime
     libjpeg62-turbo \
     libpng16-16 \
-    libtiff5 \
+    libtiff6 \
     libfreetype6 \
     # FFmpeg runtime
     ffmpeg \
-    libavcodec58 \
-    libavformat58 \
-    libavutil56 \
-    libswscale5 \
+    libavcodec \
+    libavformat \
+    libavutil \
+    libswscale \
     # Additional math libraries
     libblas3 \
     && rm -rf /var/lib/apt/lists/*
