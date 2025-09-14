@@ -78,29 +78,15 @@ RUN apt-get update && apt-get install -y \
     # Audio
     libportaudio2 \
     libasound2 \
-    # OpenCV runtime (generic package names)
-    libopencv-core \
-    libopencv-imgproc \
-    libopencv-imgcodecs \
-    libopencv-videoio \
-    libgtk-3-0 \
-    # PyTorch and ML runtime
-    libopenblas0 \
-    liblapack3 \
-    libhdf5-0 \
-    # Image processing runtime
+    # Basic image processing
     libjpeg62-turbo \
     libpng16-16 \
-    libtiff6 \
     libfreetype6 \
-    # FFmpeg runtime
-    ffmpeg \
-    libavcodec \
-    libavformat \
-    libavutil \
-    libswscale \
-    # Additional math libraries
+    # Basic math libraries
     libblas3 \
+    liblapack3 \
+    # FFmpeg (let Python packages handle their own dependencies)
+    ffmpeg \
     && rm -rf /var/lib/apt/lists/*
 
 # Create non-root user for security
