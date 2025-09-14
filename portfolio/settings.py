@@ -140,7 +140,7 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
     os.path.join(BASE_DIR, 'apps', 'new_main', 'static'),
-    os.path.join(BASE_DIR, 'apps', 'main', 'static'),
+    # Removed apps.main.static to avoid conflicts with new_main
     os.path.join(BASE_DIR, 'apps', 'magic_eye', 'static'),
     os.path.join(BASE_DIR, 'apps', 'whistle_detector', 'static'),
     os.path.join(BASE_DIR, 'apps', 'morse_code', 'static'),

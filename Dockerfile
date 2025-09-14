@@ -95,7 +95,7 @@ ENV MPLCONFIGDIR=/app/.config/matplotlib \
 USER portfolio
 
 # Collect static files
-RUN python manage.py collectstatic --noinput
+RUN python manage.py collectstatic --noinput --verbosity=0
 
 # Expose port
 EXPOSE 8000

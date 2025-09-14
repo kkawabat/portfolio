@@ -51,13 +51,28 @@ jobs:
         key: ${{ secrets.DROPLET_SSH_KEY }}
         port: ${{ secrets.DROPLET_PORT || 22 }}
         script: |
-          # Navigate to project directory
-          cd ~/apps/portfolio
+          # Navigate to the existing repository location
+          cd /opt/portfolio
           
           # Pull latest changes
+          echo "📥 Pulling latest changes..."
           git pull origin main
           
+          # Verify we're in the right directory
+          echo "📁 Current directory: $(pwd)"
+          echo "📋 Directory contents:"
+          ls -la
+          
+          # Verify docker-compose.yml exists
+          if [ ! -f "docker-compose.yml" ]; then
+            echo "❌ docker-compose.yml not found!"
+            echo "📋 Available files:"
+            ls -la
+            exit 1
+          fi
+          
           # Create .env file with secrets
+          echo "🔧 Creating .env file..."
           cat > .env << EOF
           DJANGO_SECRET_KEY=${{ secrets.DJANGO_SECRET_KEY }}
           DJANGO_DEBUG=False
@@ -72,13 +87,13 @@ jobs:
           
           # Backup current deployment
           echo "📦 Creating backup of current deployment..."
-          if docker-compose ps | grep -q "Up"; then
+          if docker-compose ps 2>/dev/null | grep -q "Up"; then
             docker tag portfolio_portfolio portfolio_portfolio:backup-$(date +%Y%m%d_%H%M%S) || true
           fi
           
           # Stop existing container
           echo "🛑 Stopping existing container..."
-          docker-compose down
+          docker-compose down 2>/dev/null || true
           
           # Pull the pre-built image from GitHub Container Registry
           echo "📥 Pulling pre-built image from registry..."
