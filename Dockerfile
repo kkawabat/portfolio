@@ -89,7 +89,9 @@ RUN mkdir -p /app/staticfiles /app/media /app/logs /app/.config && \
 # Set environment variables for matplotlib and other packages
 ENV MPLCONFIGDIR=/app/.config/matplotlib \
     PYTHONPATH=/app \
-    PYTHONUNBUFFERED=1
+    PYTHONUNBUFFERED=1 \
+    FONTCONFIG_PATH=/etc/fonts \
+    FONTCONFIG_FILE=/etc/fonts/fonts.conf
 
 # Switch to non-root user
 USER portfolio

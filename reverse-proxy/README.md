@@ -30,11 +30,26 @@ The reverse proxy can be automatically deployed using GitHub Actions when you pu
 **Prerequisites:**
 - GitHub Secrets configured (see `GITHUB_SECRETS.md`)
 - Portfolio repository cloned to `/opt/portfolio` on your droplet
+- **Passwordless sudo configured** on the droplet (one-time setup)
 
 **Deployment:**
 1. Push changes to the `reverse-proxy/` folder
 2. GitHub Actions will automatically deploy to your droplet
 3. Check the Actions tab in your GitHub repository for deployment status
+
+#### Configure Passwordless Sudo (One-time Setup)
+
+The automated deployment requires passwordless sudo access. Run this command **once** on your droplet:
+
+```bash
+# Configure passwordless sudo for your deployment user
+echo "kan ALL=(ALL) NOPASSWD: ALL" | sudo tee /etc/sudoers.d/kan
+
+# Verify the configuration
+sudo cat /etc/sudoers.d/kan
+```
+
+**Security Note:** This allows your user to run any command without a password. Only do this on trusted servers where you control access.
 
 ### Option 2: Manual Setup
 

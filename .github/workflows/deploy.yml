@@ -5,10 +5,12 @@ on:
     branches: [ main, master ]
     paths-ignore:
       - 'reverse-proxy/**'
+      - '.github/workflows/deploy-reverse-proxy.yml'
   pull_request:
     branches: [ main, master ]
     paths-ignore:
       - 'reverse-proxy/**'
+      - '.github/workflows/deploy-reverse-proxy.yml'
 
 jobs:
   deploy:

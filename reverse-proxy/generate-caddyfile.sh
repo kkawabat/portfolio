@@ -13,6 +13,14 @@ if [ ! -f "Caddyfile.template" ]; then
     exit 1
 fi
 
+# Load environment variables from .env file if it exists
+if [ -f ".env" ]; then
+    echo "📋 Loading environment variables from .env file..."
+    set -a  # automatically export all variables
+    source .env
+    set +a  # stop automatically exporting
+fi
+
 # Set default values if environment variables are not set
 DOMAIN=${DOMAIN:-"localhost"}
 CADDY_EMAIL=${CADDY_EMAIL:-"admin@example.com"}
@@ -21,6 +29,10 @@ PORTFOLIO_PORT=${PORTFOLIO_PORT:-"8000"}
 AUTO_HTTPS=${AUTO_HTTPS:-"on"}
 LOG_LEVEL=${LOG_LEVEL:-"INFO"}
 ADMIN_API=${ADMIN_API:-"off"}
+
+# Set values for HTTPS (hardcoded for simplicity)
+HSTS_HEADER="Strict-Transport-Security \"max-age=31536000; includeSubDomains; preload\""
+REDIRECT_PROTOCOL="https"
 
 # Optional subdomain configurations
 API_SUBDOMAIN=${API_SUBDOMAIN:-"api"}
@@ -46,7 +58,7 @@ if [ -f "subdomains.conf" ] && [ -s "subdomains.conf" ]; then
     echo "🔧 Adding subdomain configurations..."
     
     # Create temporary file for subdomain blocks
-    local temp_file=$(mktemp)
+    temp_file=$(mktemp)
     
     # Filter out comments and empty lines, then generate subdomain blocks
     grep -v '^#' subdomains.conf | grep -v '^$' | grep '=' | while IFS='=' read -r subdomain container_port; do
@@ -87,9 +99,18 @@ fi
 
 echo "✅ Caddyfile generated successfully!"
 
-# Validate the generated Caddyfile
+# Format and validate the generated Caddyfile
 if command -v caddy &> /dev/null; then
-    echo "🔍 Validating generated Caddyfile..."
+    echo "🔍 Formatting and validating generated Caddyfile..."
+    
+    # Format the Caddyfile
+    if caddy fmt --overwrite Caddyfile; then
+        echo "✅ Caddyfile formatted successfully!"
+    else
+        echo "⚠️ Caddyfile formatting failed, but continuing..."
+    fi
+    
+    # Validate the Caddyfile
     if caddy validate --config Caddyfile --adapter caddyfile; then
         echo "✅ Caddyfile validation passed!"
     else
@@ -97,7 +118,7 @@ if command -v caddy &> /dev/null; then
         exit 1
     fi
 else
-    echo "⚠️ Caddy not found, skipping validation"
+    echo "⚠️ Caddy not found, skipping formatting and validation"
 fi
 
 echo "🎉 Caddyfile generation completed!"

@@ -21,9 +21,9 @@ services:
       - CADDY_EMAIL=${CADDY_EMAIL}
     env_file:
       - .env
-    # Connect to the same network as your other projects
+    # Connect to the shared application network
     networks:
-      - portfolio_network
+      - app_network
       - default
     # Resource limits for small droplet
     deploy:
@@ -31,9 +31,6 @@ services:
         limits:
           memory: 256M
           cpus: '0.5'
-        reservations:
-          memory: 128M
-          cpus: '0.25'
     # Health check
     healthcheck:
       test: ["CMD", "caddy", "version"]
@@ -55,6 +52,5 @@ volumes:
     driver: local
 
 networks:
-  portfolio_network:
+  app_network:
     external: true
-    name: portfolio_default
