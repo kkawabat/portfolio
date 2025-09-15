@@ -3,8 +3,8 @@
 {% block title %}Speech Transcriber{% endblock title %}
 
 {% block ref %}
-<script src="https://unpkg.com/wavesurfer.js@7"></script>
-<script src="https://unpkg.com/wavesurfer.js@7/dist/plugins/regions.min.js"></script>
+<script src="{% static 'vendor/wavesurfer-7.min.js' %}"></script>
+<script src="{% static 'vendor/wavesurfer-regions-7.min.js' %}"></script>
 
 <link rel="stylesheet" type="text/css" href="{% static 'speech_transcriber/css/speech_transcriber.css' %}">
 <script type="application/javascript" src="{% static 'speech_transcriber/js/speech_transcriber.js' %}"></script>
