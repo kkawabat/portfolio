@@ -108,9 +108,9 @@ jobs:
           echo "▶️ Starting application..."
           docker-compose up -d
           
-          # Wait for container to be healthy
+          # Wait for container to be healthy (entrypoint handles migrations)
           echo "⏳ Waiting for container to be healthy..."
-          sleep 30
+          sleep 45
           
           # Check if deployment was successful
           if docker-compose ps | grep -q "Up"; then

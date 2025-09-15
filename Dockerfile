@@ -82,8 +82,12 @@ COPY --from=builder /usr/local/bin /usr/local/bin
 # Copy application code
 COPY . .
 
+# Copy and set up entrypoint script
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
 # Create necessary directories and set permissions
-RUN mkdir -p /app/staticfiles /app/media /app/logs /app/.config && \
+RUN mkdir -p /app/staticfiles /app/media /app/logs /app/.config /app/db_data && \
     chown -R portfolio:portfolio /app
 
 # Set environment variables for matplotlib and other packages
@@ -105,6 +109,9 @@ EXPOSE 8000
 # Health check
 HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
     CMD python -c "import requests; requests.get('http://localhost:8000/', timeout=10)"
+
+# Set entrypoint
+ENTRYPOINT ["/entrypoint.sh"]
 
 # Use gunicorn for production
 CMD ["gunicorn", "--bind", "0.0.0.0:8000", "--workers", "2", "--worker-class", "sync", "--max-requests", "1000", "--max-requests-jitter", "100", "--timeout", "60", "--keep-alive", "2", "--preload", "portfolio.wsgi:application"]

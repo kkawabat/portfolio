@@ -19,7 +19,7 @@ services:
       - PYTHONUNBUFFERED=1
     volumes:
       # Persist database and media files
-      - portfolio_db:/app/db.sqlite3
+      - portfolio_db:/app/db_data
       - portfolio_media:/app/media
       - portfolio_logs:/app/logs
     # Resource limits for small droplet
