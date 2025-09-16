@@ -93,9 +93,6 @@ def _extract_blog_info(filename, blog_posts_dir):
         date_match = re.search(r'\| (\w+ \d+, \d+)', content)
         date_str = date_match.group(1) if date_match else None
         
-        # Try to extract description from first paragraph
-        desc_match = re.search(r'<p[^>]*>([^<]+)</p>', content)
-        description = desc_match.group(1).strip() if desc_match else f"Blog post: {title}"
         
         # Create URL slug from filename
         url_slug = filename.replace('.html', '').replace(' ', '-').lower()
@@ -107,9 +104,8 @@ def _extract_blog_info(filename, blog_posts_dir):
         
         blog_info = {
             'title': title,
-            'description': description[:150] + '...' if len(description) > 150 else description,
-            'url': f'/blog/{url_slug}/',
-            'filename': filename
+            'filename': filename,
+            'slug': url_slug
         }
         
         # Add date if found
