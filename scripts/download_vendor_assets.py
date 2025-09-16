@@ -67,6 +67,40 @@ EXTERNAL_RESOURCES = [
     }
 ]
 
+# Font Awesome font files
+FONT_FILES = [
+    {
+        "url": "https://use.fontawesome.com/releases/v5.0.10/webfonts/fa-brands-400.woff2",
+        "filename": "fa-brands-400.woff2",
+        "type": "font"
+    },
+    {
+        "url": "https://use.fontawesome.com/releases/v5.0.10/webfonts/fa-brands-400.woff",
+        "filename": "fa-brands-400.woff",
+        "type": "font"
+    },
+    {
+        "url": "https://use.fontawesome.com/releases/v5.0.10/webfonts/fa-regular-400.woff2",
+        "filename": "fa-regular-400.woff2",
+        "type": "font"
+    },
+    {
+        "url": "https://use.fontawesome.com/releases/v5.0.10/webfonts/fa-regular-400.woff",
+        "filename": "fa-regular-400.woff",
+        "type": "font"
+    },
+    {
+        "url": "https://use.fontawesome.com/releases/v5.0.10/webfonts/fa-solid-900.woff2",
+        "filename": "fa-solid-900.woff2",
+        "type": "font"
+    },
+    {
+        "url": "https://use.fontawesome.com/releases/v5.0.10/webfonts/fa-solid-900.woff",
+        "filename": "fa-solid-900.woff",
+        "type": "font"
+    }
+]
+
 def verify_integrity(content, expected_hash):
     """Verify file integrity using SHA-256 hash."""
     if not expected_hash:
@@ -120,8 +154,10 @@ def main():
     """Download all external resources."""
     print("🚀 Starting vendor asset download...")
     
-    # Create vendor directory
+    # Create vendor and webfonts directories
     VENDOR_DIR.mkdir(parents=True, exist_ok=True)
+    WEBFONTS_DIR = VENDOR_DIR.parent / "webfonts"
+    WEBFONTS_DIR.mkdir(parents=True, exist_ok=True)
     
     # Download all resources
     success_count = 0
@@ -129,10 +165,30 @@ def main():
         if download_resource(resource):
             success_count += 1
     
-    print(f"\n📊 Download complete: {success_count}/{len(EXTERNAL_RESOURCES)} files downloaded")
+    # Download font files
+    print("\n🔤 Downloading Font Awesome font files...")
+    font_success_count = 0
+    for font in FONT_FILES:
+        print(f"Downloading {font['filename']}...")
+        try:
+            content = download_with_retry(font)
+            file_path = WEBFONTS_DIR / font['filename']
+            with open(file_path, 'wb') as f:
+                f.write(content)
+            print(f"✅ Downloaded {font['filename']} ({len(content)} bytes)")
+            font_success_count += 1
+        except Exception as e:
+            print(f"❌ Failed to download {font['filename']}: {e}")
     
-    if success_count == len(EXTERNAL_RESOURCES):
-        print("✅ All vendor assets downloaded successfully!")
+    total_files = len(EXTERNAL_RESOURCES) + len(FONT_FILES)
+    total_success = success_count + font_success_count
+    
+    print(f"\n📊 Download complete: {total_success}/{total_files} files downloaded")
+    print(f"   - Vendor assets: {success_count}/{len(EXTERNAL_RESOURCES)}")
+    print(f"   - Font files: {font_success_count}/{len(FONT_FILES)}")
+    
+    if total_success == total_files:
+        print("✅ All vendor assets and fonts downloaded successfully!")
         print("\nNext steps:")
         print("1. Update your templates to use local vendor assets")
         print("2. Update CSP policy to remove external CDN domains")
