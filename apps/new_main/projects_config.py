@@ -13,56 +13,47 @@ PROJECTS = [
     {
         'title': 'Whistle Detector',
         'description': 'Machine learning application that detects whistle sounds in audio recordings.',
-        'url': '/projects/whistle_detector/',
-        'slug': 'whistle_detector'
+        'slug': 'whistle-detector'
     },
     {
         'title': 'Speech Transcriber',
         'description': 'Web-based speech-to-text with audio visualization and editing.',
-        'url': '/projects/speech_transcriber/',
-        'slug': 'speech_transcriber'
+        'slug': 'speech-transcriber'
     },
     {
         'title': 'Magic Eye Generator',
         'description': 'Create Magic Eye (autostereogram) images interactively.',
-        'url': '/projects/magic_eye/',
-        'slug': 'magic_eye'
+        'slug': 'magic-eye-app'
     },
     {
         'title': 'Morse Code Translator',
         'description': 'Morse code translator with audio generation and learning tools.',
-        'url': '/projects/morse_code/',
-        'slug': 'morse_code'
+        'slug': 'morse-code-app'
     },
     {
         'title': 'Web Soundboard',
         'description': 'Interactive soundboard for playing sound effects and music clips.',
-        'url': '/projects/web_soundboard/',
-        'slug': 'web_soundboard'
+        'slug': 'web-soundboard'
     },
     {
         'title': 'Chat Highlights Parser',
         'description': 'Parse chat logs to extract highlights and interesting moments.',
-        'url': '/projects/chat_highlights/',
-        'slug': 'chat_highlights'
+        'slug': 'chat-highlights'
     },
     {
         'title': 'ELIZA Parser',
         'description': 'Modern web implementation of the classic ELIZA chatbot.',
-        'url': '/projects/eliza_parser/',
-        'slug': 'eliza_parser'
+        'slug': 'eliza-parser'
     },
     {
         'title': 'Webcam Ruler',
         'description': 'Measure objects using your webcam with computer vision.',
-        'url': '/projects/webcam_ruler/',
-        'slug': 'webcam_ruler'
+        'slug': 'webcam-ruler'
     },
     {
         'title': 'Voice Stripper',
         'description': 'Remove vocals from audio tracks using audio processing.',
-        'url': '/projects/voice_stripper/',
-        'slug': 'voice_stripper'
+        'slug': 'voice-stripper'
     }
 ]
 
