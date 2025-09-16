@@ -2,8 +2,11 @@ from django.contrib.staticfiles.storage import staticfiles_storage
 from django.http import HttpResponse, HttpResponseNotFound
 from django.shortcuts import render, redirect
 from django.urls import NoReverseMatch
+from django.conf import settings
+import os
+import re
 
-from apps.main.models import Post
+from .projects_config import get_projects, get_blogs
 
 
 def favicon(_):
@@ -13,46 +16,56 @@ def favicon(_):
 
 
 def main_view(request):
-    blog_list = Post.objects.filter(status=1, content_type=0).order_by('-created_on')
-    project_list = Post.objects.filter(content_type=1).order_by('-created_on')
+    blog_list = get_blogs()
+    project_list = get_projects()
     return render(request, 'new_main/index.html', context={'blogs': blog_list,
                                                            'projects': project_list})
 
 
 def about_view(request):
-    blog_list = Post.objects.filter(status=1, content_type=0).order_by('-created_on')
-    project_list = Post.objects.filter(content_type=1).order_by('-created_on')
+    blog_list = get_blogs()
+    project_list = get_projects()
     return render(request, 'new_main/index.html', context={'blogs': blog_list,
                                                            'projects': project_list,
                                                            'anchor': 'about'})
 
 
 def projects_view(request):
-    blog_list = Post.objects.filter(status=1, content_type=0).order_by('-created_on')
-    project_list = Post.objects.filter(content_type=1).order_by('-created_on')
+    blog_list = get_blogs()
+    project_list = get_projects()
     return render(request, 'new_main/index.html', context={'blogs': blog_list,
                                                            'projects': project_list,
                                                            'anchor': 'projects'})
 
 
 def blogs_view(request):
-    blog_list = Post.objects.filter(status=1, content_type=0).order_by('-created_on')
-    project_list = Post.objects.filter(content_type=1).order_by('-created_on')
+    blog_list = get_blogs()
+    project_list = get_projects()
     return render(request, 'new_main/index.html', context={'blogs': blog_list,
                                                            'projects': project_list,
                                                            'anchor': 'blogs'})
 
 
 def blog_post_view(request, slug_id):
-    blog = Post.objects.get(slug=slug_id)
-    if slug_id.startswith('how-to-get-started-on-web'):
-        return render(request, 'blog_posts/How to get started on web development for layman.html', context={'blog': blog})
-    return render(request, 'new_main/blog_post.html', context={'blog': blog})
+    """Render blog post from the blog_posts folder."""
+    # Convert slug back to filename
+    filename = slug_id.replace('-', ' ') + '.html'
+    
+    # Find the blog post file
+    blog_posts_dir = os.path.join(settings.BASE_DIR, 'apps', 'new_main', 'templates', 'blog_posts')
+    
+    # Try to find the file (case insensitive)
+    for file in os.listdir(blog_posts_dir):
+        if file.lower() == filename.lower():
+            template_path = f'blog_posts/{file}'
+            return render(request, template_path)
+    
+    return HttpResponseNotFound(f"Blog post '{slug_id}' not found")
 
 
 def contacts_view(request):
-    blog_list = Post.objects.filter(status=1, content_type=0).order_by('-created_on')
-    project_list = Post.objects.filter(content_type=1).order_by('-created_on')
+    blog_list = get_blogs()
+    project_list = get_projects()
     return render(request, 'new_main/index.html', context={'blogs': blog_list,
                                                            'projects': project_list,
                                                            'anchor': 'contacts'})
@@ -74,8 +87,8 @@ def project_post_view(_, slug_id):
 
 
 def socials_view(request):
-    blog_list = Post.objects.filter(status=1, content_type=0).order_by('-created_on')
-    project_list = Post.objects.filter(content_type=1).order_by('-created_on')
+    blog_list = get_blogs()
+    project_list = get_projects()
     return render(request, 'new_main/index.html', context={'blogs': blog_list,
                                                            'projects': project_list,
                                                            'anchor': 'socials'})
