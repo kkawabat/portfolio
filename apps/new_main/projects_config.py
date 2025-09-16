@@ -99,6 +99,11 @@ def _extract_blog_info(filename, blog_posts_dir):
         
         # Create URL slug from filename
         url_slug = filename.replace('.html', '').replace(' ', '-').lower()
+        # Ensure slug is not empty and contains valid characters
+        if not url_slug or not re.match(r'^[-a-zA-Z0-9_]+$', url_slug):
+            # Fallback: create a simple slug from the title
+            url_slug = re.sub(r'[^a-zA-Z0-9_-]', '-', title.lower())
+            url_slug = re.sub(r'-+', '-', url_slug).strip('-')
         
         blog_info = {
             'title': title,
