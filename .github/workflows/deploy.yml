@@ -82,7 +82,8 @@ jobs:
           YOUTUBE_API_KEY=${{ secrets.YOUTUBE_API_KEY }}
           AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION=us-east-1
+          AWS_DEFAULT_REGION=${{ secrets.AWS_DEFAULT_REGION || 'us-east-1' }}
+          AWS_REGION=${{ secrets.AWS_DEFAULT_REGION || 'us-east-1' }}
           MPLCONFIGDIR=/app/.config/matplotlib
           PYTHONUNBUFFERED=1
           EOF

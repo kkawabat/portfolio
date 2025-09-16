@@ -41,7 +41,6 @@ ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1,0.0.0.0').s
 INSTALLED_APPS = [
     'daphne',
     "debug_toolbar",
-    'apps.main',
     'apps.new_main',
     'apps.magic_eye',
     'apps.whistle_detector',

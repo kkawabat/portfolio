@@ -23,7 +23,6 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("__debug__/", include("debug_toolbar.urls")),
-    path('old_main/', include('apps.main.urls')),
     path('', include('apps.new_main.urls')),
     path('projects/voice_stripper/', include('apps.voice_stripper.urls')),
     path('projects/eliza_parser/', include('apps.eliza_parser.urls')),
@@ -36,5 +35,5 @@ urlpatterns = [
     path('projects/speech_transcriber/', include('apps.speech_transcriber.urls'))
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
-handler404 = 'apps.main.views.not_found_view'
+# handler404 = 'apps.main.views.not_found_view'  # Removed - main app deleted
 

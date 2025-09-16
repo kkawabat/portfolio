@@ -15,6 +15,7 @@ services:
       - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
       - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
       - AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION:-us-east-1}
+      - AWS_REGION=${AWS_DEFAULT_REGION:-us-east-1}
       - MPLCONFIGDIR=/app/.config/matplotlib
       - PYTHONUNBUFFERED=1
     volumes:

@@ -1,12 +1,10 @@
 from django.http import JsonResponse
 from django.shortcuts import render
 from whistle_detector.audio_processing import WhistleDetector
-from apps.main.models import Post
 
 
 def whistle_detector_view(request):
-    whistle_detector_proj = Post.objects.get(slug="whistle-detector")
-    return render(request, 'whistle_detector/index.html', context={"post": whistle_detector_proj})
+    return render(request, 'whistle_detector/index.html')
 
 
 def whistle_submit_view(request):
@@ -21,12 +19,8 @@ def whistle_submit_view(request):
 
 
 def details_view(request):
-    whistle_detector_proj = Post.objects.get(slug="whistle-detector")
-    return render(request, 'whistle_detector/index.html', context={"anchor": 'details',
-                                                                   "post": whistle_detector_proj})
+    return render(request, 'whistle_detector/index.html', context={'anchor': 'details'})
 
 
 def app_view(request):
-    whistle_detector_proj = Post.objects.get(slug="whistle-detector")
-    return render(request, 'whistle_detector/index.html', context={"anchor": 'app',
-                                                                   "post": whistle_detector_proj})
+    return render(request, 'whistle_detector/index.html', context={'anchor': 'app'})
