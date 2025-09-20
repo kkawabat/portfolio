@@ -65,7 +65,7 @@ if [ -f "subdomains.conf" ] && [ -s "subdomains.conf" ]; then
         cat >> "$temp_file" << EOF
 
 # Subdomain: $subdomain
-$subdomain.{$DOMAIN:localhost} {
+$subdomain.$DOMAIN {
     reverse_proxy $container_port {
         health_uri /health
         health_interval 30s
