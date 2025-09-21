@@ -82,19 +82,31 @@ $subdomain.$DOMAIN {
         health_timeout 10s
 EOF
         
-        # Add WebSocket-specific headers if enabled
+        # Add WebSocket-specific configuration if enabled
         if [ "$websocket_enabled" = true ]; then
             cat >> "$temp_file" << EOF
         
-        # WebSocket-specific headers
+        # WebSocket support - Caddy automatically handles WebSocket upgrades
+        # when it detects the proper headers, but we can be explicit about it
+        
+        # Ensure WebSocket headers are properly forwarded
+        header_up Connection {>Connection}
+        header_up Upgrade {>Upgrade}
+        header_up Sec-WebSocket-Key {>Sec-WebSocket-Key}
+        header_up Sec-WebSocket-Version {>Sec-WebSocket-Version}
+        header_up Sec-WebSocket-Protocol {>Sec-WebSocket-Protocol}
+        header_up Sec-WebSocket-Extensions {>Sec-WebSocket-Extensions}
+        
+        # Standard proxy headers for WebSocket connections
         header_up Host {host}
         header_up X-Real-IP {remote}
         header_up X-Forwarded-For {remote}
         header_up X-Forwarded-Proto {scheme}
         
-        # WebSocket upgrade headers
-        header_up Connection {>Connection}
-        header_up Upgrade {>Upgrade}
+        # WebSocket-specific timeout settings
+        timeout 60s
+        read_timeout 60s
+        write_timeout 60s
 EOF
         fi
         
