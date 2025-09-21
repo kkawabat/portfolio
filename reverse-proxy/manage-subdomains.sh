@@ -20,18 +20,23 @@ show_usage() {
     echo "Usage: $0 [COMMAND] [OPTIONS]"
     echo ""
     echo "Commands:"
-    echo "  add <subdomain> <container:port>    Add a new subdomain configuration"
-    echo "  remove <subdomain>                  Remove a subdomain configuration"
-    echo "  list                                List all configured subdomains"
-    echo "  generate                            Generate Caddyfile with current configs"
-    echo "  help                                Show this help message"
+    echo "  add <subdomain> <container:port> [websocket]    Add a new subdomain configuration"
+    echo "  remove <subdomain>                              Remove a subdomain configuration"
+    echo "  list                                            List all configured subdomains"
+    echo "  generate                                        Generate Caddyfile with current configs"
+    echo "  help                                            Show this help message"
     echo ""
     echo "Examples:"
     echo "  $0 add api api-container:8080"
     echo "  $0 add admin admin-panel:3000"
+    echo "  $0 add gamework gamework-signalling-server:8080 websocket"
     echo "  $0 remove api"
     echo "  $0 list"
     echo "  $0 generate"
+    echo ""
+    echo "WebSocket Support:"
+    echo "  Add 'websocket' as the third parameter to enable WebSocket-specific headers"
+    echo "  This is required for signaling servers, real-time apps, and WebSocket services"
 }
 
 # Function to get domain from .env file
@@ -71,13 +76,14 @@ EOF
 add_subdomain() {
     local subdomain="$1"
     local container_port="$2"
+    local websocket="$3"
     
     # Ensure config file exists
     ensure_config_file
     
     if [ -z "$subdomain" ] || [ -z "$container_port" ]; then
         echo -e "${RED}Error: Both subdomain and container:port are required${NC}"
-        echo "Usage: $0 add <subdomain> <container:port>"
+        echo "Usage: $0 add <subdomain> <container:port> [websocket]"
         exit 1
     fi
     
@@ -101,9 +107,14 @@ add_subdomain() {
         fi
     fi
     
-    # Add new entry
-    echo "$subdomain=$container_port" >> "$CONFIG_FILE"
-    echo -e "${GREEN}✅ Added subdomain: $subdomain -> $container_port${NC}"
+    # Add new entry with WebSocket support if specified
+    if [ "$websocket" = "websocket" ]; then
+        echo "$subdomain=$container_port:websocket" >> "$CONFIG_FILE"
+        echo -e "${GREEN}✅ Added subdomain: $subdomain -> $container_port (WebSocket enabled)${NC}"
+    else
+        echo "$subdomain=$container_port" >> "$CONFIG_FILE"
+        echo -e "${GREEN}✅ Added subdomain: $subdomain -> $container_port${NC}"
+    fi
     
     # Show full URL
     local domain=$(get_domain)
@@ -148,16 +159,26 @@ list_subdomains() {
         
         if [ -n "$configs" ]; then
             echo -e "${GREEN}Subdomain Configurations:${NC}"
-            echo "┌─────────────┬─────────────────────┬─────────────────────────┐"
-            echo "│ Subdomain   │ Container:Port      │ Full URL                │"
-            echo "├─────────────┼─────────────────────┼─────────────────────────┤"
+            echo "┌─────────────┬─────────────────────┬─────────────┬─────────────────────────┐"
+            echo "│ Subdomain   │ Container:Port      │ WebSocket   │ Full URL                │"
+            echo "├─────────────┼─────────────────────┼─────────────┼─────────────────────────┤"
             
             while IFS='=' read -r subdomain container_port; do
-                printf "│ %-11s │ %-19s │ https://%s.%-12s │\n" \
-                    "$subdomain" "$container_port" "$subdomain" "$domain"
+                # Check if WebSocket is enabled
+                if [[ "$container_port" == *":websocket" ]]; then
+                    # Remove :websocket suffix for display
+                    display_port="${container_port%:websocket}"
+                    websocket_status="✅ Yes"
+                else
+                    display_port="$container_port"
+                    websocket_status="❌ No"
+                fi
+                
+                printf "│ %-11s │ %-19s │ %-11s │ https://%s.%-12s │\n" \
+                    "$subdomain" "$display_port" "$websocket_status" "$subdomain" "$domain"
             done <<< "$configs"
             
-            echo "└─────────────┴─────────────────────┴─────────────────────────┘"
+            echo "└─────────────┴─────────────────────┴─────────────┴─────────────────────────┘"
         else
             echo -e "${YELLOW}No subdomain configurations found${NC}"
         fi

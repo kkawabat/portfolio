@@ -62,14 +62,43 @@ if [ -f "subdomains.conf" ] && [ -s "subdomains.conf" ]; then
     
     # Filter out comments and empty lines, then generate subdomain blocks
     grep -v '^#' subdomains.conf | grep -v '^$' | grep '=' | while IFS='=' read -r subdomain container_port; do
+        # Check if WebSocket is enabled
+        if [[ "$container_port" == *":websocket" ]]; then
+            # Remove :websocket suffix for actual container:port
+            actual_port="${container_port%:websocket}"
+            websocket_enabled=true
+        else
+            actual_port="$container_port"
+            websocket_enabled=false
+        fi
+        
         cat >> "$temp_file" << EOF
 
 # Subdomain: $subdomain
 $subdomain.$DOMAIN {
-    reverse_proxy $container_port {
+    reverse_proxy $actual_port {
         health_uri /health
         health_interval 30s
         health_timeout 10s
+EOF
+        
+        # Add WebSocket-specific headers if enabled
+        if [ "$websocket_enabled" = true ]; then
+            cat >> "$temp_file" << EOF
+        
+        # WebSocket-specific headers
+        header_up Host {host}
+        header_up X-Real-IP {remote}
+        header_up X-Forwarded-For {remote}
+        header_up X-Forwarded-Proto {scheme}
+        
+        # WebSocket upgrade headers
+        header_up Connection {>Connection}
+        header_up Upgrade {>Upgrade}
+EOF
+        fi
+        
+        cat >> "$temp_file" << EOF
     }
     
     # Logging
