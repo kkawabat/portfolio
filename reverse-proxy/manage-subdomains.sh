@@ -20,22 +20,25 @@ show_usage() {
     echo "Usage: $0 [COMMAND] [OPTIONS]"
     echo ""
     echo "Commands:"
-    echo "  add <subdomain> <container:port> [websocket]    Add a new subdomain configuration"
-    echo "  remove <subdomain>                              Remove a subdomain configuration"
-    echo "  list                                            List all configured subdomains"
-    echo "  generate                                        Generate Caddyfile with current configs"
-    echo "  help                                            Show this help message"
+    echo "  add <subdomain> <container:port> [--websocket]    Add a new subdomain configuration"
+    echo "  remove <subdomain>                                Remove a subdomain configuration"
+    echo "  list                                              List all configured subdomains"
+    echo "  generate                                          Generate Caddyfile with current configs"
+    echo "  help                                              Show this help message"
+    echo ""
+    echo "Options:"
+    echo "  --websocket                                       Enable WebSocket-specific headers"
     echo ""
     echo "Examples:"
     echo "  $0 add api api-container:8080"
     echo "  $0 add admin admin-panel:3000"
-    echo "  $0 add gamework gamework-signalling-server:8080 websocket"
+    echo "  $0 add gamework gamework-signalling-server:8080 --websocket"
     echo "  $0 remove api"
     echo "  $0 list"
     echo "  $0 generate"
     echo ""
     echo "WebSocket Support:"
-    echo "  Add 'websocket' as the third parameter to enable WebSocket-specific headers"
+    echo "  Use --websocket flag to enable WebSocket-specific headers"
     echo "  This is required for signaling servers, real-time apps, and WebSocket services"
 }
 
@@ -76,14 +79,14 @@ EOF
 add_subdomain() {
     local subdomain="$1"
     local container_port="$2"
-    local websocket="$3"
+    local websocket_flag="$3"
     
     # Ensure config file exists
     ensure_config_file
     
     if [ -z "$subdomain" ] || [ -z "$container_port" ]; then
         echo -e "${RED}Error: Both subdomain and container:port are required${NC}"
-        echo "Usage: $0 add <subdomain> <container:port> [websocket]"
+        echo "Usage: $0 add <subdomain> <container:port> [--websocket]"
         exit 1
     fi
     
@@ -107,8 +110,8 @@ add_subdomain() {
         fi
     fi
     
-    # Add new entry with WebSocket support if specified
-    if [ "$websocket" = "websocket" ]; then
+    # Add new entry with WebSocket support if flag is specified
+    if [ "$websocket_flag" = "--websocket" ]; then
         echo "$subdomain=$container_port:websocket" >> "$CONFIG_FILE"
         echo -e "${GREEN}✅ Added subdomain: $subdomain -> $container_port (WebSocket enabled)${NC}"
     else
@@ -216,7 +219,7 @@ reload_caddy() {
 # Main script logic
 case "$1" in
     "add")
-        add_subdomain "$2" "$3"
+        add_subdomain "$2" "$3" "$4"
         generate_caddyfile
         reload_caddy
         ;;
