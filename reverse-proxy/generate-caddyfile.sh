@@ -102,11 +102,6 @@ EOF
         header_up X-Real-IP {remote}
         header_up X-Forwarded-For {remote}
         header_up X-Forwarded-Proto {scheme}
-        
-        # WebSocket-specific timeout settings
-        timeout 60s
-        read_timeout 60s
-        write_timeout 60s
 EOF
         fi
         
