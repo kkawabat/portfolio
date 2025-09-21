@@ -86,6 +86,10 @@ EOF
         if [ "$websocket_enabled" = true ]; then
             cat >> "$temp_file" << EOF
         
+        # CRITICAL: Force HTTP/1.1 for WebSocket connections
+        # HTTP/2 does not support WebSocket upgrades
+        protocol http/1.1
+        
         # WebSocket support - Caddy automatically handles WebSocket upgrades
         # when it detects the proper headers, but we can be explicit about it
         
