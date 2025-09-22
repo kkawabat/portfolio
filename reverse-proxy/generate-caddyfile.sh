@@ -76,6 +76,19 @@ if [ -f "subdomains.conf" ] && [ -s "subdomains.conf" ]; then
 
 # Subdomain: $subdomain
 $subdomain.$DOMAIN {
+EOF
+        
+        # Add HTTP/1.1 protocol for WebSocket connections if enabled
+        if [ "$websocket_enabled" = true ]; then
+            cat >> "$temp_file" << EOF
+    # CRITICAL: Force HTTP/1.1 for WebSocket connections
+    # HTTP/2 does not support WebSocket upgrades
+    protocol http/1.1
+    
+EOF
+        fi
+        
+        cat >> "$temp_file" << EOF
     reverse_proxy $actual_port {
         health_uri /health
         health_interval 30s
@@ -85,10 +98,6 @@ EOF
         # Add WebSocket-specific configuration if enabled
         if [ "$websocket_enabled" = true ]; then
             cat >> "$temp_file" << EOF
-        
-        # CRITICAL: Force HTTP/1.1 for WebSocket connections
-        # HTTP/2 does not support WebSocket upgrades
-        protocol http/1.1
         
         # WebSocket support - Caddy automatically handles WebSocket upgrades
         # when it detects the proper headers, but we can be explicit about it
