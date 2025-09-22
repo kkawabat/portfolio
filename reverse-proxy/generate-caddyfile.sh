@@ -80,27 +80,15 @@ EOF
         
         # Add reverse proxy configuration
         if [ "$websocket_enabled" = true ]; then
-            # WebSocket-enabled configuration with explicit upgrade handling
+            # WebSocket-enabled configuration - Caddy handles WebSocket upgrades automatically
             cat >> "$temp_file" << EOF
-    # WebSocket support - explicit upgrade handling
+    # WebSocket support - Caddy automatically detects and upgrades WebSocket connections
     reverse_proxy $actual_port {
-        # Enable WebSocket upgrade
-        header_up Connection {>Connection}
-        header_up Upgrade {>Upgrade}
-        header_up Sec-WebSocket-Key {>Sec-WebSocket-Key}
-        header_up Sec-WebSocket-Version {>Sec-WebSocket-Version}
-        header_up Sec-WebSocket-Protocol {>Sec-WebSocket-Protocol}
-        header_up Sec-WebSocket-Extensions {>Sec-WebSocket-Extensions}
-        
         # Standard proxy headers
         header_up Host {host}
         header_up X-Real-IP {remote}
         header_up X-Forwarded-For {remote}
         header_up X-Forwarded-Proto {scheme}
-        
-        # WebSocket-specific configuration
-        header_up X-Forwarded-Host {host}
-        header_up X-Forwarded-Port {>X-Forwarded-Port}
     }
 EOF
         else
