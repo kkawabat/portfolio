@@ -83,8 +83,8 @@ EOF
             cat >> "$temp_file" << EOF
     # CRITICAL: Force HTTP/1.1 for WebSocket connections
     # HTTP/2 does not support WebSocket upgrades
-    # Disable HTTP/2 to force HTTP/1.1
-    protocols h1 h2 h3
+    # Use the correct Caddy syntax to disable HTTP/2
+    protocols h1
     
 EOF
         fi
