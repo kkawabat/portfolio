@@ -131,6 +131,8 @@ EOF
     }
 EOF
         fi
+        
+        cat >> "$temp_file" << EOF
     
     # Logging
     log {
