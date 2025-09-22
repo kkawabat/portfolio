@@ -83,49 +83,54 @@ EOF
             cat >> "$temp_file" << EOF
     # CRITICAL: Force HTTP/1.1 for WebSocket connections
     # HTTP/2 does not support WebSocket upgrades
-    # Use try_files to detect WebSocket requests
-    try_files {path} @websocket
-    
-    @websocket {
-        header Connection "Upgrade"
-        header Upgrade "websocket"
+    # Use route to properly handle WebSocket vs regular requests
+    route {
+        @websocket {
+            header Connection "Upgrade"
+            header Upgrade "websocket"
+        }
+        
+        # Handle WebSocket requests with proper headers
+        reverse_proxy @websocket $actual_port {
+            header_up Connection {>Connection}
+            header_up Upgrade {>Upgrade}
+            header_up Sec-WebSocket-Key {>Sec-WebSocket-Key}
+            header_up Sec-WebSocket-Version {>Sec-WebSocket-Version}
+            header_up Sec-WebSocket-Protocol {>Sec-WebSocket-Protocol}
+            header_up Sec-WebSocket-Extensions {>Sec-WebSocket-Extensions}
+            header_up Host {host}
+            header_up X-Real-IP {remote}
+            header_up X-Forwarded-For {remote}
+            header_up X-Forwarded-Proto {scheme}
+        }
+        
+        # Handle regular HTTP requests
+        reverse_proxy $actual_port {
+            health_uri /health
+            health_interval 30s
+            health_timeout 10s
+            header_up Host {host}
+            header_up X-Real-IP {remote}
+            header_up X-Forwarded-For {remote}
+            header_up X-Forwarded-Proto {scheme}
+        }
     }
     
 EOF
-        fi
-        
-        cat >> "$temp_file" << EOF
+        else
+            # Regular HTTP-only configuration
+            cat >> "$temp_file" << EOF
     reverse_proxy $actual_port {
         health_uri /health
         health_interval 30s
         health_timeout 10s
-EOF
-        
-        # Add WebSocket-specific configuration if enabled
-        if [ "$websocket_enabled" = true ]; then
-            cat >> "$temp_file" << EOF
-        
-        # WebSocket support - Caddy automatically handles WebSocket upgrades
-        # when it detects the proper headers, but we can be explicit about it
-        
-        # Ensure WebSocket headers are properly forwarded
-        header_up Connection {>Connection}
-        header_up Upgrade {>Upgrade}
-        header_up Sec-WebSocket-Key {>Sec-WebSocket-Key}
-        header_up Sec-WebSocket-Version {>Sec-WebSocket-Version}
-        header_up Sec-WebSocket-Protocol {>Sec-WebSocket-Protocol}
-        header_up Sec-WebSocket-Extensions {>Sec-WebSocket-Extensions}
-        
-        # Standard proxy headers for WebSocket connections
         header_up Host {host}
         header_up X-Real-IP {remote}
         header_up X-Forwarded-For {remote}
         header_up X-Forwarded-Proto {scheme}
+    }
 EOF
         fi
-        
-        cat >> "$temp_file" << EOF
-    }
     
     # Logging
     log {
