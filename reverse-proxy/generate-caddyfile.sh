@@ -78,15 +78,8 @@ if [ -f "subdomains.conf" ] && [ -s "subdomains.conf" ]; then
 $subdomain.$DOMAIN {
 EOF
         
-        # Add HTTP/1.1 protocol for WebSocket connections if enabled
-        if [ "$websocket_enabled" = true ]; then
-            cat >> "$temp_file" << EOF
-    # CRITICAL: Force HTTP/1.1 for WebSocket connections
-    # HTTP/2 does not support WebSocket upgrades
-    protocol http/1.1
-    
-EOF
-        fi
+        # Note: HTTP/1.1 is automatically used for WebSocket connections in Caddy
+        # No need to explicitly set protocol directive
         
         cat >> "$temp_file" << EOF
     reverse_proxy $actual_port {
