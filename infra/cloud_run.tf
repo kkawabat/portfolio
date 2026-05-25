@@ -25,9 +25,10 @@ resource "google_cloud_run_v2_service" "portfolio" {
         http_get {
           path = "/"
         }
-        initial_delay_seconds = 10
-        period_seconds        = 5
-        failure_threshold     = 10
+        initial_delay_seconds = 0
+        period_seconds        = 10
+        failure_threshold     = 30
+        timeout_seconds       = 5
       }
 
       env {
