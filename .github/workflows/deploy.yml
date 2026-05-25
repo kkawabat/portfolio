@@ -1,147 +1,51 @@
-name: Deploy to Droplet
+name: Deploy to Cloud Run
 
 on:
   push:
-    branches: [ main, master ]
+    branches: [main]
     paths-ignore:
-      - 'reverse-proxy/**'
-      - '.github/workflows/deploy-reverse-proxy.yml'
-  pull_request:
-    branches: [ main, master ]
-    paths-ignore:
-      - 'reverse-proxy/**'
-      - '.github/workflows/deploy-reverse-proxy.yml'
+      - "infra/**"
+      - "*.md"
+      - ".cursor/**"
+
+env:
+  PROJECT_ID: kan-kawabata-2026
+  REGION: us-west1
+  SERVICE: portfolio
+  REPOSITORY: portfolio
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      packages: write
-    
+      id-token: write
+
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v3
+      - name: Authenticate to GCP
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ secrets.WIF_PROVIDER }}
+          service_account: ${{ secrets.WIF_SERVICE_ACCOUNT }}
 
-    - name: Log in to GitHub Container Registry
-      uses: docker/login-action@v3
-      with:
-        registry: ghcr.io
-        username: ${{ github.actor }}
-        password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
 
-    - name: Build and push Docker image
-      uses: docker/build-push-action@v5
-      with:
-        context: .
-        push: true
-        tags: |
-          ghcr.io/${{ github.repository_owner }}/portfolio:latest
-          ghcr.io/${{ github.repository_owner }}/portfolio:${{ github.sha }}
-        cache-from: type=gha
-        cache-to: type=gha,mode=max
+      - name: Configure Docker for Artifact Registry
+        run: gcloud auth configure-docker ${{ env.REGION }}-docker.pkg.dev --quiet
 
-    - name: Deploy to Droplet
-      if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
-      uses: appleboy/ssh-action@v1.0.3
-      with:
-        host: ${{ secrets.DROPLET_HOST }}
-        username: ${{ secrets.DROPLET_USER }}
-        key: ${{ secrets.DROPLET_SSH_KEY }}
-        port: ${{ secrets.DROPLET_PORT || 22 }}
-        script: |
-          # Navigate to the existing repository location
-          cd /opt/portfolio
-          
-          # Pull latest changes
-          echo "📥 Pulling latest changes..."
-          git pull origin main
-          
-          # Verify we're in the right directory
-          echo "📁 Current directory: $(pwd)"
-          echo "📋 Directory contents:"
-          ls -la
-          
-          # Verify docker-compose.yml exists
-          if [ ! -f "docker-compose.yml" ]; then
-            echo "❌ docker-compose.yml not found!"
-            echo "📋 Available files:"
-            ls -la
-            exit 1
-          fi
-          
-          # Create .env file with secrets
-          echo "🔧 Creating .env file..."
-          cat > .env << EOF
-          DJANGO_SECRET_KEY=${{ secrets.DJANGO_SECRET_KEY }}
-          DJANGO_DEBUG=False
-          ALLOWED_HOSTS=${{ secrets.ALLOWED_HOSTS }}
-          YOUTUBE_API_KEY=${{ secrets.YOUTUBE_API_KEY }}
-          AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION=${{ secrets.AWS_DEFAULT_REGION || 'us-east-1' }}
-          AWS_REGION=${{ secrets.AWS_DEFAULT_REGION || 'us-east-1' }}
-          MPLCONFIGDIR=/app/.config/matplotlib
-          PYTHONUNBUFFERED=1
-          EOF
-          
-          # Backup current deployment
-          echo "📦 Creating backup of current deployment..."
-          if docker-compose ps 2>/dev/null | grep -q "Up"; then
-            docker tag portfolio_portfolio portfolio_portfolio:backup-$(date +%Y%m%d_%H%M%S) || true
-          fi
-          
-          # Stop existing container
-          echo "🛑 Stopping existing container..."
-          docker-compose down 2>/dev/null || true
-          
-          # Pull the pre-built image from GitHub Container Registry
-          echo "📥 Pulling pre-built image from registry..."
-          docker pull ghcr.io/${{ github.repository_owner }}/portfolio:latest
-          
-          # Tag the image for docker-compose
-          docker tag ghcr.io/${{ github.repository_owner }}/portfolio:latest portfolio_portfolio:latest
-          
-          # Start the application
-          echo "▶️ Starting application..."
-          docker-compose up -d
-          
-          # Wait for container to be healthy (entrypoint handles migrations)
-          echo "⏳ Waiting for container to be healthy..."
-          sleep 45
-          
-          # Check if deployment was successful
-          if docker-compose ps | grep -q "Up"; then
-            echo "✅ Deployment successful!"
-            # Clean up old images to save space
-            docker image prune -f
-            # Show container status
-            docker-compose ps
-          else
-            echo "❌ Deployment failed! Rolling back..."
-            # Rollback to previous version
-            docker-compose down
-            if docker images | grep -q "portfolio_portfolio:backup"; then
-              LATEST_BACKUP=$(docker images --format "table {{.Repository}}:{{.Tag}}" | grep "portfolio_portfolio:backup" | head -1)
-              docker tag $LATEST_BACKUP portfolio_portfolio:latest
-              docker-compose up -d
-              echo "🔄 Rolled back to previous version"
-            else
-              echo "⚠️ No backup found, cannot rollback"
-            fi
-            # Show logs for debugging
-            docker-compose logs --tail=50
-            exit 1
-          fi
+      - name: Build and push
+        run: |
+          IMAGE=${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.SERVICE }}
+          docker build -t ${IMAGE}:${{ github.sha }} -t ${IMAGE}:latest .
+          docker push ${IMAGE}:${{ github.sha }}
+          docker push ${IMAGE}:latest
 
-    - name: Notify deployment status
-      if: always()
-      run: |
-        if [ "${{ job.status }}" == "success" ]; then
-          echo "✅ Deployment successful!"
-        else
-          echo "❌ Deployment failed!"
-        fi
+      - name: Deploy to Cloud Run
+        uses: google-github-actions/deploy-cloudrun@v2
+        with:
+          service: ${{ env.SERVICE }}
+          region: ${{ env.REGION }}
+          image: ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.SERVICE }}:${{ github.sha }}

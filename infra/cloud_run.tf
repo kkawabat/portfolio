@@ -1,0 +1,146 @@
+resource "google_cloud_run_v2_service" "portfolio" {
+  name                = "portfolio"
+  location            = var.region
+  deletion_protection = false
+
+  template {
+    service_account = google_service_account.cloud_run.email
+
+    containers {
+      # Placeholder for initial creation — CI/CD will deploy the real image
+      image = "us-docker.pkg.dev/cloudrun/container/hello:latest"
+
+      ports {
+        container_port = 8080
+      }
+
+      resources {
+        limits = {
+          cpu    = "2"
+          memory = "2Gi"
+        }
+      }
+
+      startup_probe {
+        http_get {
+          path = "/"
+        }
+        initial_delay_seconds = 10
+        period_seconds        = 5
+        failure_threshold     = 10
+      }
+
+      env {
+        name  = "DJANGO_DEBUG"
+        value = "False"
+      }
+
+      env {
+        name  = "ALLOWED_HOSTS"
+        value = "${var.domain},www.${var.domain}"
+      }
+
+      env {
+        name  = "CSRF_TRUSTED_ORIGINS"
+        value = "https://${var.domain},https://www.${var.domain}"
+      }
+
+      env {
+        name  = "AWS_DEFAULT_REGION"
+        value = "us-east-1"
+      }
+
+      env {
+        name = "DJANGO_SECRET_KEY"
+        value_source {
+          secret_key_ref {
+            secret  = google_secret_manager_secret.django_secret_key.secret_id
+            version = "latest"
+          }
+        }
+      }
+
+      env {
+        name = "YOUTUBE_API_KEY"
+        value_source {
+          secret_key_ref {
+            secret  = google_secret_manager_secret.youtube_api_key.secret_id
+            version = "latest"
+          }
+        }
+      }
+
+      env {
+        name = "AWS_ACCESS_KEY_ID"
+        value_source {
+          secret_key_ref {
+            secret  = google_secret_manager_secret.aws_access_key_id.secret_id
+            version = "latest"
+          }
+        }
+      }
+
+      env {
+        name = "AWS_SECRET_ACCESS_KEY"
+        value_source {
+          secret_key_ref {
+            secret  = google_secret_manager_secret.aws_secret_access_key.secret_id
+            version = "latest"
+          }
+        }
+      }
+    }
+
+    scaling {
+      min_instance_count = 0
+      max_instance_count = 2
+    }
+
+    timeout = "300s"
+  }
+
+  lifecycle {
+    ignore_changes = [
+      template[0].containers[0].image,
+    ]
+  }
+
+  depends_on = [google_project_service.apis]
+}
+
+resource "google_cloud_run_v2_service_iam_member" "public" {
+  name     = google_cloud_run_v2_service.portfolio.name
+  location = var.region
+  role     = "roles/run.invoker"
+  member   = "allUsers"
+}
+
+resource "google_cloud_run_domain_mapping" "portfolio" {
+  name     = var.domain
+  location = var.region
+
+  metadata {
+    namespace = var.project_id
+  }
+
+  spec {
+    route_name = google_cloud_run_v2_service.portfolio.name
+  }
+
+  depends_on = [google_cloud_run_v2_service.portfolio]
+}
+
+resource "google_cloud_run_domain_mapping" "www" {
+  name     = "www.${var.domain}"
+  location = var.region
+
+  metadata {
+    namespace = var.project_id
+  }
+
+  spec {
+    route_name = google_cloud_run_v2_service.portfolio.name
+  }
+
+  depends_on = [google_cloud_run_v2_service.portfolio]
+}

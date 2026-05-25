@@ -67,5 +67,16 @@ logs/
 ehthumbs.db
 Thumbs.db
 
+# Terraform
+infra/.terraform/
+infra/*.tfstate
+infra/*.tfstate.backup
+infra/*.tfvars
+!infra/terraform.tfvars.example
+infra/.terraform.lock.hcl
+
+# uv
+.venv/
+
 # Project specific
 Caddyfile

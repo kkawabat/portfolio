@@ -1,0 +1,4 @@
+project_id  = "kan-kawabata-2026"
+region      = "us-west1"
+domain      = "kankawabata.com"
+github_repo = "kkawabat/portfolio"  # change to your actual owner/repo

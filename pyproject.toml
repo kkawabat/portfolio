@@ -1,45 +1,55 @@
-[tool.poetry]
+[project]
 name = "portfolio"
 version = "0.1.0"
-description = ""
-authors = ["kan kawabata <kkawabat@asu.edu>"]
+description = "Personal portfolio website for Kan Kawabata"
 readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "django>=5.2,<6",
+    "pillow>=10",
+    "python-dotenv>=1",
+    "mistune>=3",
+    "pygments>=2.15",
+    "gunicorn>=23",
+    "gevent>=24",
+    "whitenoise>=6.5",
+    "channels[daphne]>=4",
+    "aiortc>=1.5",
+    "av>=10",
+    "google-api-python-client>=2.97",
+    "google-auth-oauthlib>=1",
+    "chat-downloader>=0.2.7",
+    "pandas>=2",
+    "boto3>=1.28",
+    "transformers>=4.41",
+    "torch>=2.3",
+    "accelerate>=0.31",
+    "vadersentiment>=3.3",
+    "yt-dlp>=2024",
+    "pydub>=0.25",
+    "magic-eye-util",
+    "morse-code-util",
+    "opencv-cam-distance-measurer",
+    "whistle-detector",
+]
 
-[[tool.poetry.source]]
+[dependency-groups]
+dev = [
+    "django-debug-toolbar>=4.2",
+]
+
+[tool.uv.sources]
+magic-eye-util = { git = "https://github.com/kkawabat/MagicEyeUtil.git" }
+morse-code-util = { git = "https://github.com/kkawabat/Morse-Code-Util.git" }
+opencv-cam-distance-measurer = { git = "https://github.com/kkawabat/opencv_cam_distance_measurer.git" }
+whistle-detector = { git = "https://github.com/kkawabat/WhistleDetector.git" }
+torch = { index = "pytorch-cpu" }
+
+[[tool.uv.index]]
 name = "pytorch-cpu"
 url = "https://download.pytorch.org/whl/cpu"
-priority = "explicit"
-
-[tool.poetry.dependencies]
-python = "^3.11"
-magic-eye-util = {git = "https://github.com/kkawabat/MagicEyeUtil.git"}
-django = "^4.2.3"
-pillow = "^10.0.0"
-python-dotenv = "^1.0.0"
-mistune = "^3.0.1"
-pygments = "^2.15.1"
-gunicorn = "^21.2.0"
-gevent = "^23.7.0"
-whitenoise = "^6.5.0"
-channels = {extras = ["daphne"], version = "^4.0.0"}
-morse-code-util = {git = "https://github.com/kkawabat/Morse-Code-Util.git"}
-opencv-cam-distance-measurer = {git = "https://github.com/kkawabat/opencv_cam_distance_measurer.git"}
-aiortc = "^1.5.0"
-av = "^10.0.0"
-google-api-python-client = "^2.97.0"
-google-auth-oauthlib = "^1.0.0"
-chat-downloader = "^0.2.7"
-pandas = "^2.0.3"
-django-debug-toolbar = "^4.2.0"
-boto3 = "^1.28.44"
-transformers = "^4.41.2"
-torch = {version = "^2.3.1", source = "pytorch-cpu"}
-accelerate = "^0.31.0"
-vadersentiment = "^3.3.2"
-yt-dlp = "^2024.5.27"
-pydub = "^0.25.1"
-whistle-detector = {git = "https://github.com/kkawabat/WhistleDetector.git"}
+explicit = true
 
 [build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+requires = ["hatchling"]
+build-backend = "hatchling.build"

@@ -70,6 +70,9 @@ README.md
 .cursor/
 .python-version
 
+# Infrastructure
+infra/
+
 # Temporary files
 tmp/
 temp/
