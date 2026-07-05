@@ -7,15 +7,8 @@
 
 {% block body %}
 <div class="project-div fade-in-right">
-    <h1>Webcam Ruler 📏</h1>
-    <div id="header-div1" class='header-div project-header-div'>
-        <h3 id='header-details' class='header' onclick="select_nav('details', '#header-div1');">Details</h3>
-        <h3 id='header-app' class='header' onclick="select_nav('app', '#header-div1');">App</h3>
-    </div>
-
-    <div id="content-div" style="display:none;">
+    <div id="content-div">
         {% include "webcam_ruler/app.html" %}
-        {% include "webcam_ruler/details.html" %}
     </div>
 </div>
 
@@ -25,3 +18,7 @@
 </script>
 <script src="{% static 'webcam_ruler/js/webcam_ruler.js' %}"></script>
 {% endblock body %}
+
+{% block project_about %}
+{% include "webcam_ruler/details.html" %}
+{% endblock project_about %}

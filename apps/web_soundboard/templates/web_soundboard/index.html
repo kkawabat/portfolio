@@ -9,17 +9,14 @@
 
 {% block body %}
 <div class="project-div fade-in-right">
-    <h1>Web Soundboard 📣</h1>
-    <div id="header-div1" class='header-div project-header-div'>
-        <h3 id='header-details' class='header' onclick="select_nav('details', '#header-div1');">Details</h3>
-        <h3 id='header-app' class='header' onclick="select_nav('app', '#header-div1');">Soundboard</h3>
-    </div>
-
-    <div id="content-div" style="display:none;">
+    <div id="content-div">
         {% include 'web_soundboard/app.html' %}
-        {% include 'web_soundboard/details.html' %}
     </div>
 </div>
 <script src="{% static 'js/recorder.js' %}"></script>
 <script src="{% static 'web_soundboard/js/web_soundboard.js' %}"></script>
 {% endblock body %}
+
+{% block project_about %}
+{% include 'web_soundboard/details.html' %}
+{% endblock project_about %}

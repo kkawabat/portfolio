@@ -46,7 +46,7 @@
 
     {% if anchor %}
         headerSelected("#header-{{anchor}}", '#header-div1');
-        ContentSelection("#content-{{anchor}}");
+        ContentSelection("#content-{{anchor}}", true);
     {% endif %}
 
     function skip_animations() {

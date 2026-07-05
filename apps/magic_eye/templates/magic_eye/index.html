@@ -1,5 +1,6 @@
 {% extends "project_base.html" %}
 {% load static %}
+{% block project_default_tab %}construct{% endblock %}
 {% block title %}Magic Eye Tool{% endblock title %}
 {% block ref %}
 <link rel="stylesheet" type="text/css" href="{% static 'magic_eye/css/magic_eye_style.css' %}">
@@ -12,17 +13,14 @@
 
 {% block body %}
 <div class="project-div fade-in-right">
-    <h1>Magic Eye App 👀</h1>
-    <div id="header-div1" class='header-div project-header-div'>
-        <h3 id='header-details' class='header' onclick="select_nav('details', '#header-div1');">Details</h3>
-        <h3 id='header-construct' class='header' onclick="select_nav('construct', '#header-div1');">Create Magic Eye</h3>
-        <h3 id='header-deconstruct' class='header' onclick="select_nav('deconstruct', '#header-div1');">Solve Magic Eye</h3>
+    <div id="header-div1" class="project-mode-switch">
+        {% include "project_mode_nav_item.html" with mode_id="construct" mode_label="Create" %}
+        {% include "project_mode_nav_item.html" with mode_id="deconstruct" mode_label="Solve" %}
     </div>
 
-    <div id="content-div" style="display:none;">
+    <div id="content-div">
         {% include 'magic_eye/construct.html' %}
         {% include 'magic_eye/deconstruct.html' %}
-        {% include 'magic_eye/details.html' %}
         <div id="img-popup" class="popup-modal">
             <span class="close">&times;</span>
             <div id="img-holder" class="img-holder"> </div>
@@ -115,3 +113,7 @@
     });
 </script>
 {% endblock body %}
+
+{% block project_about %}
+{% include 'magic_eye/details.html' %}
+{% endblock project_about %}

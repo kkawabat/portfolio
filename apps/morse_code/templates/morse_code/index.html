@@ -1,5 +1,6 @@
 {% extends "project_base.html" %}
 {% load static %}
+{% block project_default_tab %}tap{% endblock %}
 {% block title %}Morse Code Speed tap test{% endblock title %}
 {% block ref %}
 <link rel="stylesheet" type="text/css" href="{% static 'morse_code/css/app_morse_code.css' %}">
@@ -8,17 +9,14 @@
 
 {% block body %}
 <div class="project-div fade-in-right">
-    <h1>Morse Code App</h1>
-    <div id="header-div1" class='header-div project-header-div'>
-        <h3 id='header-details' class='header' onclick="select_nav('details', '#header-div1');">Details</h3>
-        <h3 id='header-tap' class='header' onclick="select_nav('tap', '#header-div1');">Morse Code (Tap)</h3>
-        <h3 id='header-listen' class='header' onclick="select_nav('listen', '#header-div1');">Morse Code (Listen)</h3>
+    <div id="header-div1" class="project-mode-switch">
+        {% include "project_mode_nav_item.html" with mode_id="tap" mode_label="Tap" %}
+        {% include "project_mode_nav_item.html" with mode_id="listen" mode_label="Listen" %}
     </div>
 
-    <div id="content-div" style="display:none;">
+    <div id="content-div">
         {% include "morse_code/listening_app.html" %}
         {% include "morse_code/tapping_app.html" %}
-        {% include "morse_code/details.html" %}
     </div>
 </div>
 
@@ -26,3 +24,7 @@
 <script src="{% static 'morse_code/js/morse_code_write.js' %}"></script>
 <script src="{% static 'morse_code/js/morse_code_beep.js' %}"></script>
 {% endblock body %}
+
+{% block project_about %}
+{% include "morse_code/details.html" %}
+{% endblock project_about %}

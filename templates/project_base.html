@@ -21,23 +21,27 @@
     <script src="{% static 'vendor/htmx-1.9.4.min.js' %}"></script>
 
     <script src="{% static 'js/nav_selector_logic.js' %}"></script>
+    <script src="{% static 'js/project_ui.js' %}"></script>
     <script src="{% static 'js/visit_logic.js' %}"></script>
     {% block ref %}{% endblock ref %}
 </head>
-<body hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
-    {% include "go_back_element.html" %}
+<body class="project-page" hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
+    {% include "project_chrome.html" %}
     {% block body %}{% endblock body %}
+    <div id="project-about-overlay" class="project-about-overlay" aria-hidden="true">
+        <div class="project-about-dialog" role="dialog" aria-modal="true" aria-label="About this project">
+            <button type="button" class="project-about-close" aria-label="Close">&times;</button>
+            {% block project_about %}{% endblock project_about %}
+        </div>
+    </div>
     <button onclick="topFunction()" id="jumpToTopBtn" title="Go to top">Top</button>
     <script src="{% static 'js/jump_to_top_button.js' %}"></script>
     <script>
         $(document).ready(function() {
-            ContentSelectionHideAll();
-            {% if anchor %}
-                headerSelected("#header-{{anchor}}", '#header-div1');
-                ContentSelection("#content-{{anchor}}");
-            {% else %}
-                select_nav('details', '#header-div1');
-            {% endif %}
+            initProjectPage(
+                '{% block project_default_tab %}app{% endblock %}',
+                {% if anchor %}'{{ anchor }}'{% else %}null{% endif %}
+            );
         });
     </script>
 </body>

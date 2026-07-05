@@ -1,7 +1,11 @@
 function select_nav(name, headerClass){
-    headerSelected("#header-" +  name, headerClass)
+    var header_id = "#header-" + name;
+    if ($(header_id).hasClass('active')) {
+        return;
+    }
+    headerSelected(header_id, headerClass)
 
-    ContentSelection("#content-" +  name)
+    ContentSelection("#content-" +  name, true)
     history.pushState({}, "", name)
 }
 
@@ -13,8 +17,14 @@ function headerSelected(header_id, headerClass) {
 function ContentSelectionHideAll() {
     $('#content-div').children().each(function() { $(this).hide() })
 }
-function ContentSelection(content_div_id) {
+function ContentSelection(content_div_id, animate) {
     ContentSelectionHideAll();
     $('#content-div').show();
-    $(content_div_id).show();
+    var $panel = $(content_div_id);
+    if (animate) {
+        $panel.removeClass('fade-in-top');
+        void $panel[0].offsetWidth;
+        $panel.addClass('fade-in-top');
+    }
+    $panel.show();
 }
