@@ -11,6 +11,8 @@ from django.shortcuts import render
 from pydub import AudioSegment
 from scipy.io.wavfile import write
 
+from portfolio.worker_client import call_worker, worker_available
+
 
 def index_view(request):
     return render(request, "voice_stripper/index.html")
@@ -29,6 +31,8 @@ def strip_vocal(request):
         body_unicode = request.body.decode('utf-8')
         body = json.loads(body_unicode)
         youtube_url = body['vid_url']
+        if worker_available():
+            return JsonResponse(call_worker('/strip', {'vid_url': youtube_url}))
         wav_arr, sr, dtype = extract_audio_array_from_url(youtube_url)
         stripped_arr = apply_voice_stripper(wav_arr, dtype)
         wav_arr64 = encode_audio(stripped_arr, sr)

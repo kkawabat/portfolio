@@ -52,6 +52,11 @@ resource "google_cloud_run_v2_service" "portfolio" {
       }
 
       env {
+        name  = "WORKER_SERVICE_URL"
+        value = google_cloud_run_v2_service.portfolio_workers.uri
+      }
+
+      env {
         name = "DJANGO_SECRET_KEY"
         value_source {
           secret_key_ref {
@@ -106,7 +111,7 @@ resource "google_cloud_run_v2_service" "portfolio" {
     ]
   }
 
-  depends_on = [google_project_service.apis]
+  depends_on = [google_project_service.apis, google_cloud_run_v2_service.portfolio_workers]
 }
 
 resource "google_cloud_run_v2_service_iam_member" "public" {

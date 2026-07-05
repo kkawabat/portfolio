@@ -12,6 +12,7 @@ env:
   PROJECT_ID: kan-kawabata-2026
   REGION: us-west1
   SERVICE: portfolio
+  WORKERS_SERVICE: portfolio-workers
   REPOSITORY: portfolio
 
 jobs:
@@ -36,14 +37,28 @@ jobs:
       - name: Configure Docker for Artifact Registry
         run: gcloud auth configure-docker ${{ env.REGION }}-docker.pkg.dev --quiet
 
-      - name: Build and push
+      - name: Build and push portfolio image
         run: |
           IMAGE=${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.SERVICE }}
           docker build -t ${IMAGE}:${{ github.sha }} -t ${IMAGE}:latest .
           docker push ${IMAGE}:${{ github.sha }}
           docker push ${IMAGE}:latest
 
-      - name: Deploy to Cloud Run
+      - name: Build and push workers image
+        run: |
+          IMAGE=${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.WORKERS_SERVICE }}
+          docker build -t ${IMAGE}:${{ github.sha }} -t ${IMAGE}:latest workers/
+          docker push ${IMAGE}:${{ github.sha }}
+          docker push ${IMAGE}:latest
+
+      - name: Deploy workers to Cloud Run
+        uses: google-github-actions/deploy-cloudrun@v2
+        with:
+          service: ${{ env.WORKERS_SERVICE }}
+          region: ${{ env.REGION }}
+          image: ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.WORKERS_SERVICE }}:${{ github.sha }}
+
+      - name: Deploy portfolio to Cloud Run
         uses: google-github-actions/deploy-cloudrun@v2
         with:
           service: ${{ env.SERVICE }}

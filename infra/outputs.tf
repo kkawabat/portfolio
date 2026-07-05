@@ -1,3 +1,8 @@
+output "workers_url" {
+  description = "Portfolio workers Cloud Run service URL"
+  value       = google_cloud_run_v2_service.portfolio_workers.uri
+}
+
 output "cloud_run_url" {
   description = "Cloud Run service URL"
   value       = google_cloud_run_v2_service.portfolio.uri

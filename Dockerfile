@@ -71,5 +71,5 @@ EXPOSE ${PORT}
 ENTRYPOINT ["/entrypoint.sh"]
 
 CMD gunicorn --bind 0.0.0.0:${PORT} --workers 2 --worker-class sync \
-    --max-requests 1000 --max-requests-jitter 100 --timeout 60 \
+    --max-requests 1000 --max-requests-jitter 100 --timeout 300 \
     --keep-alive 2 --preload portfolio.wsgi:application

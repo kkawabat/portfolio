@@ -15,6 +15,7 @@ dependencies = [
     "whitenoise>=6.5",
     "google-api-python-client>=2.97",
     "google-auth-oauthlib>=1",
+    "requests>=2.32",
     "chat-downloader>=0.2.7",
     "pandas>=2",
     "boto3>=1.28",

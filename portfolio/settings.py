@@ -22,6 +22,7 @@ DEBUG = os.environ.get('DJANGO_DEBUG', 'False') == 'True'
 ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
 
 CLOUDRUN_SERVICE_URL = os.environ.get('CLOUDRUN_SERVICE_URL')
+WORKER_SERVICE_URL = os.environ.get('WORKER_SERVICE_URL')
 if CLOUDRUN_SERVICE_URL:
     ALLOWED_HOSTS.append(CLOUDRUN_SERVICE_URL.removeprefix('https://'))
 
