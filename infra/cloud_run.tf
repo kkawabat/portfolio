@@ -38,7 +38,7 @@ resource "google_cloud_run_v2_service" "portfolio" {
 
       env {
         name  = "ALLOWED_HOSTS"
-        value = "${var.domain},www.${var.domain}"
+        value = "${var.domain},www.${var.domain},127.0.0.1,localhost"
       }
 
       env {
