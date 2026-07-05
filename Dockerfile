@@ -9,7 +9,6 @@ RUN apt-get update && apt-get install -y \
     libgomp1 \
     portaudio19-dev \
     libasound2-dev \
-    libopencv-dev \
     libopenblas-dev \
     liblapack-dev \
     libhdf5-dev \

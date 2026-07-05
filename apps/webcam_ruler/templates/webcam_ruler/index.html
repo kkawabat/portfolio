@@ -3,7 +3,6 @@
 {% block title %}Webcam Ruler{% endblock title %}
 {% block ref %}
 <link rel="stylesheet" type="text/css" href="{% static 'webcam_ruler/css/webcam_ruler.css' %}">
-
 {% endblock ref %}
 
 {% block body %}
@@ -20,6 +19,9 @@
     </div>
 </div>
 
-<script src="{% static 'webcam_ruler/js/webrtc_client.js' %}"></script>
+<script>
+    var OPENCV_JS_URL = "{% static 'vendor/opencv-4.9.0.js' %}";
+    var CASCADE_URL = "{% static 'webcam_ruler/model/lbpcascade_frontalface_improved.xml' %}";
+</script>
 <script src="{% static 'webcam_ruler/js/webcam_ruler.js' %}"></script>
 {% endblock body %}

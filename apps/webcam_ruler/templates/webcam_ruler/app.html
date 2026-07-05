@@ -3,24 +3,24 @@
     <h3 style="color: orange; margin: auto; width: fit-content;">Choose what to detect</h3>
 
     <div id="header-div2" class='header-div project-header-div'>
-        <h5 id="face" class="header" onclick="change_detector_type('face');">Face </h5>
-        <h5 id="qr_code" class="header" onclick="change_detector_type('qr_code');">QR Code </h5>
-        <h5 id="raw_feed" class="header" onclick="change_detector_type('raw_feed');">Raw Feed </h5>
+        <h5 id="face" class="header detector-option" data-detector="face">Face</h5>
+        <h5 id="qr_code" class="header detector-option" data-detector="qr_code">QR Code</h5>
+        <h5 id="raw_feed" class="header detector-option" data-detector="raw_feed">Raw Feed</h5>
     </div>
 
     <div id='button-control' class='center-flex' style="display: none;">
-        <button id="startBtn" class="app-button" onclick="startRecording()">Start Detecting</button>
+        <button id="startBtn" type="button" class="app-button">Start Detecting</button>
 
         <div id='vidsContainer' style="display: none;">
-            <button id="stopBtn" class="app-button" onclick="stopRecording()">
+            <button id="stopBtn" type="button" class="app-button">
                 <i id="recordingIcon" class="fa fa-circle text-danger Blink"></i> Stop Recording
             </button>
 
-            <video id="outputFeedVid" muted></video>
-            <p>Note: this app isn't meant to be accurate it's a rough estimation and are dependent on camera focal lengths.</p>
-            <p>Additionally this app uses webrtc connection, and you might not be able to get it working as it does not use a dedicated TURN servers to learn more about webRTC please see this <a href="https://bloggeek.me/webrtc-turn/">article</a>.</p>
+            <video id="inputFeedVid" muted playsinline hidden></video>
+            <canvas id="captureCanvas" hidden></canvas>
+            <canvas id="outputFeedCanvas"></canvas>
+            <p>Note: this app isn't meant to be accurate — it's a rough estimation and depends on camera focal length.</p>
+            <p>Detection runs entirely in your browser using OpenCV.js; the first start downloads ~10 MB of OpenCV.</p>
         </div>
     </div>
 </div>
-
-

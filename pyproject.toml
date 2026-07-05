@@ -13,9 +13,6 @@ dependencies = [
     "gunicorn>=23",
     "gevent>=24",
     "whitenoise>=6.5",
-    "channels[daphne]>=4",
-    "aiortc>=1.5",
-    "av>=10",
     "google-api-python-client>=2.97",
     "google-auth-oauthlib>=1",
     "chat-downloader>=0.2.7",
@@ -30,7 +27,6 @@ dependencies = [
     "audioop-lts>=0.2; python_version >= '3.13'",
     "magic-eye-util",
     "morse-code-util",
-    "opencv-cam-distance-measurer",
     "whistle-detector",
 ]
 
@@ -42,7 +38,6 @@ dev = [
 [tool.uv.sources]
 magic-eye-util = { git = "https://github.com/kkawabat/MagicEyeUtil.git" }
 morse-code-util = { git = "https://github.com/kkawabat/Morse-Code-Util.git" }
-opencv-cam-distance-measurer = { git = "https://github.com/kkawabat/opencv_cam_distance_measurer.git" }
 whistle-detector = { git = "https://github.com/kkawabat/WhistleDetector.git" }
 torch = { index = "pytorch-cpu" }
 

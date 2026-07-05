@@ -34,7 +34,6 @@ if CLOUDRUN_SERVICE_URL:
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 INSTALLED_APPS = [
-    'daphne',
     'apps.new_main',
     'apps.magic_eye',
     'apps.whistle_detector',
@@ -66,6 +65,9 @@ MIDDLEWARE = [
 
 if DEBUG:
     INSTALLED_APPS.insert(1, 'debug_toolbar')
+    MIDDLEWARE = [
+        m for m in MIDDLEWARE if m != 'whitenoise.middleware.WhiteNoiseMiddleware'
+    ]
     MIDDLEWARE.insert(2, 'debug_toolbar.middleware.DebugToolbarMiddleware')
 
 ROOT_URLCONF = 'portfolio.urls'
@@ -85,14 +87,6 @@ TEMPLATES = [
         },
     },
 ]
-
-ASGI_APPLICATION = 'portfolio.asgi.application'
-
-CHANNEL_LAYERS = {
-    "default": {
-        "BACKEND": "channels.layers.InMemoryChannelLayer"
-    }
-}
 
 WSGI_APPLICATION = 'portfolio.wsgi.application'
 
