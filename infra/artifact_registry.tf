@@ -7,10 +7,10 @@ resource "google_artifact_registry_repository" "portfolio" {
   # DELETE selects candidates for cleanup; KEEP exempts versions from it.
   # Without a DELETE policy nothing is ever removed.
   cleanup_policies {
-    id     = "delete-old"
+    id     = "delete-all-unkept"
     action = "DELETE"
     condition {
-      older_than = "2592000s" # 30 days
+      tag_state = "ANY" # match every version; only the KEEP below survives
     }
   }
 
