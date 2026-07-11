@@ -8,8 +8,39 @@ import re
 from datetime import datetime
 from django.conf import settings
 
-# Simple project list
+# Simple project list.
+# Entries with a 'url' field live outside this repo (e.g. GitHub Pages games
+# under games.kankawabata.com); their cards link straight to that URL.
+# Entries without one are Django apps in this repo, resolved via their slug.
 PROJECTS = [
+    {
+        'title': 'Monikers',
+        'description': 'Mobile-friendly party word game for two teams, with pre-built decks and custom cards.',
+        'date': '2025',
+        'slug': 'moniker',
+        'url': 'https://games.kankawabata.com/Moniker/',
+    },
+    {
+        'title': 'Poetry for Neanderthals',
+        'description': 'Team word-guessing game where poets may only speak in single syllables.',
+        'date': '2025',
+        'slug': 'poetry-for-neanderthals',
+        'url': 'https://games.kankawabata.com/poetry_for_neanderthals/',
+    },
+    {
+        'title': 'Mora Jai Box',
+        'description': 'Simulator for the Mora Jai puzzle boxes found in Blue Prince.',
+        'date': '2025',
+        'slug': 'mora-jai-box',
+        'url': 'https://games.kankawabata.com/MoraJaiBox/',
+    },
+    {
+        'title': 'GameWork',
+        'description': 'TypeScript framework for building multiplayer browser games, with live demos.',
+        'date': '2025',
+        'slug': 'gamework',
+        'url': 'https://games.kankawabata.com/gamework/',
+    },
     {
         'title': 'Whistle Detector',
         'description': 'Machine learning application that detects whistle sounds in audio recordings.',

@@ -19,18 +19,14 @@ try:
     projects = get_projects()
     print(f"\n📁 Found {len(projects)} projects:")
     for project in projects:
-        print(f"  - {project['title']} ({project['id']})")
-        print(f"    URL: {project['url']}")
-        print(f"    Technologies: {', '.join(project['technologies'])}")
-        print()
-    
+        target = project.get('url', f"/projects/{project['slug']}/")
+        print(f"  - {project['title']} ({project['date']}) -> {target}")
+
     # Test blogs
     blogs = get_blogs()
-    print(f"📝 Found {len(blogs)} blogs:")
+    print(f"\n📝 Found {len(blogs)} blogs:")
     for blog in blogs:
-        print(f"  - {blog['title']} ({blog['id']})")
-        print(f"    URL: {blog['url']}")
-        print()
+        print(f"  - {blog['title']} (/blogs/{blog['slug']}/)")
     
     print("✅ Configuration test completed successfully!")
     

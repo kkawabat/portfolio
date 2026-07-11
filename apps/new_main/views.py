@@ -92,6 +92,9 @@ def cv_pdf(_):
 
 
 def project_post_view(_, slug_id):
+    for project in get_projects():
+        if project['slug'] == slug_id and project.get('url'):
+            return redirect(project['url'])
     try:
         return redirect(slug_id)
     except NoReverseMatch:
