@@ -1,7 +1,7 @@
 {% load static %}
 <div id="content-app" class="content-div project">
     <div>
-        <h3>Instruction</h3>
+        <h3>Whistle Detector</h3>
         <p>Click record whistle, whistle, click stop when you are done. The app will then generate the midi file.</p>
     </div>
     <form id="whistleForm">
@@ -15,6 +15,9 @@
             <button id="cancelBtn" class='app-button' type="button" onclick="cancelAudioRecording()" style="display: none;">Cancel</button>
         </div>
     </form>
+    <div id="processingDiv" style="display: none;">
+        <p><i class="fa fa-spinner fa-spin"></i> Processing...</p>
+    </div>
     <div id="playbackDiv" hidden>
 
     </div>

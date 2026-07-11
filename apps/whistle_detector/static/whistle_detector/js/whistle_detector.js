@@ -20,15 +20,20 @@ function startAudioRecording() {
 
 
 function stopAudioRecording() {
-    $('#startBtn').show()
     $('#recordingIcon').hide()
     $('#stopBtn').hide()
     $('#cancelBtn').hide()
+    $('#processingDiv').show()
     audioRecorder.stop().then(audioBlob => {
         $("#playbackDiv").attr("hidden", false);
         loadAudio(audioBlob);
         submitWhistleBlob(audioBlob);
     });
+}
+
+function showRecordAgainButton() {
+    $('#processingDiv').hide()
+    $('#startBtn').text('Record Another Whistle').show()
 }
 
 function cancelAudioRecording() {
@@ -75,6 +80,7 @@ function submitWhistleBlob(audioBlob){
         processData: false,
         contentType: false,
         success: function(response){
+            showRecordAgainButton()
             if('error' in response){
                 alert(response['error'])
             }
@@ -85,6 +91,7 @@ function submitWhistleBlob(audioBlob){
             }
         },
         error: function (request, status, error) {
+            showRecordAgainButton()
             console.log('failed')
         }
     });
