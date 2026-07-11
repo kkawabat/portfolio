@@ -19,6 +19,7 @@ resource "google_cloud_run_v2_service" "portfolio" {
           cpu    = "2"
           memory = "2Gi"
         }
+        startup_cpu_boost = true
       }
 
       startup_probe {
