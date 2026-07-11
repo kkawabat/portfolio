@@ -17,6 +17,7 @@ body.project-page {
   padding-top: 0.5rem;
   margin: 0.5em;
   justify-content: flex-start;
+  min-height: 100vh;
 }
 
 .project h3, h4, h5 { color: orange; }
@@ -26,6 +27,7 @@ body.project-page {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    flex: 1;
     max-width: 80em;
     width: 100%;
     margin: auto;
@@ -215,6 +217,11 @@ body.project-page {
     margin: 0.5em auto 4em auto;
 }
 
+body.project-page #content-div {
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
 #content-div img {
     max-width:100%;
     margin-bottom: 1em;
@@ -252,3 +259,56 @@ a { color: orange; }
 }
 
 .blog-content h5 { color: orange; }
+.project-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(15em, 1fr));
+    gap: 1em;
+    width: 100%;
+    margin-top: 1em;
+}
+
+.project-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+    padding: 1em;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 8px;
+    color: inherit;
+    text-decoration: none;
+    transition: border-color 0.15s, transform 0.15s;
+}
+
+.project-card:hover {
+    border-color: orange;
+    transform: translateY(-2px);
+}
+
+.project-card:hover h3 {
+    color: orange;
+}
+
+.project-card h3 {
+    margin: 0;
+}
+
+.project-card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 0.5em;
+}
+
+.project-card-date {
+    color: #999;
+    font-size: 0.8em;
+    white-space: nowrap;
+}
+
+.project-card-desc {
+    margin: 0;
+    color: #ccc;
+    font-size: 0.85em;
+    line-height: 1.4;
+}

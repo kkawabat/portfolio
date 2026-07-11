@@ -1,7 +1,13 @@
 <div id="content-blogs" class="fade-in-top content-div">
-    <div id='header-div2' class='header-div'>
+    <div id='header-div2' class='project-grid'>
         {% for blog in blogs %}
-            <h3 id='blog-{{blog.slug}}' class='header' hx-get="{% url 'blog_post' slug_id=blog.slug %}" hx-swap="innerHTML" hx-target="#blog-div" hx-on:click="blog_toggle(true)">{{blog.title}}</h3>
+            <div class='project-card' hx-get="{% url 'blog_post' slug_id=blog.slug %}" hx-swap="innerHTML" hx-target="#blog-div" hx-on:click="blog_toggle(true)">
+                <div class="project-card-top">
+                    <h3>{{blog.title}}</h3>
+                    {% if blog.date %}<span class="project-card-date">{{blog.date|date:"M j, Y"}}</span>{% endif %}
+                </div>
+                <p class="project-card-desc">{{blog.description}}</p>
+            </div>
         {% endfor %}
     </div>
     <div id="blog-div" style="display: none;"></div>
