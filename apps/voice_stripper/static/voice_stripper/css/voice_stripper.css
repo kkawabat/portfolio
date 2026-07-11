@@ -1,7 +1,19 @@
-
 #youtube-link {
     width: 100%;
     background-color: #333333;
     border-color: orange;
-    color: orange
+    color: orange;
+}
+
+#content-app {
+    width: 40em;
+    max-width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.voice-stripper-headline {
+    margin: 0 0 1.5em;
+    text-align: center;
 }
