@@ -19,7 +19,7 @@ def _is_local_worker(url: str) -> bool:
 
 
 def _auth_headers(worker_url: str) -> dict:
-    if _is_local_worker(worker_url):
+    if settings.DEBUG or _is_local_worker(worker_url):
         return {}
     token = google.oauth2.id_token.fetch_id_token(
         google.auth.transport.requests.Request(),

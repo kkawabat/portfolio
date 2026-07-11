@@ -7,10 +7,18 @@ services:
     environment:
       - DJANGO_DEBUG=True
       - ALLOWED_HOSTS=localhost,127.0.0.1
+      - WORKER_SERVICE_URL=http://workers:8080
     volumes:
       - portfolio_db:/app/db_data
     tmpfs:
       - /tmp:noexec,nosuid,size=100m
+    depends_on:
+      - workers
+
+  workers:
+    build: ./workers
+    ports:
+      - "8081:8080"
 
 volumes:
   portfolio_db:

@@ -2,10 +2,7 @@ import json
 
 from django.http import JsonResponse
 from django.shortcuts import render
-from transformers import pipeline
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
-
-SENTIMENT_PIPELINE = None
 
 
 def index_view(request):
@@ -18,25 +15,6 @@ def details_view(request):
 
 def app_view(request):
     return render(request, "eliza_parser/index.html", context={'anchor': 'app'})
-
-
-def analyze_old(request):
-    global SENTIMENT_PIPELINE
-    if SENTIMENT_PIPELINE is None:
-        # distilbert-base-uncased-finetuned-sst-2-english was too large for my small server =( had to use a smaller model
-        SENTIMENT_PIPELINE = pipeline("sentiment-analysis", model='distilbert-base-uncased-finetuned-sst-2-english')
-        # SENTIMENT_PIPELINE = pipeline('sentiment-analysis', model='AlexAnge/small-sentiment-model')
-    output = []
-    dialog_list = json.loads(request.body.decode('utf8'))
-    sentiments = SENTIMENT_PIPELINE(dialog_list)
-    for dialog, sentiment in zip(dialog_list, sentiments):
-        sentiment['text'] = dialog
-        if sentiment['label'] == "NEGATIVE":
-            sentiment['value'] = -1 * sentiment['score']
-        else:
-            sentiment['value'] = sentiment['score']
-        output.append(sentiment)
-    return JsonResponse({"sentiment_results": output})
 
 
 def analyze(request):
