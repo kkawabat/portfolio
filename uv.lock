@@ -1183,7 +1183,7 @@ wheels = [
 [[package]]
 name = "whistle-detector"
 version = "0.1.0"
-source = { git = "https://github.com/kkawabat/WhistleDetector.git#3b06d4d3a971b8fc02abd2908520f3c53d60a959" }
+source = { git = "https://github.com/kkawabat/WhistleDetector.git#d67a2da14d223df66b4cb54953cee788a06938b3" }
 dependencies = [
     { name = "ffmpeg-python" },
     { name = "kaudio-library" },
