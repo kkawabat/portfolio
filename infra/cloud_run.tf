@@ -3,6 +3,15 @@ resource "google_cloud_run_v2_service" "portfolio" {
   location            = var.region
   deletion_protection = false
 
+  # Service-level scaling — a different block from the template.scaling below,
+  # despite the name. Cloud Run reports it populated whether or not it is
+  # declared, and the provider treats its fields as optional-not-computed, so
+  # omitting it leaves a phantom removal pending on every plan.
+  scaling {
+    min_instance_count    = 0
+    manual_instance_count = 0
+  }
+
   template {
     service_account = google_service_account.cloud_run.email
 
@@ -107,8 +116,15 @@ resource "google_cloud_run_v2_service" "portfolio" {
   }
 
   lifecycle {
+    # CI owns these. The deploy action stamps the image, a commit-sha label and
+    # its own client metadata on every deploy, so Terraform cannot win: reverting
+    # them just leaves a phantom diff on every plan until the next deploy puts
+    # them back. commit-sha is unfixable by definition — it changes per commit.
     ignore_changes = [
       template[0].containers[0].image,
+      template[0].labels,
+      client,
+      client_version,
     ]
   }
 

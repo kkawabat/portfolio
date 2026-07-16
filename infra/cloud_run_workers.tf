@@ -3,8 +3,14 @@ resource "google_cloud_run_v2_service" "portfolio_workers" {
   location            = var.region
   deletion_protection = false
 
+  # See cloud_run.tf: service-level scaling, distinct from template.scaling.
+  scaling {
+    min_instance_count    = 0
+    manual_instance_count = 0
+  }
+
   template {
-    service_account = google_service_account.cloud_run.email
+    service_account                  = google_service_account.cloud_run.email
     max_instance_request_concurrency = 1
 
     containers {
@@ -52,8 +58,12 @@ resource "google_cloud_run_v2_service" "portfolio_workers" {
   }
 
   lifecycle {
+    # See cloud_run.tf: CI stamps these on every deploy.
     ignore_changes = [
       template[0].containers[0].image,
+      template[0].labels,
+      client,
+      client_version,
     ]
   }
 
