@@ -8,12 +8,14 @@ terraform {
     }
   }
 
-  # Uncomment after creating the bucket:
-  #   gsutil mb -l us-west1 gs://portfolio-tfstate-reliable-vector-159318
-  # backend "gcs" {
-  #   bucket = "portfolio-tfstate-reliable-vector-159318"
-  #   prefix = "terraform/state"
-  # }
+  # State holds live infrastructure and secret versions, so it does not belong on
+  # a single laptop disk. The bucket is versioned and shared with gamework/infra
+  # under a separate prefix; it is bootstrap infrastructure, created out of band
+  # rather than managed by the state it stores (see gamework/CONTEXT.md).
+  backend "gcs" {
+    bucket = "kan-kawabata-2026-tfstate"
+    prefix = "portfolio"
+  }
 }
 
 provider "google" {
