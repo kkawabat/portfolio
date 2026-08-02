@@ -27,3 +27,18 @@ output "domain_mapping_records" {
   description = "DNS records to add in Namecheap"
   value       = google_cloud_run_domain_mapping.portfolio.status
 }
+
+output "billing_export_dataset" {
+  description = "BigQuery dataset for Cloud Billing export (enable export in Console)"
+  value       = "${var.project_id}.${google_bigquery_dataset.billing_export.dataset_id}"
+}
+
+output "billing_export_console_url" {
+  description = "One-time Console step to link billing account export to the dataset"
+  value       = "https://console.cloud.google.com/billing/${var.billing_account_id}/export/bigquery?project=${var.project_id}"
+}
+
+output "spend_cap_console_url" {
+  description = "Console step to create a Cloud Run spend cap (hard stop on runaway traffic)"
+  value       = "https://console.cloud.google.com/billing/${var.billing_account_id}/budgets/create?project=${var.project_id}"
+}
