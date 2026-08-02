@@ -17,7 +17,11 @@
 
 
 #content-projects {
-    margin: auto;
+    width: 100%;
+}
+
+#content-projects > p {
+    text-align: center;
 }
 
 #header-div2 { flex-direction: column; }

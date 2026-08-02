@@ -212,9 +212,16 @@ body.project-page {
     flex-direction: column;
     gap: 5%;
     color: #fff;
-    max-width: 40em;
+    max-width: 54em;
     width: 100%;
     margin: 0.5em auto 4em auto;
+}
+
+#content-about {
+    max-width: 40em;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
 }
 
 body.project-page #content-div {
@@ -268,18 +275,29 @@ a { color: orange; }
 }
 
 #content-projects .project-grid {
-    grid-template-columns: repeat(3, 1fr);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1em;
+}
+
+#content-projects .project-card {
+    flex: 0 1 16em;
+    width: 16em;
+    max-width: 100%;
 }
 
 @media screen and (max-width: 900px) {
-    #content-projects .project-grid {
-        grid-template-columns: repeat(2, 1fr);
+    #content-projects .project-card {
+        flex: 0 1 calc(50% - 0.5em);
+        width: calc(50% - 0.5em);
     }
 }
 
 @media screen and (max-width: 600px) {
-    #content-projects .project-grid {
-        grid-template-columns: 1fr;
+    #content-projects .project-card {
+        flex: 0 1 100%;
+        width: 100%;
     }
 }
 
