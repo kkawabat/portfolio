@@ -20,7 +20,8 @@ try:
     print(f"\n📁 Found {len(projects)} projects:")
     for project in projects:
         target = project.get('url', f"/projects/{project['slug']}/")
-        print(f"  - {project['title']} ({project['date']}) -> {target}")
+        date = project['date'].strftime('%b %Y')
+        print(f"  - {project['title']} ({date}) -> {target}")
 
     # Test blogs
     blogs = get_blogs()

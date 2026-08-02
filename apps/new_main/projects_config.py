@@ -14,98 +14,98 @@ from django.conf import settings
 # Entries without one are Django apps in this repo, resolved via their slug.
 PROJECTS = [
     {
-        'title': 'Monikers',
-        'description': 'Mobile-friendly party word game for two teams, with pre-built decks and custom cards.',
-        'date': '2025',
-        'slug': 'moniker',
-        'url': 'https://games.kankawabata.com/Moniker/',
-    },
-    {
-        'title': 'Poetry for Neanderthals',
-        'description': 'Team word-guessing game where poets may only speak in single syllables.',
-        'date': '2025',
-        'slug': 'poetry-for-neanderthals',
-        'url': 'https://games.kankawabata.com/poetry_for_neanderthals/',
-    },
-    {
-        'title': 'Mora Jai Box',
-        'description': 'Simulator for the Mora Jai puzzle boxes found in Blue Prince.',
-        'date': '2025',
-        'slug': 'mora-jai-box',
-        'url': 'https://games.kankawabata.com/MoraJaiBox/',
+        'title': 'You Laugh You Lose',
+        'description': 'Try not to laugh while watching a YouTube video — your webcam scores every break.',
+        'date': datetime(2026, 8, 2),
+        'slug': 'you-laugh-you-lose'
     },
     {
         'title': 'GameWork',
         'description': 'TypeScript framework for building multiplayer browser games, with live demos.',
-        'date': '2025',
+        'date': datetime(2025, 9, 2),
         'slug': 'gamework',
         'url': 'https://games.kankawabata.com/gamework/',
     },
     {
-        'title': 'Whistle Detector',
-        'description': 'Machine learning application that detects whistle sounds in audio recordings.',
-        'date': '2023',
-        'slug': 'whistle-detector'
+        'title': 'Poetry for Neanderthals',
+        'description': 'Team word-guessing game where poets may only speak in single syllables.',
+        'date': datetime(2025, 8, 30),
+        'slug': 'poetry-for-neanderthals',
+        'url': 'https://games.kankawabata.com/poetry_for_neanderthals/',
+    },
+    {
+        'title': 'Monikers',
+        'description': 'Mobile-friendly party word game for two teams, with pre-built decks and custom cards.',
+        'date': datetime(2025, 8, 17),
+        'slug': 'moniker',
+        'url': 'https://games.kankawabata.com/Moniker/',
+    },
+    {
+        'title': 'Mora Jai Box',
+        'description': 'Simulator for the Mora Jai puzzle boxes found in Blue Prince.',
+        'date': datetime(2025, 5, 11),
+        'slug': 'mora-jai-box',
+        'url': 'https://games.kankawabata.com/MoraJaiBox/',
+    },
+    {
+        'title': 'Voice Stripper',
+        'description': 'Remove vocals from audio tracks using audio processing.',
+        'date': datetime(2024, 6, 23),
+        'slug': 'voice-stripper'
+    },
+    {
+        'title': 'ELIZA Parser',
+        'description': 'Modern web implementation of the classic ELIZA chatbot.',
+        'date': datetime(2024, 5, 29),
+        'slug': 'eliza-parser'
     },
     {
         'title': 'Speech Transcriber',
         'description': 'Web-based speech-to-text with audio visualization and editing.',
-        'date': '2023',
+        'date': datetime(2023, 9, 4),
         'slug': 'speech-transcriber'
+    },
+    {
+        'title': 'Chat Highlights Parser',
+        'description': 'Parse chat logs to extract highlights and interesting moments.',
+        'date': datetime(2023, 8, 20),
+        'slug': 'chat-highlights'
+    },
+    {
+        'title': 'Web Soundboard',
+        'description': 'Interactive soundboard for playing sound effects and music clips.',
+        'date': datetime(2023, 8, 19),
+        'slug': 'web-soundboard'
+    },
+    {
+        'title': 'Webcam Ruler',
+        'description': 'Measure objects using your webcam with computer vision.',
+        'date': datetime(2023, 8, 15),
+        'slug': 'webcam-ruler'
+    },
+    {
+        'title': 'Whistle Detector',
+        'description': 'Machine learning application that detects whistle sounds in audio recordings.',
+        'date': datetime(2023, 8, 13),
+        'slug': 'whistle-detector'
     },
     {
         'title': 'Magic Eye Generator',
         'description': 'Create Magic Eye (autostereogram) images interactively.',
-        'date': '2022',
+        'date': datetime(2022, 1, 1),
         'slug': 'magic-eye-app'
     },
     {
         'title': 'Morse Code Translator',
         'description': 'Morse code translator with audio generation and learning tools.',
-        'date': '2020',
+        'date': datetime(2020, 1, 1),
         'slug': 'morse-code-app'
     },
-    {
-        'title': 'Web Soundboard',
-        'description': 'Interactive soundboard for playing sound effects and music clips.',
-        'date': '2023',
-        'slug': 'web-soundboard'
-    },
-    {
-        'title': 'Chat Highlights Parser',
-        'description': 'Parse chat logs to extract highlights and interesting moments.',
-        'date': '2023',
-        'slug': 'chat-highlights'
-    },
-    {
-        'title': 'ELIZA Parser',
-        'description': 'Modern web implementation of the classic ELIZA chatbot.',
-        'date': '2023',
-        'slug': 'eliza-parser'
-    },
-    {
-        'title': 'Webcam Ruler',
-        'description': 'Measure objects using your webcam with computer vision.',
-        'date': '2022',
-        'slug': 'webcam-ruler'
-    },
-    {
-        'title': 'You Laugh You Lose',
-        'description': 'Try not to laugh while watching a YouTube video — your webcam scores every break.',
-        'date': '2026',
-        'slug': 'you-laugh-you-lose'
-    },
-    {
-        'title': 'Voice Stripper',
-        'description': 'Remove vocals from audio tracks using audio processing.',
-        'date': '2023',
-        'slug': 'voice-stripper'
-    }
 ]
 
 def get_projects():
-    """Get all projects."""
-    return PROJECTS
+    """Get all projects, newest first."""
+    return sorted(PROJECTS, key=lambda x: x.get('date', datetime.min), reverse=True)
 
 def get_blog_posts_dir():
     """Folder of markdown blog posts at the repo root."""
