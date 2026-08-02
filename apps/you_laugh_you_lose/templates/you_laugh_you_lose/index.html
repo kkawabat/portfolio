@@ -1,0 +1,19 @@
+{% extends "project_base.html" %}
+{% load static %}
+{% block title %}You Laugh You Lose{% endblock title %}
+{% block ref %}
+<link rel="stylesheet" type="text/css" href="{% static 'you_laugh_you_lose/css/you_laugh_you_lose.css' %}">
+{% endblock ref %}
+
+{% block body %}
+<div class="project-div fade-in-right">
+    <div id="content-div">
+        {% include "you_laugh_you_lose/app.html" %}
+    </div>
+</div>
+<script type="module" src="{% static 'you_laugh_you_lose/js/you_laugh_you_lose.js' %}"></script>
+{% endblock body %}
+
+{% block project_about %}
+{% include "you_laugh_you_lose/details.html" %}
+{% endblock project_about %}

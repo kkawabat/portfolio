@@ -14,6 +14,7 @@ urlpatterns = [
     path('projects/whistle_detector/', include('apps.whistle_detector.urls')),
     path('projects/morse_code/', include('apps.morse_code.urls')),
     path('projects/webcam_ruler/', include('apps.webcam_ruler.urls')),
+    path('projects/you_laugh_you_lose/', include('apps.you_laugh_you_lose.urls')),
     path('projects/speech_transcriber/', include('apps.speech_transcriber.urls')),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 

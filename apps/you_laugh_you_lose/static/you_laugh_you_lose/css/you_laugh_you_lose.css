@@ -1,0 +1,257 @@
+.ylyl-app {
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.ylyl-panel {
+    margin-bottom: 1.5rem;
+}
+
+.ylyl-setup-row {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    align-items: center;
+    margin: 1rem 0;
+}
+
+.ylyl-url-input {
+    flex: 1;
+    min-width: 240px;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+.ylyl-sensitivity {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.5rem;
+}
+
+.ylyl-sensitivity input[type="range"] {
+    flex: 1;
+    max-width: 280px;
+}
+
+.ylyl-note {
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.ylyl-split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+@media (max-width: 768px) {
+    .ylyl-split {
+        grid-template-columns: 1fr;
+    }
+}
+
+.ylyl-youtube-col #player {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: #000;
+}
+
+.ylyl-youtube-col iframe {
+    width: 100%;
+    height: 100%;
+}
+
+.ylyl-webcam-col {
+    position: relative;
+    background: #111;
+    border-radius: 4px;
+    overflow: hidden;
+    aspect-ratio: 4 / 3;
+}
+
+#webcam,
+#webcam-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+#webcam-overlay {
+    pointer-events: none;
+}
+
+.ylyl-meter {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 0.5rem 0.75rem;
+    background: rgba(0, 0, 0, 0.65);
+    color: #fff;
+}
+
+.ylyl-meter-bar {
+    height: 8px;
+    background: #333;
+    border-radius: 4px;
+    overflow: hidden;
+    margin: 0.25rem 0;
+}
+
+#laugh-meter-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #4caf50, #ff9800, #f44336);
+    transition: width 0.1s linear;
+}
+
+.ylyl-laugh-status {
+    font-size: 0.85rem;
+    font-weight: bold;
+}
+
+.ylyl-laugh-status.laughing {
+    color: #f44336;
+}
+
+.ylyl-stats-row {
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+    margin: 1rem 0;
+    flex-wrap: wrap;
+}
+
+.ylyl-stat {
+    text-align: center;
+}
+
+.ylyl-stat-val {
+    display: block;
+    font-size: 1.75rem;
+    font-weight: bold;
+    color: orange;
+}
+
+.ylyl-stat-label {
+    font-size: 0.85rem;
+    color: #666;
+}
+
+.ylyl-timeline-wrap {
+    margin: 1rem 0;
+}
+
+.ylyl-timeline-label {
+    font-size: 0.9rem;
+    margin-bottom: 0.35rem;
+    color: #444;
+}
+
+.ylyl-timeline {
+    position: relative;
+    height: 32px;
+    background: #e8e8e8;
+    border-radius: 4px;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.ylyl-timeline-segment {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    background: rgba(244, 67, 54, 0.75);
+    border-radius: 2px;
+    min-width: 2px;
+}
+
+.ylyl-timeline-segment:hover {
+    background: rgba(244, 67, 54, 1);
+}
+
+#timeline-playhead {
+    position: absolute;
+    top: 0;
+    width: 2px;
+    height: 100%;
+    background: #2196f3;
+    pointer-events: none;
+    z-index: 2;
+    left: 0;
+}
+
+.ylyl-timeline-times {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    color: #666;
+    margin-top: 0.25rem;
+}
+
+.ylyl-abort {
+    margin-top: 0.5rem;
+}
+
+.ylyl-results-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 1rem;
+    margin: 1.5rem 0;
+}
+
+.ylyl-result-card {
+    text-align: center;
+    padding: 1rem;
+    background: #f5f5f5;
+    border-radius: 8px;
+}
+
+.ylyl-result-val {
+    display: block;
+    font-size: 2rem;
+    font-weight: bold;
+    color: orange;
+}
+
+.ylyl-result-label {
+    font-size: 0.85rem;
+    color: #666;
+}
+
+.ylyl-replay-wrap {
+    margin: 1.5rem 0;
+}
+
+.ylyl-replay-wrap video {
+    width: 100%;
+    max-width: 480px;
+    border-radius: 4px;
+    background: #000;
+}
+
+.ylyl-loading {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.ylyl-loading-text {
+    color: #fff;
+    font-size: 1.25rem;
+    padding: 1.5rem 2rem;
+    background: rgba(0, 0, 0, 0.8);
+    border-radius: 8px;
+}

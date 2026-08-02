@@ -1,0 +1,20 @@
+<div id="content-details" class="content-div project">
+    <h3>Introduction</h3>
+    <p>
+        You Laugh You Lose is a challenge game: pick a funny YouTube video, keep a straight face,
+        and see how long you can last. Your webcam watches for smiles and laughs using
+        MediaPipe Face Landmarker blendshapes (<code>mouthSmileLeft</code>, <code>mouthSmileRight</code>,
+        <code>jawOpen</code>).
+    </p>
+    <p>
+        All processing runs in your browser — no video is uploaded. A timeline is synced to the
+        YouTube playback so you can see exactly when you broke.
+    </p>
+    <h3>How it works</h3>
+    <ul>
+        <li>MediaPipe Face Landmarker detects facial expressions from your webcam feed.</li>
+        <li>The YouTube IFrame API tracks video position and detects when the video ends.</li>
+        <li>MediaRecorder captures your face cam for replay on the results screen.</li>
+        <li>Laugh events are timestamped against the YouTube video's current time.</li>
+    </ul>
+</div>

@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'apps.morse_code',
     'apps.speech_transcriber',
     'apps.webcam_ruler',
+    'apps.you_laugh_you_lose',
     'apps.voice_stripper',
     'apps.web_soundboard',
     'apps.chat_highlights',
@@ -120,6 +121,7 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'apps', 'whistle_detector', 'static'),
     os.path.join(BASE_DIR, 'apps', 'morse_code', 'static'),
     os.path.join(BASE_DIR, 'apps', 'webcam_ruler', 'static'),
+    os.path.join(BASE_DIR, 'apps', 'you_laugh_you_lose', 'static'),
     os.path.join(BASE_DIR, 'apps', 'web_soundboard', 'static'),
     os.path.join(BASE_DIR, 'apps', 'eliza_parser', 'static'),
 )

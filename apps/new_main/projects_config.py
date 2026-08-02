@@ -90,6 +90,12 @@ PROJECTS = [
         'slug': 'webcam-ruler'
     },
     {
+        'title': 'You Laugh You Lose',
+        'description': 'Try not to laugh while watching a YouTube video — your webcam scores every break.',
+        'date': '2026',
+        'slug': 'you-laugh-you-lose'
+    },
+    {
         'title': 'Voice Stripper',
         'description': 'Remove vocals from audio tracks using audio processing.',
         'date': '2023',

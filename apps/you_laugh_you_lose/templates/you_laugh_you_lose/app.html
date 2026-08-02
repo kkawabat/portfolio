@@ -1,0 +1,95 @@
+{% load static %}
+<div id="content-app" class="content-div project ylyl-app">
+    <section id="ylyl-setup" class="ylyl-panel">
+        <h3>Pick a video and try not to laugh</h3>
+        <div class="ylyl-setup-row">
+            <input type="url" id="youtube-link" class="ylyl-url-input"
+                   placeholder="Paste a YouTube link…"
+                   value="https://www.youtube.com/watch?v=dQw4w9WgXcQ">
+            <button id="start-btn" type="button" class="app-button">Start Challenge</button>
+        </div>
+        <div class="ylyl-sensitivity">
+            <label for="smile-threshold">Smile sensitivity</label>
+            <input type="range" id="smile-threshold" min="0.2" max="0.8" step="0.05" value="0.45">
+            <span id="smile-threshold-val">0.45</span>
+        </div>
+        <p class="ylyl-note">Camera and ~5 MB of MediaPipe models load on first start. Everything stays on your device.</p>
+    </section>
+
+    <section id="ylyl-game" class="ylyl-panel" hidden>
+        <div class="ylyl-split">
+            <div class="ylyl-youtube-col">
+                <div id="player"></div>
+            </div>
+            <div class="ylyl-webcam-col">
+                <video id="webcam" muted playsinline></video>
+                <canvas id="webcam-overlay"></canvas>
+                <div id="laugh-meter" class="ylyl-meter">
+                    <div class="ylyl-meter-label">Laugh meter</div>
+                    <div class="ylyl-meter-bar"><div id="laugh-meter-fill"></div></div>
+                    <div id="laugh-status" class="ylyl-laugh-status">Holding…</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="ylyl-stats-row">
+            <div class="ylyl-stat"><span class="ylyl-stat-val" id="stat-breaks">0</span><span class="ylyl-stat-label">Breaks</span></div>
+            <div class="ylyl-stat"><span class="ylyl-stat-val" id="stat-survival">0:00</span><span class="ylyl-stat-label">Survival</span></div>
+            <div class="ylyl-stat"><span class="ylyl-stat-val" id="stat-streak">0:00</span><span class="ylyl-stat-label">Current streak</span></div>
+        </div>
+
+        <div class="ylyl-timeline-wrap">
+            <div class="ylyl-timeline-label">Laugh timeline (synced to video)</div>
+            <div id="timeline" class="ylyl-timeline">
+                <div id="timeline-segments"></div>
+                <div id="timeline-playhead"></div>
+            </div>
+            <div class="ylyl-timeline-times">
+                <span>0:00</span>
+                <span id="timeline-duration">--:--</span>
+            </div>
+        </div>
+
+        <button id="abort-btn" type="button" class="app-button ylyl-abort">End early</button>
+    </section>
+
+    <section id="ylyl-results" class="ylyl-panel" hidden>
+        <h3 id="results-title">Challenge complete!</h3>
+        <div class="ylyl-results-grid">
+            <div class="ylyl-result-card">
+                <span class="ylyl-result-val" id="result-breaks">0</span>
+                <span class="ylyl-result-label">Total breaks</span>
+            </div>
+            <div class="ylyl-result-card">
+                <span class="ylyl-result-val" id="result-survival-pct">0%</span>
+                <span class="ylyl-result-label">Survival</span>
+            </div>
+            <div class="ylyl-result-card">
+                <span class="ylyl-result-val" id="result-longest-streak">0:00</span>
+                <span class="ylyl-result-label">Longest streak</span>
+            </div>
+            <div class="ylyl-result-card">
+                <span class="ylyl-result-val" id="result-first-break">—</span>
+                <span class="ylyl-result-label">First break at</span>
+            </div>
+        </div>
+
+        <div class="ylyl-replay-wrap">
+            <h4>Your face cam replay</h4>
+            <video id="replay-video" controls playsinline></video>
+        </div>
+
+        <div class="ylyl-timeline-wrap">
+            <div class="ylyl-timeline-label">Laugh timeline — click a segment to seek</div>
+            <div id="results-timeline" class="ylyl-timeline">
+                <div id="results-timeline-segments"></div>
+            </div>
+        </div>
+
+        <button id="retry-btn" type="button" class="app-button">Try again</button>
+    </section>
+
+    <div id="ylyl-loading" class="ylyl-loading" hidden>
+        <div class="ylyl-loading-text" id="loading-text">Loading…</div>
+    </div>
+</div>
