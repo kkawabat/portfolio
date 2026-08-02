@@ -9,6 +9,12 @@ on:
       - ".cursor/**"
   workflow_dispatch:
 
+# Serialize deploys so concurrent pushes cannot race on the same Cloud Run
+# service revision. Queue runs (do not cancel) so every main commit ships.
+concurrency:
+  group: deploy-cloud-run-${{ github.ref }}
+  cancel-in-progress: false
+
 env:
   PROJECT_ID: kan-kawabata-2026
   REGION: us-west1
@@ -19,6 +25,7 @@ env:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     permissions:
       contents: read
       id-token: write
@@ -52,16 +59,40 @@ jobs:
           docker push ${IMAGE}:${{ github.sha }}
           docker push ${IMAGE}:latest
 
-      - name: Deploy workers to Cloud Run
-        uses: google-github-actions/deploy-cloudrun@v2
-        with:
-          service: ${{ env.WORKERS_SERVICE }}
-          region: ${{ env.REGION }}
-          image: ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.WORKERS_SERVICE }}:${{ github.sha }}
+      - name: Deploy to Cloud Run
+        run: |
+          deploy_cloud_run() {
+            gcloud run deploy "$1" \
+              --image "$2" \
+              --region "${{ env.REGION }}" \
+              --update-labels "managed-by=github-actions,commit-sha=${{ github.sha }}" \
+              --quiet
+          }
 
-      - name: Deploy portfolio to Cloud Run
-        uses: google-github-actions/deploy-cloudrun@v2
-        with:
-          service: ${{ env.SERVICE }}
-          region: ${{ env.REGION }}
-          image: ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.SERVICE }}:${{ github.sha }}
+          retry_deploy() {
+            local service="$1"
+            local image="$2"
+            local max_attempts=5
+            local wait_secs=30
+
+            for attempt in $(seq 1 "$max_attempts"); do
+              if deploy_cloud_run "$service" "$image"; then
+                echo "Deployed ${service} on attempt ${attempt}"
+                return 0
+              fi
+
+              if [[ "$attempt" -lt "$max_attempts" ]]; then
+                echo "Deploy ${service} attempt ${attempt} failed; retrying in ${wait_secs}s..."
+                sleep "$wait_secs"
+              fi
+            done
+
+            echo "Deploy ${service} failed after ${max_attempts} attempts"
+            return 1
+          }
+
+          WORKERS_IMAGE="${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.WORKERS_SERVICE }}:${{ github.sha }}"
+          PORTFOLIO_IMAGE="${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.SERVICE }}:${{ github.sha }}"
+
+          retry_deploy "${{ env.WORKERS_SERVICE }}" "$WORKERS_IMAGE"
+          retry_deploy "${{ env.SERVICE }}" "$PORTFOLIO_IMAGE"
