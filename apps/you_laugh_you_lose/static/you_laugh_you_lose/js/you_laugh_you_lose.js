@@ -15,9 +15,9 @@ let startBtn, abortBtn, retryBtn;
 let webcamEl, overlayCanvas;
 let smileMeterFill, jawMeterFill, smileMeterVal, jawMeterVal;
 let statPeak, statAvg, statElapsed;
-let timelineCanvas, timelinePlayhead, timelineDurationEl, timelineCanvasWrap;
-let resultsTimelineCanvas, resultsTimelineWrap;
-let replayVideoEl;
+let timelineCanvas, timelinePlayhead, timelineDurationEl;
+let resultsTimelineCanvas, resultsTimelinePlayhead, resultsTimelineDurationEl;
+let replayVideoEl, funniestMomentCard, playerHostGame, playerHostResults;
 
 // --- runtime state ---
 /** @type {YT.Player | null} */
@@ -133,6 +133,36 @@ function updatePlayhead() {
     updateStats();
 }
 
+function mountPlayer(hostEl) {
+    const playerEl = document.getElementById('player');
+    hostEl.appendChild(playerEl);
+}
+
+function seekReplay(seekTime) {
+    if (ytPlayer && typeof ytPlayer.seekTo === 'function') {
+        ytPlayer.seekTo(seekTime, true);
+        ytPlayer.playVideo();
+    }
+    if (replayVideoEl && replayVideoEl.src) {
+        replayVideoEl.currentTime = Math.min(seekTime, replayVideoEl.duration || seekTime);
+        replayVideoEl.play().catch(() => {});
+    }
+    updateResultsPlayhead(seekTime);
+    renderExpressionTimeline(resultsTimelineCanvas, expressionSamples, videoDuration, {
+        playheadTime: seekTime,
+        clickable: true,
+        onSeek: seekReplay,
+    });
+}
+
+function updateResultsPlayhead(time) {
+    if (!videoDuration) {
+        return;
+    }
+    const pct = (time / videoDuration) * 100;
+    resultsTimelinePlayhead.style.left = `${pct}%`;
+}
+
 function scoreColor(score) {
     const r = Math.round(76 + score * 168);
     const g = Math.round(175 - score * 132);
@@ -141,7 +171,7 @@ function scoreColor(score) {
 }
 
 function renderExpressionTimeline(canvas, samples, duration, options = {}) {
-    const { playheadTime = null, clickable = false } = options;
+    const { playheadTime = null, clickable = false, onSeek = null } = options;
     const wrap = canvas.parentElement;
     const width = wrap.clientWidth || 600;
     const dpr = window.devicePixelRatio || 1;
@@ -207,15 +237,12 @@ function renderExpressionTimeline(canvas, samples, duration, options = {}) {
         ctx.stroke();
     }
 
-    if (clickable) {
+    if (clickable && onSeek) {
         canvas.onclick = (e) => {
             const rect = canvas.getBoundingClientRect();
             const x = e.clientX - rect.left;
             const seekTime = (x / rect.width) * duration;
-            if (ytPlayer) {
-                ytPlayer.seekTo(seekTime, true);
-                ytPlayer.playVideo();
-            }
+            onSeek(seekTime);
         };
     } else {
         canvas.onclick = null;
@@ -409,6 +436,7 @@ async function startGame() {
         showLoading('Starting webcam…');
         await startWebcam();
         showLoading('Loading video…');
+        mountPlayer(playerHostGame);
         await createYouTubePlayer(videoId);
 
         videoDuration = ytPlayer.getDuration() || 0;
@@ -479,24 +507,30 @@ function showResults(endTime) {
     gameEl.hidden = true;
     resultsEl.hidden = false;
 
-    const avg = computeAverage(expressionSamples);
     const watched = videoDuration > 0 ? (endTime / videoDuration) * 100 : 0;
 
     document.getElementById('results-title').textContent = 'Challenge complete!';
     document.getElementById('result-peak').textContent = formatScore(sessionPeak);
-    document.getElementById('result-avg').textContent = formatScore(avg);
     document.getElementById('result-peak-at').textContent =
         sessionPeak > 0 ? formatTime(sessionPeakTime) : '—';
     document.getElementById('result-survival-pct').textContent = `${Math.round(watched)}%`;
 
-    renderExpressionTimeline(resultsTimelineCanvas, expressionSamples, videoDuration, {
-        clickable: true,
-    });
+    funniestMomentCard.classList.toggle('ylyl-result-card-disabled', sessionPeak <= 0);
+    resultsTimelineDurationEl.textContent = formatTime(videoDuration);
+
+    mountPlayer(playerHostResults);
 
     if (recordedChunks.length > 0) {
         const blob = new Blob(recordedChunks, { type: recordedChunks[0].type || 'video/webm' });
         replayVideoEl.src = URL.createObjectURL(blob);
     }
+
+    renderExpressionTimeline(resultsTimelineCanvas, expressionSamples, videoDuration, {
+        playheadTime: endTime,
+        clickable: true,
+        onSeek: seekReplay,
+    });
+    updateResultsPlayhead(endTime);
 }
 
 function retry() {
@@ -504,6 +538,7 @@ function retry() {
     resetState();
     resetUi();
     document.getElementById('player').innerHTML = '';
+    mountPlayer(playerHostGame);
 }
 
 // --- init ---
@@ -513,13 +548,29 @@ function bindControls() {
     abortBtn.addEventListener('click', endGame);
     retryBtn.addEventListener('click', retry);
 
+    funniestMomentCard.addEventListener('click', () => {
+        if (sessionPeakTime > 0) {
+            seekReplay(sessionPeakTime);
+        }
+    });
+    funniestMomentCard.addEventListener('keydown', (e) => {
+        if ((e.key === 'Enter' || e.key === ' ') && sessionPeakTime > 0) {
+            e.preventDefault();
+            seekReplay(sessionPeakTime);
+        }
+    });
+
     window.addEventListener('resize', () => {
         if (gameActive) {
             refreshLiveTimeline();
         } else if (!resultsEl.hidden && expressionSamples.length > 0) {
+            const playhead = ytPlayer ? ytPlayer.getCurrentTime() : sessionPeakTime;
             renderExpressionTimeline(resultsTimelineCanvas, expressionSamples, videoDuration, {
+                playheadTime: playhead,
                 clickable: true,
+                onSeek: seekReplay,
             });
+            updateResultsPlayhead(playhead);
         }
     });
 }
@@ -549,11 +600,14 @@ function cacheDom() {
     timelineCanvas = document.getElementById('timeline-canvas');
     timelinePlayhead = document.getElementById('timeline-playhead');
     timelineDurationEl = document.getElementById('timeline-duration');
-    timelineCanvasWrap = timelineCanvas.parentElement;
 
     resultsTimelineCanvas = document.getElementById('results-timeline-canvas');
-    resultsTimelineWrap = resultsTimelineCanvas.parentElement;
+    resultsTimelinePlayhead = document.getElementById('results-timeline-playhead');
+    resultsTimelineDurationEl = document.getElementById('results-timeline-duration');
     replayVideoEl = document.getElementById('replay-video');
+    funniestMomentCard = document.getElementById('funniest-moment-card');
+    playerHostGame = document.getElementById('player-host-game');
+    playerHostResults = document.getElementById('player-host-results');
 }
 
 document.addEventListener('DOMContentLoaded', () => {

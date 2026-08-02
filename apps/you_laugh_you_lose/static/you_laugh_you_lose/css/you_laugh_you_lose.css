@@ -42,16 +42,24 @@
     }
 }
 
-.ylyl-youtube-col #player {
+.ylyl-youtube-col .ylyl-player-host,
+.ylyl-replay-youtube .ylyl-player-host {
     position: relative;
     width: 100%;
     aspect-ratio: 16 / 9;
     background: #000;
+    border-radius: 4px;
+    overflow: hidden;
 }
 
-.ylyl-youtube-col iframe {
+.ylyl-player-host #player,
+.ylyl-player-host iframe {
     width: 100%;
     height: 100%;
+}
+
+.ylyl-app > #player {
+    display: none;
 }
 
 .ylyl-webcam-col {
@@ -163,6 +171,12 @@
     color: #444;
 }
 
+.ylyl-timeline-label-prominent {
+    color: #fff;
+    font-weight: 600;
+    font-size: 1rem;
+}
+
 .ylyl-timeline-canvas-wrap {
     position: relative;
     height: 80px;
@@ -215,6 +229,25 @@
     border-radius: 8px;
 }
 
+.ylyl-result-card-clickable {
+    cursor: pointer;
+    transition: background 0.15s ease;
+}
+
+.ylyl-result-card-clickable:hover:not(.ylyl-result-card-disabled) {
+    background: #e8e8e8;
+}
+
+.ylyl-result-card-clickable:focus-visible {
+    outline: 2px solid orange;
+    outline-offset: 2px;
+}
+
+.ylyl-result-card-disabled {
+    cursor: default;
+    opacity: 0.65;
+}
+
 .ylyl-result-val {
     display: block;
     font-size: 2rem;
@@ -231,11 +264,30 @@
     margin: 1.5rem 0;
 }
 
-.ylyl-replay-wrap video {
+.ylyl-replay-wrap h4 {
+    color: #fff;
+    margin-bottom: 0.75rem;
+}
+
+.ylyl-replay-split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    align-items: start;
+}
+
+@media (max-width: 768px) {
+    .ylyl-replay-split {
+        grid-template-columns: 1fr;
+    }
+}
+
+.ylyl-replay-webcam video {
     width: 100%;
-    max-width: 480px;
     border-radius: 4px;
     background: #000;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
 }
 
 .ylyl-loading {

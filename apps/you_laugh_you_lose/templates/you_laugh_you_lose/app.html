@@ -14,7 +14,7 @@
     <section id="ylyl-game" class="ylyl-panel" hidden>
         <div class="ylyl-split">
             <div class="ylyl-youtube-col">
-                <div id="player"></div>
+                <div id="player-host-game" class="ylyl-player-host"></div>
             </div>
             <div class="ylyl-webcam-col">
                 <video id="webcam" muted playsinline></video>
@@ -60,15 +60,11 @@
         <div class="ylyl-results-grid">
             <div class="ylyl-result-card">
                 <span class="ylyl-result-val" id="result-peak">0.00</span>
-                <span class="ylyl-result-label">Peak intensity</span>
+                <span class="ylyl-result-label">Laugh score</span>
             </div>
-            <div class="ylyl-result-card">
-                <span class="ylyl-result-val" id="result-avg">0.00</span>
-                <span class="ylyl-result-label">Average intensity</span>
-            </div>
-            <div class="ylyl-result-card">
+            <div class="ylyl-result-card ylyl-result-card-clickable" id="funniest-moment-card" role="button" tabindex="0">
                 <span class="ylyl-result-val" id="result-peak-at">—</span>
-                <span class="ylyl-result-label">Peak at</span>
+                <span class="ylyl-result-label">Funniest moment</span>
             </div>
             <div class="ylyl-result-card">
                 <span class="ylyl-result-val" id="result-survival-pct">0%</span>
@@ -76,20 +72,34 @@
             </div>
         </div>
 
-        <div class="ylyl-replay-wrap">
-            <h4>Your face cam replay</h4>
-            <video id="replay-video" controls playsinline></video>
-        </div>
-
         <div class="ylyl-timeline-wrap">
-            <div class="ylyl-timeline-label">Expression timeline — click to seek</div>
+            <div class="ylyl-timeline-label ylyl-timeline-label-prominent">Expression timeline — click to seek</div>
             <div class="ylyl-timeline-canvas-wrap">
                 <canvas id="results-timeline-canvas" class="ylyl-timeline-canvas"></canvas>
+                <div id="results-timeline-playhead" class="ylyl-timeline-playhead"></div>
+            </div>
+            <div class="ylyl-timeline-times">
+                <span>0:00</span>
+                <span id="results-timeline-duration">--:--</span>
+            </div>
+        </div>
+
+        <div class="ylyl-replay-wrap">
+            <h4>Replay</h4>
+            <div class="ylyl-replay-split">
+                <div class="ylyl-replay-youtube">
+                    <div id="player-host-results" class="ylyl-player-host"></div>
+                </div>
+                <div class="ylyl-replay-webcam">
+                    <video id="replay-video" controls playsinline></video>
+                </div>
             </div>
         </div>
 
         <button id="retry-btn" type="button" class="app-button">Try again</button>
     </section>
+
+    <div id="player"></div>
 
     <div id="ylyl-loading" class="ylyl-loading" hidden>
         <div class="ylyl-loading-text" id="loading-text">Loading…</div>
