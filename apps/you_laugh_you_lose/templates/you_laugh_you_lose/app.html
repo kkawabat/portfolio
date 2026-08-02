@@ -5,13 +5,8 @@
         <div class="ylyl-setup-row">
             <input type="url" id="youtube-link" class="ylyl-url-input"
                    placeholder="Paste a YouTube link…"
-                   value="https://www.youtube.com/watch?v=dQw4w9WgXcQ">
+                   value="https://www.youtube.com/watch?v=BQOzdbqP1d4">
             <button id="start-btn" type="button" class="app-button">Start Challenge</button>
-        </div>
-        <div class="ylyl-sensitivity">
-            <label for="smile-threshold">Smile sensitivity</label>
-            <input type="range" id="smile-threshold" min="0.2" max="0.8" step="0.05" value="0.45">
-            <span id="smile-threshold-val">0.45</span>
         </div>
         <p class="ylyl-note">Camera and ~5 MB of MediaPipe models load on first start. Everything stays on your device.</p>
     </section>
@@ -24,25 +19,32 @@
             <div class="ylyl-webcam-col">
                 <video id="webcam" muted playsinline></video>
                 <canvas id="webcam-overlay"></canvas>
-                <div id="laugh-meter" class="ylyl-meter">
-                    <div class="ylyl-meter-label">Laugh meter</div>
-                    <div class="ylyl-meter-bar"><div id="laugh-meter-fill"></div></div>
-                    <div id="laugh-status" class="ylyl-laugh-status">Holding…</div>
+                <div id="expression-meter" class="ylyl-meter">
+                    <div class="ylyl-meter-row">
+                        <span class="ylyl-meter-name">Smile</span>
+                        <div class="ylyl-meter-bar"><div id="smile-meter-fill" class="ylyl-meter-fill smile"></div></div>
+                        <span id="smile-meter-val" class="ylyl-meter-val">0.00</span>
+                    </div>
+                    <div class="ylyl-meter-row">
+                        <span class="ylyl-meter-name">Jaw</span>
+                        <div class="ylyl-meter-bar"><div id="jaw-meter-fill" class="ylyl-meter-fill jaw"></div></div>
+                        <span id="jaw-meter-val" class="ylyl-meter-val">0.00</span>
+                    </div>
                 </div>
             </div>
         </div>
 
         <div class="ylyl-stats-row">
-            <div class="ylyl-stat"><span class="ylyl-stat-val" id="stat-breaks">0</span><span class="ylyl-stat-label">Breaks</span></div>
-            <div class="ylyl-stat"><span class="ylyl-stat-val" id="stat-survival">0:00</span><span class="ylyl-stat-label">Survival</span></div>
-            <div class="ylyl-stat"><span class="ylyl-stat-val" id="stat-streak">0:00</span><span class="ylyl-stat-label">Current streak</span></div>
+            <div class="ylyl-stat"><span class="ylyl-stat-val" id="stat-peak">0.00</span><span class="ylyl-stat-label">Peak</span></div>
+            <div class="ylyl-stat"><span class="ylyl-stat-val" id="stat-avg">0.00</span><span class="ylyl-stat-label">Average</span></div>
+            <div class="ylyl-stat"><span class="ylyl-stat-val" id="stat-elapsed">0:00</span><span class="ylyl-stat-label">Elapsed</span></div>
         </div>
 
         <div class="ylyl-timeline-wrap">
-            <div class="ylyl-timeline-label">Laugh timeline (synced to video)</div>
-            <div id="timeline" class="ylyl-timeline">
-                <div id="timeline-segments"></div>
-                <div id="timeline-playhead"></div>
+            <div class="ylyl-timeline-label">Expression intensity (synced to video)</div>
+            <div class="ylyl-timeline-canvas-wrap">
+                <canvas id="timeline-canvas" class="ylyl-timeline-canvas"></canvas>
+                <div id="timeline-playhead" class="ylyl-timeline-playhead"></div>
             </div>
             <div class="ylyl-timeline-times">
                 <span>0:00</span>
@@ -57,20 +59,20 @@
         <h3 id="results-title">Challenge complete!</h3>
         <div class="ylyl-results-grid">
             <div class="ylyl-result-card">
-                <span class="ylyl-result-val" id="result-breaks">0</span>
-                <span class="ylyl-result-label">Total breaks</span>
+                <span class="ylyl-result-val" id="result-peak">0.00</span>
+                <span class="ylyl-result-label">Peak intensity</span>
+            </div>
+            <div class="ylyl-result-card">
+                <span class="ylyl-result-val" id="result-avg">0.00</span>
+                <span class="ylyl-result-label">Average intensity</span>
+            </div>
+            <div class="ylyl-result-card">
+                <span class="ylyl-result-val" id="result-peak-at">—</span>
+                <span class="ylyl-result-label">Peak at</span>
             </div>
             <div class="ylyl-result-card">
                 <span class="ylyl-result-val" id="result-survival-pct">0%</span>
-                <span class="ylyl-result-label">Survival</span>
-            </div>
-            <div class="ylyl-result-card">
-                <span class="ylyl-result-val" id="result-longest-streak">0:00</span>
-                <span class="ylyl-result-label">Longest streak</span>
-            </div>
-            <div class="ylyl-result-card">
-                <span class="ylyl-result-val" id="result-first-break">—</span>
-                <span class="ylyl-result-label">First break at</span>
+                <span class="ylyl-result-label">Video watched</span>
             </div>
         </div>
 
@@ -80,9 +82,9 @@
         </div>
 
         <div class="ylyl-timeline-wrap">
-            <div class="ylyl-timeline-label">Laugh timeline — click a segment to seek</div>
-            <div id="results-timeline" class="ylyl-timeline">
-                <div id="results-timeline-segments"></div>
+            <div class="ylyl-timeline-label">Expression timeline — click to seek</div>
+            <div class="ylyl-timeline-canvas-wrap">
+                <canvas id="results-timeline-canvas" class="ylyl-timeline-canvas"></canvas>
             </div>
         </div>
 

@@ -24,18 +24,6 @@
     font-size: 1rem;
 }
 
-.ylyl-sensitivity {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    margin-bottom: 0.5rem;
-}
-
-.ylyl-sensitivity input[type="range"] {
-    flex: 1;
-    max-width: 280px;
-}
-
 .ylyl-note {
     color: #666;
     font-size: 0.9rem;
@@ -98,28 +86,47 @@
     color: #fff;
 }
 
+.ylyl-meter-row {
+    display: grid;
+    grid-template-columns: 3.5rem 1fr 2.5rem;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.35rem;
+}
+
+.ylyl-meter-row:last-child {
+    margin-bottom: 0;
+}
+
+.ylyl-meter-name {
+    font-size: 0.8rem;
+}
+
 .ylyl-meter-bar {
     height: 8px;
     background: #333;
     border-radius: 4px;
     overflow: hidden;
-    margin: 0.25rem 0;
 }
 
-#laugh-meter-fill {
+.ylyl-meter-fill {
     height: 100%;
     width: 0%;
-    background: linear-gradient(90deg, #4caf50, #ff9800, #f44336);
-    transition: width 0.1s linear;
+    transition: width 0.08s linear;
 }
 
-.ylyl-laugh-status {
-    font-size: 0.85rem;
-    font-weight: bold;
+.ylyl-meter-fill.smile {
+    background: linear-gradient(90deg, #4caf50, #ff9800);
 }
 
-.ylyl-laugh-status.laughing {
-    color: #f44336;
+.ylyl-meter-fill.jaw {
+    background: linear-gradient(90deg, #2196f3, #f44336);
+}
+
+.ylyl-meter-val {
+    font-size: 0.8rem;
+    font-variant-numeric: tabular-nums;
+    text-align: right;
 }
 
 .ylyl-stats-row {
@@ -156,29 +163,22 @@
     color: #444;
 }
 
-.ylyl-timeline {
+.ylyl-timeline-canvas-wrap {
     position: relative;
-    height: 32px;
-    background: #e8e8e8;
+    height: 80px;
     border-radius: 4px;
     overflow: hidden;
-    cursor: pointer;
+    background: #e8e8e8;
 }
 
-.ylyl-timeline-segment {
-    position: absolute;
-    top: 0;
-    height: 100%;
-    background: rgba(244, 67, 54, 0.75);
-    border-radius: 2px;
-    min-width: 2px;
+.ylyl-timeline-canvas {
+    display: block;
+    width: 100%;
+    height: 80px;
+    cursor: crosshair;
 }
 
-.ylyl-timeline-segment:hover {
-    background: rgba(244, 67, 54, 1);
-}
-
-#timeline-playhead {
+.ylyl-timeline-playhead {
     position: absolute;
     top: 0;
     width: 2px;

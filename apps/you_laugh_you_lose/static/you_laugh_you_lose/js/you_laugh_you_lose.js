@@ -4,19 +4,19 @@ const MEDIAPIPE_WASM = 'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.1
 const FACE_MODEL =
     'https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task';
 
-const JAW_THRESHOLD = 0.35;
-const LAUGH_MIN_MS = 400;
 const MEDIA_CONSTRAINTS = { audio: false, video: { width: 640, height: 480, facingMode: 'user' } };
+const TIMELINE_HEIGHT = 80;
 
-/** @typedef {{ startTime: number, endTime: number, peakScore: number }} LaughEvent */
+/** @typedef {{ t: number, smileLeft: number, smileRight: number, smile: number, jaw: number, score: number }} ExpressionSample */
 
-// --- DOM refs (set on init) ---
+// --- DOM refs ---
 let setupEl, gameEl, resultsEl, loadingEl, loadingText;
-let startBtn, abortBtn, retryBtn, smileSlider, smileValEl;
-let webcamEl, overlayCanvas, laughMeterFill, laughStatusEl;
-let statBreaks, statSurvival, statStreak;
-let timelineEl, timelineSegments, timelinePlayhead, timelineDurationEl;
-let resultsTimeline, resultsTimelineSegments;
+let startBtn, abortBtn, retryBtn;
+let webcamEl, overlayCanvas;
+let smileMeterFill, jawMeterFill, smileMeterVal, jawMeterVal;
+let statPeak, statAvg, statElapsed;
+let timelineCanvas, timelinePlayhead, timelineDurationEl, timelineCanvasWrap;
+let resultsTimelineCanvas, resultsTimelineWrap;
 let replayVideoEl;
 
 // --- runtime state ---
@@ -30,20 +30,13 @@ let mediaRecorder = null;
 let recordedChunks = [];
 let animationFrameId = null;
 let gameActive = false;
-let smileThreshold = 0.45;
 let videoDuration = 0;
 
-/** @type {LaughEvent[]} */
-let laughEvents = [];
-let breakCount = 0;
-let laughCandidateStart = null;
-let laughCandidateVideoTime = null;
-let laughCandidatePeak = 0;
-let isLaughingNow = false;
-let currentLaughStart = null;
-let streakStartVideoTime = 0;
-let longestStreakSec = 0;
-let lastFrameTime = 0;
+/** @type {ExpressionSample[]} */
+let expressionSamples = [];
+let sessionPeak = 0;
+let sessionPeakTime = 0;
+let lastExpression = null;
 
 // --- utilities ---
 
@@ -52,6 +45,10 @@ function formatTime(seconds) {
     const m = Math.floor(s / 60);
     const rem = s % 60;
     return `${m}:${rem.toString().padStart(2, '0')}`;
+}
+
+function formatScore(value) {
+    return value.toFixed(2);
 }
 
 function parseYouTubeId(url) {
@@ -85,26 +82,46 @@ function blendshapeMap(categories) {
     return map;
 }
 
-function laughScore(blendshapes) {
-    const smile = ((blendshapes.mouthSmileLeft || 0) + (blendshapes.mouthSmileRight || 0)) / 2;
+function parseExpression(blendshapes) {
+    const smileLeft = blendshapes.mouthSmileLeft || 0;
+    const smileRight = blendshapes.mouthSmileRight || 0;
+    const smile = (smileLeft + smileRight) / 2;
     const jaw = blendshapes.jawOpen || 0;
-    const score = Math.max(smile, jaw * 0.9);
-    const laughing = smile >= smileThreshold || jaw >= JAW_THRESHOLD;
-    return { smile, jaw, score, laughing };
+    const score = Math.max(smile, jaw);
+    return { smileLeft, smileRight, smile, jaw, score };
 }
 
-function updateLaughMeter(score, laughing) {
-    laughMeterFill.style.width = `${Math.min(100, score * 100)}%`;
-    laughStatusEl.textContent = laughing ? 'LAUGHING!' : 'Holding…';
-    laughStatusEl.classList.toggle('laughing', laughing);
+function recordExpression(videoTime, expr) {
+    const sample = { t: videoTime, ...expr };
+    expressionSamples.push(sample);
+
+    if (expr.score > sessionPeak) {
+        sessionPeak = expr.score;
+        sessionPeakTime = videoTime;
+    }
+    lastExpression = expr;
+}
+
+function computeAverage(samples) {
+    if (samples.length === 0) {
+        return 0;
+    }
+    const total = samples.reduce((sum, s) => sum + s.score, 0);
+    return total / samples.length;
+}
+
+function updateMeters(expr) {
+    smileMeterFill.style.width = `${Math.min(100, expr.smile * 100)}%`;
+    jawMeterFill.style.width = `${Math.min(100, expr.jaw * 100)}%`;
+    smileMeterVal.textContent = formatScore(expr.smile);
+    jawMeterVal.textContent = formatScore(expr.jaw);
 }
 
 function updateStats() {
-    statBreaks.textContent = String(breakCount);
-    const survival = getVideoTime();
-    statSurvival.textContent = formatTime(survival);
-    const streak = Math.max(0, survival - streakStartVideoTime);
-    statStreak.textContent = formatTime(streak);
+    const elapsed = getVideoTime();
+    statPeak.textContent = formatScore(sessionPeak);
+    statAvg.textContent = formatScore(computeAverage(expressionSamples));
+    statElapsed.textContent = formatTime(elapsed);
 }
 
 function updatePlayhead() {
@@ -116,73 +133,99 @@ function updatePlayhead() {
     updateStats();
 }
 
-function renderTimelineSegment(container, event, clickable) {
-    if (!videoDuration) {
+function scoreColor(score) {
+    const r = Math.round(76 + score * 168);
+    const g = Math.round(175 - score * 132);
+    const b = Math.round(80 - score * 37);
+    return `rgb(${r}, ${g}, ${b})`;
+}
+
+function renderExpressionTimeline(canvas, samples, duration, options = {}) {
+    const { playheadTime = null, clickable = false } = options;
+    const wrap = canvas.parentElement;
+    const width = wrap.clientWidth || 600;
+    const dpr = window.devicePixelRatio || 1;
+
+    canvas.width = width * dpr;
+    canvas.height = TIMELINE_HEIGHT * dpr;
+    canvas.style.width = `${width}px`;
+    canvas.style.height = `${TIMELINE_HEIGHT}px`;
+
+    const ctx = canvas.getContext('2d');
+    ctx.scale(dpr, dpr);
+    ctx.clearRect(0, 0, width, TIMELINE_HEIGHT);
+
+    ctx.fillStyle = '#e8e8e8';
+    ctx.fillRect(0, 0, width, TIMELINE_HEIGHT);
+
+    if (!duration || samples.length === 0) {
         return;
     }
-    const seg = document.createElement('div');
-    seg.className = 'ylyl-timeline-segment';
-    const left = (event.startTime / videoDuration) * 100;
-    const width = Math.max(0.3, ((event.endTime - event.startTime) / videoDuration) * 100);
-    seg.style.left = `${left}%`;
-    seg.style.width = `${width}%`;
-    seg.title = `${formatTime(event.startTime)} – ${formatTime(event.endTime)}`;
-    if (clickable && ytPlayer) {
-        seg.addEventListener('click', () => {
-            ytPlayer.seekTo(event.startTime, true);
-            ytPlayer.playVideo();
-        });
+
+    const buckets = new Float32Array(width);
+    for (const sample of samples) {
+        const x = Math.min(width - 1, Math.floor((sample.t / duration) * width));
+        buckets[x] = Math.max(buckets[x], sample.score);
     }
-    container.appendChild(seg);
-}
 
-function addLaughSegmentToTimeline(event) {
-    renderTimelineSegment(timelineSegments, event, false);
-    renderTimelineSegment(resultsTimelineSegments, event, true);
-}
-
-function finalizeLaughEvent(endVideoTime, peakScore) {
-    if (currentLaughStart === null) {
-        return;
+    ctx.beginPath();
+    ctx.moveTo(0, TIMELINE_HEIGHT);
+    for (let x = 0; x < width; x++) {
+        const y = TIMELINE_HEIGHT - buckets[x] * (TIMELINE_HEIGHT - 4);
+        ctx.lineTo(x, y);
     }
-    const event = {
-        startTime: currentLaughStart,
-        endTime: endVideoTime,
-        peakScore,
-    };
-    laughEvents.push(event);
-    addLaughSegmentToTimeline(event);
-    breakCount += 1;
-    currentLaughStart = null;
-    streakStartVideoTime = endVideoTime;
-}
+    ctx.lineTo(width, TIMELINE_HEIGHT);
+    ctx.closePath();
 
-function processLaughDetection(laughing, score, videoTime, nowMs) {
-    if (laughing) {
-        if (laughCandidateStart === null) {
-            laughCandidateStart = nowMs;
-            laughCandidateVideoTime = videoTime;
-            laughCandidatePeak = score;
+    const gradient = ctx.createLinearGradient(0, 0, 0, TIMELINE_HEIGHT);
+    gradient.addColorStop(0, 'rgba(244, 67, 54, 0.85)');
+    gradient.addColorStop(0.5, 'rgba(255, 152, 0, 0.7)');
+    gradient.addColorStop(1, 'rgba(76, 175, 80, 0.35)');
+    ctx.fillStyle = gradient;
+    ctx.fill();
+
+    ctx.beginPath();
+    for (let x = 0; x < width; x++) {
+        const y = TIMELINE_HEIGHT - buckets[x] * (TIMELINE_HEIGHT - 4);
+        if (x === 0) {
+            ctx.moveTo(x, y);
         } else {
-            laughCandidatePeak = Math.max(laughCandidatePeak, score);
+            ctx.lineTo(x, y);
         }
-
-        const sustained = nowMs - laughCandidateStart >= LAUGH_MIN_MS;
-        if (sustained && !isLaughingNow) {
-            isLaughingNow = true;
-            currentLaughStart = laughCandidateVideoTime;
-            const streakLen = laughCandidateVideoTime - streakStartVideoTime;
-            longestStreakSec = Math.max(longestStreakSec, streakLen);
-        }
-    } else {
-        if (isLaughingNow && currentLaughStart !== null) {
-            finalizeLaughEvent(videoTime, laughCandidatePeak);
-        }
-        laughCandidateStart = null;
-        laughCandidateVideoTime = null;
-        laughCandidatePeak = 0;
-        isLaughingNow = false;
     }
+    ctx.strokeStyle = 'rgba(0, 0, 0, 0.25)';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+
+    if (playheadTime !== null) {
+        const px = (playheadTime / duration) * width;
+        ctx.strokeStyle = '#2196f3';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(px, 0);
+        ctx.lineTo(px, TIMELINE_HEIGHT);
+        ctx.stroke();
+    }
+
+    if (clickable) {
+        canvas.onclick = (e) => {
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const seekTime = (x / rect.width) * duration;
+            if (ytPlayer) {
+                ytPlayer.seekTo(seekTime, true);
+                ytPlayer.playVideo();
+            }
+        };
+    } else {
+        canvas.onclick = null;
+    }
+}
+
+function refreshLiveTimeline() {
+    renderExpressionTimeline(timelineCanvas, expressionSamples, videoDuration, {
+        playheadTime: getVideoTime(),
+    });
 }
 
 // --- MediaPipe ---
@@ -265,7 +308,7 @@ async function startWebcam() {
     mediaRecorder.start(1000);
 }
 
-function drawOverlay(detected) {
+function drawOverlay(detected, expr) {
     const ctx = overlayCanvas.getContext('2d');
     const w = overlayCanvas.width;
     const h = overlayCanvas.height;
@@ -275,7 +318,8 @@ function drawOverlay(detected) {
         return;
     }
 
-    ctx.strokeStyle = isLaughingNow ? '#f44336' : '#4caf50';
+    const score = expr ? expr.score : 0;
+    ctx.strokeStyle = scoreColor(score);
     ctx.lineWidth = 2;
     for (const landmarks of detected.faceLandmarks) {
         for (const pt of landmarks) {
@@ -297,24 +341,21 @@ function runDetectionLoop() {
         overlayCanvas.height = webcamEl.videoHeight;
 
         const result = faceLandmarker.detectForVideo(webcamEl, now);
-        drawOverlay(result);
+        const videoTime = getVideoTime();
 
-        let score = 0;
-        let laughing = false;
+        let expr = { smileLeft: 0, smileRight: 0, smile: 0, jaw: 0, score: 0 };
         if (result.faceBlendshapes && result.faceBlendshapes.length > 0) {
             const shapes = blendshapeMap(result.faceBlendshapes[0].categories);
-            const parsed = laughScore(shapes);
-            score = parsed.score;
-            laughing = parsed.laughing;
+            expr = parseExpression(shapes);
+            recordExpression(videoTime, expr);
+            updateMeters(expr);
+            refreshLiveTimeline();
         }
 
-        const videoTime = getVideoTime();
-        processLaughDetection(laughing, score, videoTime, now);
-        updateLaughMeter(score, isLaughingNow || laughing);
+        drawOverlay(result, expr);
     }
 
     updatePlayhead();
-    lastFrameTime = now;
     animationFrameId = requestAnimationFrame(runDetectionLoop);
 }
 
@@ -356,7 +397,6 @@ async function startGame() {
         return;
     }
 
-    smileThreshold = parseFloat(smileSlider.value);
     resetState();
 
     startBtn.disabled = true;
@@ -373,6 +413,7 @@ async function startGame() {
 
         videoDuration = ytPlayer.getDuration() || 0;
         timelineDurationEl.textContent = formatTime(videoDuration);
+        refreshLiveTimeline();
 
         setupEl.hidden = true;
         resultsEl.hidden = true;
@@ -380,7 +421,6 @@ async function startGame() {
         hideLoading();
 
         gameActive = true;
-        streakStartVideoTime = 0;
         runDetectionLoop();
         ytPlayer.playVideo();
     } catch (err) {
@@ -395,23 +435,18 @@ async function startGame() {
 }
 
 function resetState() {
-    laughEvents = [];
-    breakCount = 0;
-    laughCandidateStart = null;
-    laughCandidateVideoTime = null;
-    laughCandidatePeak = 0;
-    isLaughingNow = false;
-    currentLaughStart = null;
-    streakStartVideoTime = 0;
-    longestStreakSec = 0;
+    expressionSamples = [];
+    sessionPeak = 0;
+    sessionPeakTime = 0;
+    lastExpression = null;
     videoDuration = 0;
     recordedChunks = [];
-    timelineSegments.innerHTML = '';
-    resultsTimelineSegments.innerHTML = '';
-    updateLaughMeter(0, false);
-    statBreaks.textContent = '0';
-    statSurvival.textContent = '0:00';
-    statStreak.textContent = '0:00';
+
+    updateMeters({ smileLeft: 0, smileRight: 0, smile: 0, jaw: 0, score: 0 });
+    statPeak.textContent = '0.00';
+    statAvg.textContent = '0.00';
+    statElapsed.textContent = '0:00';
+    timelinePlayhead.style.left = '0%';
 }
 
 function resetUi() {
@@ -425,16 +460,9 @@ function endGame() {
         return;
     }
 
-    const endTime = getVideoTime();
-    if (isLaughingNow && currentLaughStart !== null) {
-        finalizeLaughEvent(endTime, laughCandidatePeak);
-    } else if (!isLaughingNow) {
-        longestStreakSec = Math.max(longestStreakSec, endTime - streakStartVideoTime);
-    }
-
     stopDetectionLoop();
 
-    const finishResults = () => showResults(endTime);
+    const finishResults = () => showResults(getVideoTime());
     if (mediaRecorder && mediaRecorder.state !== 'inactive') {
         mediaRecorder.onstop = finishResults;
         mediaRecorder.stop();
@@ -451,15 +479,19 @@ function showResults(endTime) {
     gameEl.hidden = true;
     resultsEl.hidden = false;
 
-    const survived = videoDuration > 0 ? (endTime / videoDuration) * 100 : 0;
-    const title = breakCount === 0 ? 'Perfect run — you never laughed!' : 'Challenge complete!';
-    document.getElementById('results-title').textContent = title;
+    const avg = computeAverage(expressionSamples);
+    const watched = videoDuration > 0 ? (endTime / videoDuration) * 100 : 0;
 
-    document.getElementById('result-breaks').textContent = String(breakCount);
-    document.getElementById('result-survival-pct').textContent = `${Math.round(survived)}%`;
-    document.getElementById('result-longest-streak').textContent = formatTime(longestStreakSec);
-    document.getElementById('result-first-break').textContent =
-        laughEvents.length > 0 ? formatTime(laughEvents[0].startTime) : '—';
+    document.getElementById('results-title').textContent = 'Challenge complete!';
+    document.getElementById('result-peak').textContent = formatScore(sessionPeak);
+    document.getElementById('result-avg').textContent = formatScore(avg);
+    document.getElementById('result-peak-at').textContent =
+        sessionPeak > 0 ? formatTime(sessionPeakTime) : '—';
+    document.getElementById('result-survival-pct').textContent = `${Math.round(watched)}%`;
+
+    renderExpressionTimeline(resultsTimelineCanvas, expressionSamples, videoDuration, {
+        clickable: true,
+    });
 
     if (recordedChunks.length > 0) {
         const blob = new Blob(recordedChunks, { type: recordedChunks[0].type || 'video/webm' });
@@ -481,8 +513,14 @@ function bindControls() {
     abortBtn.addEventListener('click', endGame);
     retryBtn.addEventListener('click', retry);
 
-    smileSlider.addEventListener('input', () => {
-        smileValEl.textContent = smileSlider.value;
+    window.addEventListener('resize', () => {
+        if (gameActive) {
+            refreshLiveTimeline();
+        } else if (!resultsEl.hidden && expressionSamples.length > 0) {
+            renderExpressionTimeline(resultsTimelineCanvas, expressionSamples, videoDuration, {
+                clickable: true,
+            });
+        }
     });
 }
 
@@ -496,25 +534,25 @@ function cacheDom() {
     startBtn = document.getElementById('start-btn');
     abortBtn = document.getElementById('abort-btn');
     retryBtn = document.getElementById('retry-btn');
-    smileSlider = document.getElementById('smile-threshold');
-    smileValEl = document.getElementById('smile-threshold-val');
 
     webcamEl = document.getElementById('webcam');
     overlayCanvas = document.getElementById('webcam-overlay');
-    laughMeterFill = document.getElementById('laugh-meter-fill');
-    laughStatusEl = document.getElementById('laugh-status');
+    smileMeterFill = document.getElementById('smile-meter-fill');
+    jawMeterFill = document.getElementById('jaw-meter-fill');
+    smileMeterVal = document.getElementById('smile-meter-val');
+    jawMeterVal = document.getElementById('jaw-meter-val');
 
-    statBreaks = document.getElementById('stat-breaks');
-    statSurvival = document.getElementById('stat-survival');
-    statStreak = document.getElementById('stat-streak');
+    statPeak = document.getElementById('stat-peak');
+    statAvg = document.getElementById('stat-avg');
+    statElapsed = document.getElementById('stat-elapsed');
 
-    timelineEl = document.getElementById('timeline');
-    timelineSegments = document.getElementById('timeline-segments');
+    timelineCanvas = document.getElementById('timeline-canvas');
     timelinePlayhead = document.getElementById('timeline-playhead');
     timelineDurationEl = document.getElementById('timeline-duration');
+    timelineCanvasWrap = timelineCanvas.parentElement;
 
-    resultsTimeline = document.getElementById('results-timeline');
-    resultsTimelineSegments = document.getElementById('results-timeline-segments');
+    resultsTimelineCanvas = document.getElementById('results-timeline-canvas');
+    resultsTimelineWrap = resultsTimelineCanvas.parentElement;
     replayVideoEl = document.getElementById('replay-video');
 }
 

@@ -7,14 +7,14 @@
         <code>jawOpen</code>).
     </p>
     <p>
-        All processing runs in your browser — no video is uploaded. A timeline is synced to the
-        YouTube playback so you can see exactly when you broke.
+        All processing runs in your browser — no video is uploaded. Expression values are
+        recorded continuously and plotted on a timeline synced to the YouTube video.
     </p>
     <h3>How it works</h3>
     <ul>
         <li>MediaPipe Face Landmarker detects facial expressions from your webcam feed.</li>
         <li>The YouTube IFrame API tracks video position and detects when the video ends.</li>
         <li>MediaRecorder captures your face cam for replay on the results screen.</li>
-        <li>Laugh events are timestamped against the YouTube video's current time.</li>
+        <li>Laugh intensity is tracked continuously (no threshold) and plotted against video time.</li>
     </ul>
 </div>
