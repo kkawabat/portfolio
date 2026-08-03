@@ -34,50 +34,40 @@
     font-size: 0.9rem;
 }
 
-.ylyl-split {
-    display: grid;
-    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
-    gap: 1rem;
+.ylyl-video-stack {
+    position: relative;
+    width: 100%;
     margin-bottom: 1rem;
-    align-items: start;
+    border-radius: 4px;
+    overflow: hidden;
+    background: #000;
 }
 
-@media (max-width: 768px) {
-    .ylyl-split {
-        grid-template-columns: 1fr;
-    }
-}
-
-.ylyl-youtube-col .ylyl-player-host,
-.ylyl-replay-youtube .ylyl-player-host {
+.ylyl-video-stack .ylyl-player-host {
     position: relative;
     width: 100%;
     aspect-ratio: 16 / 9;
     background: #000;
-    border-radius: 4px;
-    overflow: hidden;
 }
 
-.ylyl-player-host #player,
-.ylyl-player-host iframe {
-    width: 100%;
-    height: 100%;
-}
-
-.ylyl-app > #player {
-    display: none;
-}
-
-.ylyl-webcam-col {
-    position: relative;
-    background: #111;
-    border-radius: 4px;
-    overflow: hidden;
+.ylyl-webcam-pip {
+    position: absolute;
+    bottom: 0.75rem;
+    right: 0.75rem;
+    width: 24%;
+    min-width: 120px;
+    max-width: 200px;
     aspect-ratio: 4 / 3;
+    z-index: 4;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 2px solid rgba(255, 255, 255, 0.9);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.55);
+    background: #111;
 }
 
-#webcam,
-#webcam-overlay {
+.ylyl-webcam-pip #webcam,
+.ylyl-webcam-pip #webcam-overlay {
     position: absolute;
     top: 0;
     left: 0;
@@ -86,8 +76,55 @@
     object-fit: cover;
 }
 
-#webcam-overlay {
+.ylyl-webcam-pip #webcam-overlay {
     pointer-events: none;
+}
+
+.ylyl-webcam-pip .ylyl-meter {
+    padding: 0.35rem 0.5rem;
+}
+
+.ylyl-webcam-pip .ylyl-meter-row {
+    grid-template-columns: 2.25rem 1fr 1.75rem;
+    gap: 0.35rem;
+    margin-bottom: 0.25rem;
+}
+
+.ylyl-webcam-pip .ylyl-meter-name,
+.ylyl-webcam-pip .ylyl-meter-val {
+    font-size: 0.7rem;
+}
+
+.ylyl-webcam-pip .ylyl-meter-bar {
+    height: 6px;
+}
+
+@media (max-width: 768px) {
+    .ylyl-webcam-pip {
+        width: 30%;
+        min-width: 96px;
+        max-width: 140px;
+        bottom: 0.5rem;
+        right: 0.5rem;
+        border-width: 1px;
+    }
+}
+
+/* Slight zoom crops side "more videos" panels YouTube shows on pause. */
+.ylyl-player-host #player {
+    position: absolute;
+    inset: -6% -10%;
+    width: 120%;
+    height: 112%;
+}
+
+.ylyl-player-host #player,
+.ylyl-player-host iframe {
+    border: 0;
+}
+
+.ylyl-app > #player {
+    display: none;
 }
 
 .ylyl-meter {
@@ -275,25 +312,62 @@
     margin-bottom: 0.75rem;
 }
 
-.ylyl-replay-split {
-    display: grid;
-    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
-    gap: 1rem;
-    align-items: start;
+.ylyl-replay-stack {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    max-height: min(70vh, 720px);
+    margin: 0 auto;
+    background: #000;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.ylyl-replay-stack #replay-video {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    background: #000;
+}
+
+.ylyl-youtube-pip {
+    position: absolute;
+    bottom: 0.75rem;
+    right: 0.75rem;
+    width: 32%;
+    min-width: 140px;
+    max-width: 240px;
+    z-index: 4;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 2px solid rgba(255, 255, 255, 0.9);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.55);
+    background: #000;
+}
+
+.ylyl-player-host-pip {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: #000;
+}
+
+.ylyl-youtube-pip .ylyl-player-host #player {
+    inset: -4% -8%;
+    width: 116%;
+    height: 108%;
 }
 
 @media (max-width: 768px) {
-    .ylyl-replay-split {
-        grid-template-columns: 1fr;
+    .ylyl-youtube-pip {
+        width: 38%;
+        min-width: 112px;
+        max-width: 180px;
+        bottom: 0.5rem;
+        right: 0.5rem;
+        border-width: 1px;
     }
-}
-
-.ylyl-replay-webcam video {
-    width: 100%;
-    border-radius: 4px;
-    background: #000;
-    aspect-ratio: 4 / 3;
-    object-fit: cover;
 }
 
 .ylyl-loading {

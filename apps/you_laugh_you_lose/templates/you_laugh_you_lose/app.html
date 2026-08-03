@@ -12,11 +12,9 @@
     </section>
 
     <section id="ylyl-game" class="ylyl-panel" hidden>
-        <div class="ylyl-split">
-            <div class="ylyl-youtube-col">
-                <div id="player-host-game" class="ylyl-player-host"></div>
-            </div>
-            <div class="ylyl-webcam-col">
+        <div class="ylyl-video-stack">
+            <div id="player-host-game" class="ylyl-player-host"></div>
+            <div class="ylyl-webcam-pip">
                 <video id="webcam" muted playsinline></video>
                 <canvas id="webcam-overlay"></canvas>
                 <div id="expression-meter" class="ylyl-meter">
@@ -86,12 +84,10 @@
 
         <div class="ylyl-replay-wrap">
             <h4>Replay</h4>
-            <div class="ylyl-replay-split">
-                <div class="ylyl-replay-youtube">
-                    <div id="player-host-results" class="ylyl-player-host"></div>
-                </div>
-                <div class="ylyl-replay-webcam">
-                    <video id="replay-video" controls playsinline></video>
+            <div class="ylyl-replay-stack">
+                <video id="replay-video" controls playsinline></video>
+                <div class="ylyl-youtube-pip">
+                    <div id="player-host-results" class="ylyl-player-host ylyl-player-host-pip"></div>
                 </div>
             </div>
         </div>

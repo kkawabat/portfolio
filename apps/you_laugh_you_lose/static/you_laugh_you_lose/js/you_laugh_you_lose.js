@@ -7,6 +7,19 @@ const FACE_MODEL =
 const MEDIA_CONSTRAINTS = { audio: false, video: { width: 640, height: 480, facingMode: 'user' } };
 const TIMELINE_HEIGHT = 80;
 
+/** Minimal embed: no control bar, same-channel rel only, no annotations/captions. */
+const YOUTUBE_PLAYER_VARS = {
+    playsinline: 1,
+    rel: 0,
+    modestbranding: 1,
+    controls: 0,
+    iv_load_policy: 3,
+    cc_load_policy: 0,
+    fs: 0,
+    disablekb: 1,
+    origin: window.location.origin,
+};
+
 /** @typedef {{ t: number, smileLeft: number, smileRight: number, smile: number, jaw: number, score: number }} ExpressionSample */
 
 // --- DOM refs ---
@@ -36,6 +49,7 @@ let videoDuration = 0;
 let expressionSamples = [];
 let sessionPeak = 0;
 let sessionPeakTime = 0;
+let sessionEndTime = 0;
 let lastExpression = null;
 
 // --- utilities ---
@@ -148,18 +162,22 @@ function seekReplay(seekTime) {
         replayVideoEl.play().catch(() => {});
     }
     updateResultsPlayhead(seekTime);
-    renderExpressionTimeline(resultsTimelineCanvas, expressionSamples, videoDuration, {
-        playheadTime: seekTime,
+    renderResultsTimeline(seekTime);
+}
+
+function renderResultsTimeline(playheadTime) {
+    renderExpressionTimeline(resultsTimelineCanvas, expressionSamples, sessionEndTime, {
+        playheadTime,
         clickable: true,
         onSeek: seekReplay,
     });
 }
 
 function updateResultsPlayhead(time) {
-    if (!videoDuration) {
+    if (!sessionEndTime) {
         return;
     }
-    const pct = (time / videoDuration) * 100;
+    const pct = (time / sessionEndTime) * 100;
     resultsTimelinePlayhead.style.left = `${pct}%`;
 }
 
@@ -194,6 +212,9 @@ function renderExpressionTimeline(canvas, samples, duration, options = {}) {
 
     const buckets = new Float32Array(width);
     for (const sample of samples) {
+        if (sample.t > duration) {
+            continue;
+        }
         const x = Math.min(width - 1, Math.floor((sample.t / duration) * width));
         buckets[x] = Math.max(buckets[x], sample.score);
     }
@@ -300,7 +321,7 @@ function createYouTubePlayer(videoId) {
             height: '100%',
             width: '100%',
             videoId,
-            playerVars: { playsinline: 1, rel: 0, modestbranding: 1 },
+            playerVars: YOUTUBE_PLAYER_VARS,
             events: {
                 onReady: (e) => resolve(e.target),
                 onStateChange: onPlayerStateChange,
@@ -312,6 +333,11 @@ function createYouTubePlayer(videoId) {
 function onPlayerStateChange(event) {
     if (event.data === YT.PlayerState.ENDED) {
         endGame();
+        return;
+    }
+    // Keep the challenge running — pausing shows cluttered YouTube overlays.
+    if (gameActive && event.data === YT.PlayerState.PAUSED && ytPlayer) {
+        ytPlayer.playVideo();
     }
 }
 
@@ -466,6 +492,7 @@ function resetState() {
     expressionSamples = [];
     sessionPeak = 0;
     sessionPeakTime = 0;
+    sessionEndTime = 0;
     lastExpression = null;
     videoDuration = 0;
     recordedChunks = [];
@@ -507,7 +534,8 @@ function showResults(endTime) {
     gameEl.hidden = true;
     resultsEl.hidden = false;
 
-    const watched = videoDuration > 0 ? (endTime / videoDuration) * 100 : 0;
+    sessionEndTime = Math.max(endTime, sessionPeakTime, expressionSamples.at(-1)?.t ?? 0);
+    const watched = videoDuration > 0 ? (sessionEndTime / videoDuration) * 100 : 0;
 
     document.getElementById('results-title').textContent = 'Challenge complete!';
     document.getElementById('result-peak').textContent = formatScore(sessionPeak);
@@ -516,7 +544,7 @@ function showResults(endTime) {
     document.getElementById('result-survival-pct').textContent = `${Math.round(watched)}%`;
 
     funniestMomentCard.classList.toggle('ylyl-result-card-disabled', sessionPeak <= 0);
-    resultsTimelineDurationEl.textContent = formatTime(videoDuration);
+    resultsTimelineDurationEl.textContent = formatTime(sessionEndTime);
 
     mountPlayer(playerHostResults);
 
@@ -525,11 +553,7 @@ function showResults(endTime) {
         replayVideoEl.src = URL.createObjectURL(blob);
     }
 
-    renderExpressionTimeline(resultsTimelineCanvas, expressionSamples, videoDuration, {
-        playheadTime: endTime,
-        clickable: true,
-        onSeek: seekReplay,
-    });
+    renderResultsTimeline(endTime);
     updateResultsPlayhead(endTime);
 }
 
@@ -564,12 +588,8 @@ function bindControls() {
         if (gameActive) {
             refreshLiveTimeline();
         } else if (!resultsEl.hidden && expressionSamples.length > 0) {
-            const playhead = ytPlayer ? ytPlayer.getCurrentTime() : sessionPeakTime;
-            renderExpressionTimeline(resultsTimelineCanvas, expressionSamples, videoDuration, {
-                playheadTime: playhead,
-                clickable: true,
-                onSeek: seekReplay,
-            });
+            const playhead = ytPlayer ? ytPlayer.getCurrentTime() : sessionEndTime;
+            renderResultsTimeline(playhead);
             updateResultsPlayhead(playhead);
         }
     });
