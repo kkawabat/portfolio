@@ -420,6 +420,16 @@ function stopDetectionLoop() {
     }
 }
 
+function stopWebcam() {
+    if (mediaStream) {
+        mediaStream.getTracks().forEach((t) => t.stop());
+        mediaStream = null;
+    }
+    if (webcamEl) {
+        webcamEl.srcObject = null;
+    }
+}
+
 function cleanupMedia() {
     stopDetectionLoop();
 
@@ -427,12 +437,7 @@ function cleanupMedia() {
         mediaRecorder.stop();
     }
 
-    if (mediaStream) {
-        mediaStream.getTracks().forEach((t) => t.stop());
-        mediaStream = null;
-    }
-
-    webcamEl.srcObject = null;
+    stopWebcam();
 
     if (ytPlayer && typeof ytPlayer.destroy === 'function') {
         ytPlayer.destroy();
@@ -517,7 +522,10 @@ function endGame() {
 
     stopDetectionLoop();
 
-    const finishResults = () => showResults(getVideoTime());
+    const finishResults = () => {
+        stopWebcam();
+        showResults(getVideoTime());
+    };
     if (mediaRecorder && mediaRecorder.state !== 'inactive') {
         mediaRecorder.onstop = finishResults;
         mediaRecorder.stop();
