@@ -12,7 +12,7 @@ MONTHLY_BUDGET_USD="${MONTHLY_BUDGET_USD:-25}"
 BUDGET_ALERT_EMAIL="${BUDGET_ALERT_EMAIL:-kan.kawabata.personal@gmail.com}"
 DISPLAY_NAME="Portfolio (${PROJECT_ID}) monthly alerts"
 
-CHANNEL_ID="$(gcloud monitoring channels list \
+CHANNEL_ID="$(gcloud beta monitoring channels list \
   --project="${PROJECT_ID}" \
   --filter="displayName=\"Portfolio billing alerts\"" \
   --format='value(name)' \
@@ -42,7 +42,16 @@ ARGS=(
 
 if [[ -n "${EXISTING}" ]]; then
   echo "Updating existing budget ${EXISTING}"
-  gcloud billing budgets update "${EXISTING}" "${ARGS[@]}"
+  gcloud billing budgets update "${EXISTING}" \
+    --billing-account="${BILLING_ACCOUNT_ID}" \
+    --display-name="${DISPLAY_NAME}" \
+    --budget-amount="${MONTHLY_BUDGET_USD}USD" \
+    --filter-projects="projects/${PROJECT_ID}" \
+    --clear-threshold-rules \
+    --add-threshold-rule=percent=0.5,basis=current-spend \
+    --add-threshold-rule=percent=0.9,basis=current-spend \
+    --add-threshold-rule=percent=1.0,basis=current-spend \
+    --notifications-rule-monitoring-notification-channels="${CHANNEL_ID}"
 else
   echo "Creating budget (${DISPLAY_NAME}) — alerts to ${BUDGET_ALERT_EMAIL}"
   gcloud billing budgets create "${ARGS[@]}"
