@@ -10,6 +10,9 @@ const PADDLE = {
     acceleration: 5200,
     maxSpeed: 1300,
     drag: 4.0,
+    /** How far the paddle leans with the phone, and how quickly it eases there. */
+    maxTilt: 12 * DEG,
+    tiltResponse: 12,
 };
 
 const BALL = {
@@ -21,6 +24,8 @@ const BALL = {
     maxBounceAngle: 62 * DEG,
     minVerticalRatio: 0.28,
     paddleSpin: 0.14,
+    /** How much the paddle's lean steers the bounce, so it deflects the way it looks. */
+    paddleAngleInfluence: 0.6,
 };
 
 const BRICK = {
@@ -54,7 +59,7 @@ let stageEl, canvas, ctx;
 let scoreEl, levelEl, livesEl, footnoteEl;
 let overlayEl, overlayTitle, overlayText, overlayNote, primaryBtn;
 let tiltPreviewEl, tiltMarkerEl, rotateNagEl;
-let invertBtn, pauseBtn, fullscreenBtn;
+let invertBtn, pauseBtn, fullscreenBtn, exitFullscreenBtn;
 
 // --- runtime state ---
 let phase = Phase.SETUP;
@@ -64,7 +69,7 @@ let lastFrameTime = 0;
 let physicsAccumulator = 0;
 let wakeLock = null;
 
-const paddle = { x: VIEW.width / 2, velocity: 0 };
+const paddle = { x: VIEW.width / 2, velocity: 0, angle: 0 };
 const ball = { x: 0, y: 0, vx: 0, vy: 0, speed: BALL.baseSpeed };
 let bricks = [];
 let bricksRemaining = 0;
@@ -297,24 +302,38 @@ function stepPaddle(dt) {
         const previous = paddle.x;
         paddle.x = clamp(pointer.x, PADDLE.width / 2, VIEW.width - PADDLE.width / 2);
         paddle.velocity = (paddle.x - previous) / dt;
-        return;
+    } else {
+        const steer = tiltSteering() || keyboardSteering();
+        paddle.velocity += steer * PADDLE.acceleration * dt;
+        paddle.velocity *= Math.exp(-PADDLE.drag * dt);
+        paddle.velocity = clamp(paddle.velocity, -PADDLE.maxSpeed, PADDLE.maxSpeed);
+        paddle.x += paddle.velocity * dt;
+
+        const leftLimit = PADDLE.width / 2;
+        const rightLimit = VIEW.width - PADDLE.width / 2;
+        if (paddle.x < leftLimit) {
+            paddle.x = leftLimit;
+            paddle.velocity = 0;
+        } else if (paddle.x > rightLimit) {
+            paddle.x = rightLimit;
+            paddle.velocity = 0;
+        }
     }
 
-    const steer = tiltSteering() || keyboardSteering();
-    paddle.velocity += steer * PADDLE.acceleration * dt;
-    paddle.velocity *= Math.exp(-PADDLE.drag * dt);
-    paddle.velocity = clamp(paddle.velocity, -PADDLE.maxSpeed, PADDLE.maxSpeed);
-    paddle.x += paddle.velocity * dt;
+    stepPaddleLean(dt);
+}
 
-    const leftLimit = PADDLE.width / 2;
-    const rightLimit = VIEW.width - PADDLE.width / 2;
-    if (paddle.x < leftLimit) {
-        paddle.x = leftLimit;
-        paddle.velocity = 0;
-    } else if (paddle.x > rightLimit) {
-        paddle.x = rightLimit;
-        paddle.velocity = 0;
-    }
+/**
+ * The paddle leans the way the phone is held, easing toward the target so it does not
+ * jitter with sensor noise. Without a motion sensor it leans into its own movement
+ * instead, so mouse and keyboard play still reads the same way.
+ */
+function stepPaddleLean(dt) {
+    const lean = tilt.receiving
+        ? tiltSteering()
+        : clamp(paddle.velocity / PADDLE.maxSpeed, -1, 1);
+    const target = lean * PADDLE.maxTilt;
+    paddle.angle += (target - paddle.angle) * Math.min(1, dt * PADDLE.tiltResponse);
 }
 
 function setBallDirection(vx, vy, speed) {
@@ -340,8 +359,14 @@ function bounceOffPaddle() {
         return;
     }
 
+    // Rotating the paddle rotates its surface normal, so a paddle that visibly leans
+    // right sends the ball right — the bounce matches what the player can see.
     const offset = clamp((ball.x - paddle.x) / (PADDLE.width / 2), -1, 1);
-    const angle = offset * BALL.maxBounceAngle;
+    const angle = clamp(
+        offset * BALL.maxBounceAngle + paddle.angle * BALL.paddleAngleInfluence,
+        -BALL.maxBounceAngle,
+        BALL.maxBounceAngle,
+    );
     const spin = paddle.velocity * BALL.paddleSpin;
     setBallDirection(Math.sin(angle) * ball.speed + spin, -Math.cos(angle) * ball.speed, ball.speed);
     ball.y = top - BALL.radius;
@@ -492,12 +517,15 @@ function drawBricks() {
 }
 
 function drawPaddle() {
-    const top = paddleTop();
+    ctx.save();
+    ctx.translate(paddle.x, paddleTop() + PADDLE.height / 2);
+    ctx.rotate(paddle.angle);
     ctx.fillStyle = 'orange';
     ctx.shadowColor = 'rgba(255, 165, 0, 0.55)';
     ctx.shadowBlur = 18;
-    fillRounded(paddle.x - PADDLE.width / 2, top, PADDLE.width, PADDLE.height, 8);
+    fillRounded(-PADDLE.width / 2, -PADDLE.height / 2, PADDLE.width, PADDLE.height, 8);
     ctx.shadowBlur = 0;
+    ctx.restore();
 }
 
 function drawBall() {
@@ -606,9 +634,15 @@ async function onPrimaryButton() {
     startGame();
 }
 
-async function toggleFullscreen() {
+async function exitFullscreen() {
     if (document.fullscreenElement) {
         await document.exitFullscreen().catch(() => {});
+    }
+}
+
+async function toggleFullscreen() {
+    if (document.fullscreenElement) {
+        await exitFullscreen();
         return;
     }
     try {
@@ -647,6 +681,7 @@ function bindControls() {
     primaryBtn.addEventListener('click', onPrimaryButton);
     pauseBtn.addEventListener('click', togglePause);
     fullscreenBtn.addEventListener('click', toggleFullscreen);
+    exitFullscreenBtn.addEventListener('click', exitFullscreen);
     invertBtn.addEventListener('click', () => setInvert(!tilt.invert));
 
     canvas.addEventListener('pointerdown', (event) => {
@@ -728,6 +763,7 @@ function cacheDom() {
     invertBtn = document.getElementById('tb-invert-btn');
     pauseBtn = document.getElementById('tb-pause-btn');
     fullscreenBtn = document.getElementById('tb-fullscreen-btn');
+    exitFullscreenBtn = document.getElementById('tb-exit-fullscreen');
 }
 
 function init() {
