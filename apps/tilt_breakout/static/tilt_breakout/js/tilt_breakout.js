@@ -40,7 +40,6 @@ const BRICK = {
 /** Roll away from the player's neutral grip that earns full paddle acceleration. */
 const TILT_FULL_DEFLECTION = 22 * DEG;
 const TILT_DEADZONE = 0.05;
-const INVERT_STORAGE_KEY = 'tiltBreakout.invert';
 
 const STARTING_LIVES = 3;
 const PHYSICS_STEP = 1 / 120;
@@ -59,7 +58,7 @@ let stageEl, canvas, ctx;
 let scoreEl, levelEl, livesEl, footnoteEl;
 let overlayEl, overlayTitle, overlayText, overlayNote, primaryBtn;
 let tiltPreviewEl, tiltMarkerEl, rotateNagEl;
-let invertBtn, pauseBtn, fullscreenBtn, exitFullscreenBtn;
+let pauseBtn, fullscreenBtn, exitFullscreenBtn;
 
 // --- runtime state ---
 let phase = Phase.SETUP;
@@ -86,7 +85,6 @@ const tilt = {
     roll: 0,
     neutral: 0,
     awaitingCalibration: false,
-    invert: false,
 };
 
 const pointer = { active: false, x: VIEW.width / 2 };
@@ -162,10 +160,7 @@ function tiltSteering() {
         return 0;
     }
     const centered = clamp((tilt.roll - tilt.neutral) / TILT_FULL_DEFLECTION, -1, 1);
-    if (Math.abs(centered) < TILT_DEADZONE) {
-        return 0;
-    }
-    return tilt.invert ? -centered : centered;
+    return Math.abs(centered) < TILT_DEADZONE ? 0 : centered;
 }
 
 function keyboardSteering() {
@@ -207,27 +202,8 @@ function calibrateTilt() {
 }
 
 function onTiltAvailable() {
-    invertBtn.hidden = false;
     tiltPreviewEl.hidden = false;
     footnoteEl.textContent = 'Tilt left and right to steer. Tap the board to launch the ball.';
-}
-
-function setInvert(value) {
-    tilt.invert = value;
-    invertBtn.classList.toggle('tb-chip-on', value);
-    try {
-        localStorage.setItem(INVERT_STORAGE_KEY, value ? '1' : '0');
-    } catch {
-        // Storage can be unavailable in private mode; the toggle still works for this session.
-    }
-}
-
-function loadInvertPreference() {
-    try {
-        setInvert(localStorage.getItem(INVERT_STORAGE_KEY) === '1');
-    } catch {
-        setInvert(false);
-    }
 }
 
 // --- level construction ---
@@ -682,7 +658,6 @@ function bindControls() {
     pauseBtn.addEventListener('click', togglePause);
     fullscreenBtn.addEventListener('click', toggleFullscreen);
     exitFullscreenBtn.addEventListener('click', exitFullscreen);
-    invertBtn.addEventListener('click', () => setInvert(!tilt.invert));
 
     canvas.addEventListener('pointerdown', (event) => {
         if (event.pointerType === 'mouse') {
@@ -760,7 +735,6 @@ function cacheDom() {
     tiltMarkerEl = document.getElementById('tb-tilt-marker');
     rotateNagEl = document.getElementById('tb-rotate-nag');
 
-    invertBtn = document.getElementById('tb-invert-btn');
     pauseBtn = document.getElementById('tb-pause-btn');
     fullscreenBtn = document.getElementById('tb-fullscreen-btn');
     exitFullscreenBtn = document.getElementById('tb-exit-fullscreen');
@@ -769,7 +743,6 @@ function cacheDom() {
 function init() {
     cacheDom();
     bindControls();
-    loadInvertPreference();
     resizeCanvas();
     updateRotateNag();
     updateHud();

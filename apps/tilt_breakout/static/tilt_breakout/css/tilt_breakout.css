@@ -58,12 +58,6 @@
     color: orange;
 }
 
-.tb-chip-on {
-    background: rgba(255, 165, 0, 0.22);
-    border-color: orange;
-    color: orange;
-}
-
 .tb-stage {
     position: relative;
     width: min(100%, (100dvh - 13rem) * 8 / 5);
