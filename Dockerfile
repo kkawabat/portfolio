@@ -56,6 +56,13 @@ USER portfolio
 
 RUN python manage.py collectstatic --noinput --verbosity=0
 
+# Stamped by CI so the live page can show exactly which commit is serving it.
+# Declared last so changing it does not invalidate any earlier build layer.
+ARG GIT_SHA=dev
+ARG BUILD_TIME=
+ENV GIT_SHA=${GIT_SHA} \
+    BUILD_TIME=${BUILD_TIME}
+
 EXPOSE ${PORT}
 
 ENTRYPOINT ["/entrypoint.sh"]

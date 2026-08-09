@@ -21,6 +21,11 @@ DEBUG = os.environ.get('DJANGO_DEBUG', 'False') == 'True'
 
 ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
 
+# Stamped into the image by the deploy workflow; shown in the page footer so it is
+# obvious from the live site which commit is serving and when it shipped.
+BUILD_SHA = os.environ.get('GIT_SHA', 'dev')
+BUILD_TIME = os.environ.get('BUILD_TIME', '')
+
 CLOUDRUN_SERVICE_URL = os.environ.get('CLOUDRUN_SERVICE_URL')
 WORKER_SERVICE_URL = os.environ.get('WORKER_SERVICE_URL')
 if CLOUDRUN_SERVICE_URL:
@@ -86,6 +91,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'apps.new_main.context_processors.build_info',
             ],
         },
     },

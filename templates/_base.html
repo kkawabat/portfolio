@@ -26,6 +26,7 @@
 </head>
 <body hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
     {% block body %}{% endblock body %}
+    {% include "_build_stamp.html" %}
     <button onclick="topFunction()" id="jumpToTopBtn" title="Go to top">Top</button>
     <script src="{% static 'js/jump_to_top_button.js' %}"></script>
 </body>

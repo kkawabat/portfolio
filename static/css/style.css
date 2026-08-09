@@ -327,16 +327,24 @@ a { color: orange; }
     margin: 0;
 }
 
-.project-card-top {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    gap: 0.5em;
+/* The date floats rather than sharing a flex row: a flex item will not shrink below
+   its longest word, so a title like "Poetry for Neanderthals" used to push the nowrap
+   date out past the card border. Floating costs one row of height in the top-right
+   corner and lets the title flow around it — the first line sits beside the date, the
+   rest use the full card width. The date is first in source order because a float only
+   wraps content that follows it. */
+.project-card-top::after {
+    content: '';
+    display: block;
+    clear: both;
 }
 
 .project-card-date {
+    float: right;
+    margin-left: 0.5em;
     color: #999;
     font-size: 0.8em;
+    line-height: 1.6;
     white-space: nowrap;
 }
 
@@ -345,4 +353,20 @@ a { color: orange; }
     color: #ccc;
     font-size: 0.85em;
     line-height: 1.4;
+}
+
+.build-stamp {
+    margin: 2em auto 1em auto;
+    text-align: center;
+    color: #666;
+    font-size: 0.75em;
+}
+
+.build-stamp a {
+    color: #888;
+    text-decoration: none;
+}
+
+.build-stamp a:hover {
+    color: orange;
 }

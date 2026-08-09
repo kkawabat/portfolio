@@ -22,10 +22,15 @@ spanning ML, audio processing, computer vision, NLP, and device sensors.
 
 - **Push directly to `main`.** This is a personal project — no feature
   branches, PRs, or review ceremony expected.
-- **There is no dev or staging environment.** Pushing to `main` triggers the
-  GitHub Actions deploy to Cloud Run, and changes are verified on the live
-  site at kankawabata.com. Don't plan on standing up a server to check work
-  before shipping it — ship it, then look at the real page.
+- **There is no dev or staging deployment.** `main` goes straight to
+  production: pushing triggers the GitHub Actions deploy to Cloud Run, and
+  changes get verified on the live site at kankawabata.com.
+- **The page footer shows a build stamp** — build time plus a link to the
+  commit that is serving. Use it to tell whether the deploy you are waiting
+  on has actually landed. It is baked into the image at build time
+  (`GIT_SHA` / `BUILD_TIME` build args in `Dockerfile`), *not* read from the
+  running process: Cloud Run scales to zero, so a process start time would
+  reset on any cold start and falsely look like a fresh deploy.
 
 ## Apps
 

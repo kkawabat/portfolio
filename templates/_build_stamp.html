@@ -1,0 +1,9 @@
+{% if build_sha and build_sha != 'dev' %}
+<p class="build-stamp">
+    updated {{ build_time }} &middot;
+    <a href="https://github.com/kkawabat/portfolio/commit/{{ build_sha }}"
+       target="_blank" rel="noopener">{{ build_sha|slice:":7" }}</a>
+</p>
+{% else %}
+<p class="build-stamp">local dev build</p>
+{% endif %}
