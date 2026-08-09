@@ -1,0 +1,61 @@
+<div id="content-details" class="content-div project">
+    <h3>Introduction</h3>
+    <p>
+        Tilt Breakout is the classic brick-breaker, steered by the physical orientation of your phone.
+        Hold the device in landscape and roll it left or right; the paddle accelerates in that direction
+        rather than snapping to a position, so it carries momentum and has to be steered into place.
+    </p>
+    <p>
+        Everything runs client-side on a <code>&lt;canvas&gt;</code> — no server round trips, no game state
+        leaves the browser.
+    </p>
+
+    <h3>Reading the tilt</h3>
+    <p>
+        The <code>deviceorientation</code> event reports the device's attitude as three Euler angles
+        (<code>alpha</code>, <code>beta</code>, <code>gamma</code>) applied in Z-X'-Y'' order. Those angles are
+        relative to the <em>device</em>, not to what you see, so they cannot be used directly: the same physical
+        motion produces different numbers in portrait and in each landscape direction.
+    </p>
+    <p>
+        Instead, the angles are converted into the direction gravity points in device coordinates,
+    </p>
+    <p class="tb-formula">
+        g = ( cos&beta;&thinsp;sin&gamma;, &nbsp;&minus;sin&beta;, &nbsp;&minus;cos&beta;&thinsp;cos&gamma; )
+    </p>
+    <p>
+        and that vector is then rotated by <code>screen.orientation.angle</code> into screen coordinates.
+        Its horizontal component is the <em>sine</em> of the screen's roll, so taking an <code>asin</code>
+        recovers the roll as a true angle. One code path then covers every orientation, and the number means
+        the same thing in all of them.
+    </p>
+    <p>
+        Using the angle rather than the raw sine matters once the reading is calibrated. The player's grip at
+        the moment they press start is captured as the neutral point and subtracted, and sines do not subtract
+        evenly: from a 30&deg; resting grip, the sine has already used up half its range, so rolling further
+        would barely register. In angle space the same 22&deg; of roll earns full paddle acceleration from any
+        starting grip.
+    </p>
+
+    <h3>Notes on the sensor APIs</h3>
+    <ul>
+        <li>iOS requires <code>DeviceOrientationEvent.requestPermission()</code>, and it must be called from
+            inside a user gesture — hence the start button.</li>
+        <li>Motion sensors are only exposed over HTTPS.</li>
+        <li>The fused <code>deviceorientation</code> angles are used rather than the raw accelerometer, because
+            they are already gravity-corrected and drift-compensated.</li>
+        <li>The Generic Sensor API (<code>Accelerometer</code>, <code>AbsoluteOrientationSensor</code>) is a nicer
+            interface but is Chromium-only, so it is not used here.</li>
+        <li>Without a motion sensor the game falls back to mouse and keyboard, so it still plays on a desktop.</li>
+    </ul>
+
+    <h3>Game details</h3>
+    <ul>
+        <li>Physics run on a fixed 120&nbsp;Hz timestep with an accumulator, so behaviour does not change with
+            display refresh rate.</li>
+        <li>The bounce angle off the paddle depends on where the ball lands along it, and the paddle's own
+            velocity adds a little spin.</li>
+        <li>Each cleared level adds a row of bricks and a little ball speed.</li>
+        <li>A Screen Wake Lock keeps the phone from dimming mid-rally.</li>
+    </ul>
+</div>

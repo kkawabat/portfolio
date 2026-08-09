@@ -1,0 +1,51 @@
+{% load static %}
+<div id="content-app" class="content-div project tb-app">
+    <div class="tb-hud">
+        <div class="tb-hud-group">
+            <span class="tb-hud-label">Score</span>
+            <span class="tb-hud-value" id="tb-score">0</span>
+        </div>
+        <div class="tb-hud-group">
+            <span class="tb-hud-label">Level</span>
+            <span class="tb-hud-value" id="tb-level">1</span>
+        </div>
+        <div class="tb-hud-group">
+            <span class="tb-hud-label">Lives</span>
+            <span class="tb-hud-value" id="tb-lives">●●●</span>
+        </div>
+        <div class="tb-hud-actions">
+            <button type="button" class="tb-chip" id="tb-invert-btn" hidden>Invert tilt</button>
+            <button type="button" class="tb-chip" id="tb-pause-btn">Pause</button>
+            <button type="button" class="tb-chip" id="tb-fullscreen-btn">Fullscreen</button>
+        </div>
+    </div>
+
+    <div class="tb-stage" id="tb-stage">
+        <canvas id="tb-canvas"></canvas>
+
+        <div class="tb-overlay" id="tb-overlay">
+            <div class="tb-overlay-card">
+                <h3 class="tb-overlay-title" id="tb-overlay-title">Tilt Breakout</h3>
+                <p class="tb-overlay-text" id="tb-overlay-text">
+                    Hold your phone in landscape and tilt left and right to steer the paddle.
+                </p>
+                <div class="tb-tilt-preview" id="tb-tilt-preview" hidden>
+                    <div class="tb-tilt-track"><div class="tb-tilt-marker" id="tb-tilt-marker"></div></div>
+                    <span class="tb-tilt-hint">Tilt to check the direction — flip it with <b>Invert tilt</b> if it feels backwards.</span>
+                </div>
+                <button type="button" class="app-button tb-overlay-btn" id="tb-primary-btn">Start</button>
+                <p class="tb-overlay-note" id="tb-overlay-note"></p>
+            </div>
+        </div>
+
+        <div class="tb-rotate-nag" id="tb-rotate-nag" hidden>
+            <span class="tb-rotate-icon">⟳</span>
+            <span>Rotate your phone to landscape</span>
+        </div>
+    </div>
+
+    <p class="tb-footnote" id="tb-footnote">
+        On a phone: tilt to steer, tap to launch. On a desktop: move the mouse or use the arrow keys,
+        space to launch, P to pause.
+    </p>
+</div>

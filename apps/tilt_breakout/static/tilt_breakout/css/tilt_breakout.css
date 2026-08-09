@@ -1,0 +1,222 @@
+#content-div:has(.tb-app) {
+    max-width: 70em;
+    gap: 0;
+}
+
+.tb-app {
+    width: 100%;
+    max-width: none;
+}
+
+.tb-hud {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.6rem;
+}
+
+.tb-hud-group {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.1;
+}
+
+.tb-hud-label {
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #8a8f9c;
+}
+
+.tb-hud-value {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: orange;
+    font-variant-numeric: tabular-nums;
+}
+
+.tb-hud-actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-left: auto;
+    flex-wrap: wrap;
+}
+
+.tb-chip {
+    background: rgba(255, 255, 255, 0.08);
+    color: #e6e8ee;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 999px;
+    padding: 0.35rem 0.9rem;
+    font-size: 0.8rem;
+    cursor: pointer;
+}
+
+.tb-chip:hover {
+    background: rgba(255, 165, 0, 0.18);
+    color: orange;
+}
+
+.tb-chip-on {
+    background: rgba(255, 165, 0, 0.22);
+    border-color: orange;
+    color: orange;
+}
+
+.tb-stage {
+    position: relative;
+    width: min(100%, (100dvh - 13rem) * 8 / 5);
+    aspect-ratio: 8 / 5;
+    margin: 0 auto;
+    border-radius: 10px;
+    overflow: hidden;
+    background: #12131a;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+}
+
+.tb-stage:fullscreen {
+    width: 100%;
+    height: 100%;
+    aspect-ratio: auto;
+    border-radius: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.tb-stage:fullscreen #tb-canvas {
+    width: min(100%, 100vh * 8 / 5);
+    height: auto;
+    aspect-ratio: 8 / 5;
+}
+
+#tb-canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+    touch-action: none;
+}
+
+.tb-overlay {
+    position: absolute;
+    inset: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    background: rgba(10, 11, 16, 0.78);
+    backdrop-filter: blur(3px);
+    z-index: 3;
+    /* Let taps fall through to the canvas so "tap to launch" works while this is up;
+       only the button itself needs to catch them. */
+    pointer-events: none;
+}
+
+.tb-overlay-visible {
+    display: flex;
+}
+
+.tb-overlay-card {
+    text-align: center;
+    max-width: 32em;
+}
+
+.tb-overlay-title {
+    color: orange;
+    margin-bottom: 0.5rem;
+}
+
+.tb-overlay-text {
+    color: #d7dae2;
+    margin-bottom: 0.75rem;
+}
+
+.tb-overlay-note {
+    color: #9aa0ad;
+    font-size: 0.85rem;
+    margin: 0.5rem 0 0 0;
+}
+
+.tb-overlay-btn {
+    margin: 0.5rem auto 0 auto;
+    pointer-events: auto;
+}
+
+.tb-tilt-preview {
+    margin: 0.75rem auto 0.25rem auto;
+    max-width: 20em;
+}
+
+.tb-tilt-track {
+    position: relative;
+    height: 8px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.12);
+    overflow: hidden;
+}
+
+.tb-tilt-marker {
+    position: absolute;
+    left: calc(50% - 12px);
+    top: 0;
+    width: 24px;
+    height: 100%;
+    border-radius: 999px;
+    background: orange;
+    transition: transform 60ms linear;
+}
+
+.tb-tilt-hint {
+    display: block;
+    margin-top: 0.5rem;
+    font-size: 0.8rem;
+    color: #9aa0ad;
+}
+
+.tb-rotate-nag {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    background: rgba(10, 11, 16, 0.92);
+    color: #d7dae2;
+    text-align: center;
+    padding: 1rem;
+    z-index: 4;
+}
+
+.tb-rotate-icon {
+    font-size: 2.5rem;
+    color: orange;
+}
+
+.tb-footnote {
+    color: #8a8f9c;
+    font-size: 0.85rem;
+    text-align: center;
+    margin: 0.75rem auto 0 auto;
+    max-width: 42em;
+}
+
+.tb-formula {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    text-align: center;
+    color: orange;
+    margin: 0.75rem 0;
+}
+
+@media (max-width: 600px) {
+    .tb-hud {
+        gap: 1rem;
+    }
+
+    .tb-hud-actions {
+        width: 100%;
+        margin-left: 0;
+        justify-content: center;
+    }
+}

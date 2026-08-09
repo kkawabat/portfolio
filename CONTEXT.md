@@ -1,8 +1,8 @@
 # Portfolio — Kan Kawabata
 
 Personal portfolio and interactive project showcase at kankawabata.com.
-A Django monolith serving server-rendered pages with 10 interactive demos
-spanning ML, audio processing, computer vision, and NLP.
+A Django monolith serving server-rendered pages with 11 interactive demos
+spanning ML, audio processing, computer vision, NLP, and device sensors.
 
 ## Architecture
 
@@ -17,6 +17,15 @@ spanning ML, audio processing, computer vision, and NLP.
 - **Domain:** kankawabata.com (registrar: Namecheap, DNS pointed to Cloud Run)
 - **Container registry:** GCP Artifact Registry
 - **CI/CD auth:** Workload Identity Federation (no long-lived keys)
+
+## Development workflow
+
+- **Push directly to `main`.** This is a personal project — no feature
+  branches, PRs, or review ceremony expected.
+- **There is no dev or staging environment.** Pushing to `main` triggers the
+  GitHub Actions deploy to Cloud Run, and changes are verified on the live
+  site at kankawabata.com. Don't plan on standing up a server to check work
+  before shipping it — ship it, then look at the real page.
 
 ## Apps
 
@@ -35,6 +44,8 @@ templates, and static assets:
 | `web_soundboard` | Interactive soundboard | — |
 | `chat_highlights` | YouTube chat highlight parser | YouTube API, pandas |
 | `eliza_parser` | ELIZA chatbot | — |
+| `you_laugh_you_lose` | Keep-a-straight-face challenge scored by webcam | MediaPipe, YouTube IFrame API |
+| `tilt_breakout` | Brick breaker steered by phone tilt | DeviceOrientation, canvas |
 
 ## External services
 

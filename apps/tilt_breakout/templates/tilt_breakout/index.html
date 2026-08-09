@@ -1,0 +1,19 @@
+{% extends "project_base.html" %}
+{% load static %}
+{% block title %}Tilt Breakout{% endblock title %}
+{% block ref %}
+<link rel="stylesheet" type="text/css" href="{% static 'tilt_breakout/css/tilt_breakout.css' %}">
+{% endblock ref %}
+
+{% block body %}
+<div class="project-div fade-in-right">
+    <div id="content-div">
+        {% include "tilt_breakout/app.html" %}
+    </div>
+</div>
+<script type="module" src="{% static 'tilt_breakout/js/tilt_breakout.js' %}"></script>
+{% endblock body %}
+
+{% block project_about %}
+{% include "tilt_breakout/details.html" %}
+{% endblock project_about %}

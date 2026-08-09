@@ -14,6 +14,12 @@ from django.conf import settings
 # Entries without one are Django apps in this repo, resolved via their slug.
 PROJECTS = [
     {
+        'title': 'Tilt Breakout',
+        'description': 'Brick breaker steered by tilting your phone — device orientation drives the paddle.',
+        'date': datetime(2026, 8, 9),
+        'slug': 'tilt-breakout'
+    },
+    {
         'title': 'You Laugh You Lose',
         'description': 'Try not to laugh while watching a YouTube video — your webcam scores every break.',
         'date': datetime(2026, 8, 2),

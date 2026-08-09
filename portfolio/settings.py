@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'apps.speech_transcriber',
     'apps.webcam_ruler',
     'apps.you_laugh_you_lose',
+    'apps.tilt_breakout',
     'apps.voice_stripper',
     'apps.web_soundboard',
     'apps.chat_highlights',
