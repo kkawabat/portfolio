@@ -7,7 +7,18 @@ import mistune
 import os
 import re
 
-from .projects_config import get_projects, get_blogs, get_blog_posts_dir
+from .projects_config import get_projects, get_blogs, get_blog_posts_dir, get_project_tags
+
+
+def _homepage_context(anchor=None):
+    context = {
+        'blogs': get_blogs(),
+        'projects': get_projects(),
+        'project_tags': get_project_tags(),
+    }
+    if anchor:
+        context['anchor'] = anchor
+    return context
 
 
 def favicon(_):
@@ -17,34 +28,19 @@ def favicon(_):
 
 
 def main_view(request):
-    blog_list = get_blogs()
-    project_list = get_projects()
-    return render(request, 'new_main/index.html', context={'blogs': blog_list,
-                                                           'projects': project_list})
+    return render(request, 'new_main/index.html', context=_homepage_context())
 
 
 def about_view(request):
-    blog_list = get_blogs()
-    project_list = get_projects()
-    return render(request, 'new_main/index.html', context={'blogs': blog_list,
-                                                           'projects': project_list,
-                                                           'anchor': 'about'})
+    return render(request, 'new_main/index.html', context=_homepage_context('about'))
 
 
 def projects_view(request):
-    blog_list = get_blogs()
-    project_list = get_projects()
-    return render(request, 'new_main/index.html', context={'blogs': blog_list,
-                                                           'projects': project_list,
-                                                           'anchor': 'projects'})
+    return render(request, 'new_main/index.html', context=_homepage_context('projects'))
 
 
 def blogs_view(request):
-    blog_list = get_blogs()
-    project_list = get_projects()
-    return render(request, 'new_main/index.html', context={'blogs': blog_list,
-                                                           'projects': project_list,
-                                                           'anchor': 'blogs'})
+    return render(request, 'new_main/index.html', context=_homepage_context('blogs'))
 
 
 def blog_post_view(request, slug_id):
@@ -76,11 +72,7 @@ def blog_post_view(request, slug_id):
 
 
 def contacts_view(request):
-    blog_list = get_blogs()
-    project_list = get_projects()
-    return render(request, 'new_main/index.html', context={'blogs': blog_list,
-                                                           'projects': project_list,
-                                                           'anchor': 'contacts'})
+    return render(request, 'new_main/index.html', context=_homepage_context('contacts'))
 
 
 def cv_pdf(_):
@@ -102,8 +94,4 @@ def project_post_view(_, slug_id):
 
 
 def socials_view(request):
-    blog_list = get_blogs()
-    project_list = get_projects()
-    return render(request, 'new_main/index.html', context={'blogs': blog_list,
-                                                           'projects': project_list,
-                                                           'anchor': 'socials'})
+    return render(request, 'new_main/index.html', context=_homepage_context('socials'))

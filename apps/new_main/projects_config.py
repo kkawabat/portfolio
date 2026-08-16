@@ -12,18 +12,29 @@ from django.conf import settings
 # Entries with a 'url' field live outside this repo (e.g. GitHub Pages games
 # under games.kankawabata.com); their cards link straight to that URL.
 # Entries without one are Django apps in this repo, resolved via their slug.
+# tags: a project may have several; the My Projects tab filters by union.
+PROJECT_TAG_ORDER = ('game', 'visual', 'audio', 'text')
+PROJECT_TAG_LABELS = {
+    'game': 'Games',
+    'visual': 'Visual',
+    'audio': 'Audio',
+    'text': 'Text',
+}
+
 PROJECTS = [
     {
         'title': 'Tilt Breakout',
         'description': 'Brick breaker steered by tilting your phone — device orientation drives the paddle.',
         'date': datetime(2026, 8, 9),
-        'slug': 'tilt-breakout'
+        'slug': 'tilt-breakout',
+        'tags': ['game', 'visual'],
     },
     {
         'title': 'You Laugh You Lose',
         'description': 'Try not to laugh while watching a YouTube video — your webcam scores every break.',
         'date': datetime(2026, 8, 2),
-        'slug': 'you-laugh-you-lose'
+        'slug': 'you-laugh-you-lose',
+        'tags': ['game', 'visual'],
     },
     {
         'title': 'GameWork',
@@ -31,6 +42,7 @@ PROJECTS = [
         'date': datetime(2025, 9, 2),
         'slug': 'gamework',
         'url': 'https://games.kankawabata.com/gamework/',
+        'tags': ['game'],
     },
     {
         'title': 'Poetry for Neanderthals',
@@ -38,6 +50,7 @@ PROJECTS = [
         'date': datetime(2025, 8, 30),
         'slug': 'poetry-for-neanderthals',
         'url': 'https://games.kankawabata.com/poetry_for_neanderthals/',
+        'tags': ['game', 'text'],
     },
     {
         'title': 'Monikers',
@@ -45,6 +58,7 @@ PROJECTS = [
         'date': datetime(2025, 8, 17),
         'slug': 'moniker',
         'url': 'https://games.kankawabata.com/Moniker/',
+        'tags': ['game', 'text'],
     },
     {
         'title': 'Mora Jai Box',
@@ -52,66 +66,86 @@ PROJECTS = [
         'date': datetime(2025, 5, 11),
         'slug': 'mora-jai-box',
         'url': 'https://games.kankawabata.com/MoraJaiBox/',
+        'tags': ['game', 'visual'],
     },
     {
         'title': 'Voice Stripper',
         'description': 'Remove vocals from audio tracks using audio processing.',
         'date': datetime(2024, 6, 23),
-        'slug': 'voice-stripper'
+        'slug': 'voice-stripper',
+        'tags': ['audio'],
     },
     {
         'title': 'ELIZA Parser',
         'description': 'Modern web implementation of the classic ELIZA chatbot.',
         'date': datetime(2024, 5, 29),
-        'slug': 'eliza-parser'
+        'slug': 'eliza-parser',
+        'tags': ['text'],
     },
     {
         'title': 'Speech Transcriber',
         'description': 'Web-based speech-to-text with audio visualization and editing.',
         'date': datetime(2023, 9, 4),
-        'slug': 'speech-transcriber'
+        'slug': 'speech-transcriber',
+        'tags': ['audio', 'text'],
     },
     {
         'title': 'Chat Highlights Parser',
         'description': 'Parse chat logs to extract highlights and interesting moments.',
         'date': datetime(2023, 8, 20),
-        'slug': 'chat-highlights'
+        'slug': 'chat-highlights',
+        'tags': ['text'],
     },
     {
         'title': 'Web Soundboard',
         'description': 'Interactive soundboard for playing sound effects and music clips.',
         'date': datetime(2023, 8, 19),
-        'slug': 'web-soundboard'
+        'slug': 'web-soundboard',
+        'tags': ['audio'],
     },
     {
         'title': 'Webcam Ruler',
         'description': 'Measure objects using your webcam with computer vision.',
         'date': datetime(2023, 8, 15),
-        'slug': 'webcam-ruler'
+        'slug': 'webcam-ruler',
+        'tags': ['visual'],
     },
     {
         'title': 'Whistle Detector',
         'description': 'Machine learning application that detects whistle sounds in audio recordings.',
         'date': datetime(2023, 8, 13),
-        'slug': 'whistle-detector'
+        'slug': 'whistle-detector',
+        'tags': ['audio'],
     },
     {
         'title': 'Magic Eye Generator',
         'description': 'Create Magic Eye (autostereogram) images interactively.',
         'date': datetime(2022, 1, 1),
-        'slug': 'magic-eye-app'
+        'slug': 'magic-eye-app',
+        'tags': ['visual'],
     },
     {
         'title': 'Morse Code Translator',
         'description': 'Morse code translator with audio generation and learning tools.',
         'date': datetime(2020, 1, 1),
-        'slug': 'morse-code-app'
+        'slug': 'morse-code-app',
+        'tags': ['audio', 'text'],
     },
 ]
 
 def get_projects():
     """Get all projects, newest first."""
     return sorted(PROJECTS, key=lambda x: x.get('date', datetime.min), reverse=True)
+
+
+def get_project_tags():
+    """Filter buttons for the projects tab, in display order, omitting unused tags."""
+    used = {tag for project in PROJECTS for tag in project.get('tags', [])}
+    return [
+        {'id': tag, 'label': PROJECT_TAG_LABELS[tag]}
+        for tag in PROJECT_TAG_ORDER
+        if tag in used
+    ]
 
 def get_blog_posts_dir():
     """Folder of markdown blog posts at the repo root."""

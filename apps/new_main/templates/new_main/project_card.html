@@ -1,0 +1,7 @@
+<a class="project-card" href="{% if project.url %}{{ project.url }}{% else %}{% url 'project_post' slug_id=project.slug %}{% endif %}" data-tags="{{ project.tags|join:' ' }}">
+    <div class="project-card-top">
+        <span class="project-card-date">{{ project.date|date:"M Y" }}</span>
+        <h3>{{ project.title }}</h3>
+    </div>
+    <p class="project-card-desc">{{ project.description }}</p>
+</a>

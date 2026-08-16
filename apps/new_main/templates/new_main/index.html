@@ -7,6 +7,7 @@
 
 <link rel="stylesheet" type="text/css" href="{% static 'new_main/css/style.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'new_main/css/animations.css' %}">
+<script src="{% static 'new_main/js/project_filters.js' %}"></script>
 
 {% endblock ref %}
 
@@ -47,6 +48,10 @@
     {% if anchor %}
         headerSelected("#header-{{anchor}}", '#header-div1');
         ContentSelection("#content-{{anchor}}", true);
+        if (window.location.hash) {
+            var hashTarget = document.querySelector(window.location.hash);
+            if (hashTarget) { hashTarget.scrollIntoView(); }
+        }
     {% endif %}
 
     function skip_animations() {

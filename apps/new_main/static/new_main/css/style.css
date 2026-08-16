@@ -24,6 +24,37 @@
     text-align: center;
 }
 
+.project-filters {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.4em;
+    margin: 0.75em 0 0.25em 0;
+}
+
+.project-filter-btn {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: #aaa;
+    font-family: inherit;
+    font-size: 0.85rem;
+    padding: 0.4rem 0.85rem;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.project-filter-btn:hover,
+.project-filter-btn:focus {
+    color: #fff;
+    border-color: rgba(255, 255, 255, 0.35);
+}
+
+.project-filter-btn.active {
+    background: rgba(255, 165, 0, 0.15);
+    border-color: orange;
+    color: orange;
+}
+
 #header-div2 { flex-direction: column; }
 
 .fab {

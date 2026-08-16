@@ -35,7 +35,16 @@ spanning ML, audio processing, computer vision, NLP, and device sensors.
 ## Apps
 
 Each app in `apps/` is a self-contained Django app with its own views,
-templates, and static assets:
+templates, and static assets. GameWork multiplayer titles are **not** apps
+here — they live as demos in the gamework repo and appear on the homepage
+only as external cards (`url` in `projects_config.py`). Each card has one or
+more **tags** (`game`, `visual`, `audio`, `text`). The My Projects tab is a
+single grid; category buttons at the top filter it by union (All is the
+default). `/projects#games` selects Games so GameWork can deep-link here.
+
+Put a new idea in this repo when it needs Python, a server, or is a
+single-player page with no GameWork session (Tilt Breakout). A new WebRTC
+multiplayer idea goes in `gamework/examples/`.
 
 | App | What it does | Notable deps |
 |-----|-------------|--------------|
