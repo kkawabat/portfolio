@@ -58,10 +58,12 @@ let stageEl, canvas, ctx;
 let scoreEl, levelEl, livesEl, footnoteEl;
 let overlayEl, overlayTitle, overlayText, overlayNote, primaryBtn;
 let tiltPreviewEl, tiltMarkerEl, rotateNagEl;
-let pauseBtn, fullscreenBtn, exitFullscreenBtn;
+let pauseBtn, relevelBtn, fullscreenBtn, exitFullscreenBtn;
 
 // --- runtime state ---
 let phase = Phase.SETUP;
+let pausedFrom = null;
+let releveling = false;
 let renderScale = 1;
 let animationFrameId = null;
 let lastFrameTime = 0;
@@ -268,6 +270,7 @@ function startGame() {
     paddle.velocity = 0;
     buildLevel(level);
     updateHud();
+    relevelBtn.hidden = false;
     serveBall();
 }
 
@@ -410,6 +413,7 @@ function loseLife() {
     releaseWakeLock();
     if (lives <= 0) {
         phase = Phase.GAME_OVER;
+        relevelBtn.hidden = true;
         showOverlay({
             title: 'Game over',
             text: `You scored ${score} on level ${level}.`,
@@ -581,18 +585,66 @@ function updateRotateNag() {
 }
 
 function togglePause() {
-    if (phase === Phase.PLAYING) {
+    if (phase === Phase.PLAYING || phase === Phase.SERVING) {
+        pausedFrom = phase;
         phase = Phase.PAUSED;
+        releveling = false;
         releaseWakeLock();
         showOverlay({ title: 'Paused', text: 'Take a breath.', button: 'Resume' });
+    } else if (phase === Phase.PAUSED && releveling) {
+        releveling = false;
+        showOverlay({ title: 'Paused', text: 'Take a breath.', button: 'Resume' });
     } else if (phase === Phase.PAUSED) {
-        phase = Phase.PLAYING;
-        hideOverlay();
-        requestWakeLock();
+        resumeFromPause();
     }
 }
 
+function resumeFromPause() {
+    phase = pausedFrom || Phase.PLAYING;
+    pausedFrom = null;
+    releveling = false;
+    hideOverlay();
+    if (phase === Phase.PLAYING) {
+        requestWakeLock();
+    } else if (phase === Phase.SERVING) {
+        showOverlay({
+            title: 'Ready',
+            text: isTouchDevice() ? 'Tap to launch' : 'Press space or click to launch',
+            button: null,
+        });
+    }
+}
+
+function beginRelevel() {
+    if (phase === Phase.SETUP || phase === Phase.GAME_OVER) {
+        return;
+    }
+    if (phase === Phase.PLAYING || phase === Phase.SERVING) {
+        pausedFrom = phase;
+        phase = Phase.PAUSED;
+        releaseWakeLock();
+    }
+    releveling = true;
+    if (tilt.supported) {
+        tiltPreviewEl.hidden = false;
+    }
+    showOverlay({
+        title: 'Relevel',
+        text: 'Hold the phone however is comfortable, then tap Level.',
+        button: 'Level',
+    });
+}
+
+function confirmRelevel() {
+    calibrateTilt();
+    resumeFromPause();
+}
+
 async function onPrimaryButton() {
+    if (phase === Phase.PAUSED && releveling) {
+        confirmRelevel();
+        return;
+    }
     if (phase === Phase.PAUSED) {
         togglePause();
         return;
@@ -656,6 +708,7 @@ function canvasPointerX(event) {
 function bindControls() {
     primaryBtn.addEventListener('click', onPrimaryButton);
     pauseBtn.addEventListener('click', togglePause);
+    relevelBtn.addEventListener('click', beginRelevel);
     fullscreenBtn.addEventListener('click', toggleFullscreen);
     exitFullscreenBtn.addEventListener('click', exitFullscreen);
 
@@ -736,6 +789,7 @@ function cacheDom() {
     rotateNagEl = document.getElementById('tb-rotate-nag');
 
     pauseBtn = document.getElementById('tb-pause-btn');
+    relevelBtn = document.getElementById('tb-relevel-btn');
     fullscreenBtn = document.getElementById('tb-fullscreen-btn');
     exitFullscreenBtn = document.getElementById('tb-exit-fullscreen');
 }
@@ -757,6 +811,7 @@ function init() {
     }
 
     overlayEl.classList.add('tb-overlay-visible');
+    relevelBtn.hidden = true;
     lastFrameTime = performance.now();
     animationFrameId = requestAnimationFrame(frame);
 }
