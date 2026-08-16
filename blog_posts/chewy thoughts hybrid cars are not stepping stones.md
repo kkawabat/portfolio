@@ -1,8 +1,8 @@
 | Aug 16, 2026
 
-# Chewy thoughts: hybrid cars are not a stepping stone
+# Chewy thoughts: hybrid cars are not stepping stones
 
-When people argue about cars they usually pick a side: internal combustion or electric. Hybrids barely show up. I think that is a category error. For a lot of driving, on the roads and fueling networks we actually have, a hybrid is not a timid midpoint on the way to a battery car. It is not a stepping stone. It is the better car.
+When people argue about cars they usually pick a side: internal combustion or electric. Hybrids barely show up. I think that is a category error. For a lot of driving, on the roads and fueling networks we actually have, hybrid cars are not stepping stones on the way to a battery car. They are the better car.
 
 I mean two different machines, and mixing them is how the argument gets sloppy. A self-charging hybrid (HEV) never plugs in. Its battery is a working buffer: it recaptures braking, covers the engine's worst moments, and lets the engine shut off in traffic. A plug-in hybrid (PHEV) adds a much bigger battery and a cord. Most weekdays can be electric. A long day still ends at a gas pump. I have a charger and solar, so the PHEV is the car I am actually describing when I say this is not a layover. The HEV is the version that still wins if you never plug anything in. Those can both be right without being the same claim.
 

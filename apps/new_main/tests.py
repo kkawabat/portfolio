@@ -81,10 +81,10 @@ class BlogPostTests(TestCase):
 
     def test_hybrid_post_is_listed_with_created_date(self):
         blogs = {blog['slug']: blog for blog in get_blogs()}
-        hybrid = blogs['chewy-thoughts-hybrid-cars-are-not-a-stepping-stone']
+        hybrid = blogs['chewy-thoughts-hybrid-cars-are-not-stepping-stones']
         self.assertEqual(
             hybrid['title'],
-            'Chewy thoughts: hybrid cars are not a stepping stone',
+            'Chewy thoughts: hybrid cars are not stepping stones',
         )
         self.assertEqual(hybrid['date'], datetime(2026, 8, 16))
         self.assertNotIn('updated', hybrid)
