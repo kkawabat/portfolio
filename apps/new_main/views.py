@@ -45,30 +45,28 @@ def blogs_view(request):
 
 def blog_post_view(request, slug_id):
     """Render a markdown blog post from the blog_posts folder."""
-    # Convert slug back to filename
-    filename = slug_id.replace('-', ' ') + '.md'
+    blog = next((b for b in get_blogs() if b['slug'] == slug_id), None)
+    if not blog:
+        return HttpResponseNotFound(f"Blog post '{slug_id}' not found")
 
     blog_posts_dir = get_blog_posts_dir()
+    with open(os.path.join(blog_posts_dir, blog['filename']), encoding='utf-8') as f:
+        text = f.read()
 
-    # Try to find the file (case insensitive)
-    for file in os.listdir(blog_posts_dir):
-        if file.lower() == filename.lower():
-            with open(os.path.join(blog_posts_dir, file), encoding='utf-8') as f:
-                text = f.read()
+    # Pull out the "| Aug 15, 2023" date line so it can be styled
+    date = ''
+    date_match = re.search(r'^\|\s*(.+?)\s*$', text, re.MULTILINE)
+    if date_match:
+        date = date_match.group(1)
+        text = text.replace(date_match.group(0), '', 1)
 
-            # Pull out the "| Aug 15, 2023" date line so it can be styled
-            date = ''
-            date_match = re.search(r'^\|\s*(.+?)\s*$', text, re.MULTILINE)
-            if date_match:
-                date = date_match.group(1)
-                text = text.replace(date_match.group(0), '', 1)
+    # The H1 is the page title (already in blog['title']); don't render it twice
+    text = re.sub(r'^#\s+.+\n?', '', text.lstrip(), count=1)
 
-            return render(request, 'new_main/blog_post.html',
-                          context={'title': file[:-len('.md')],
-                                   'date': date,
-                                   'content': mistune.html(text)})
-
-    return HttpResponseNotFound(f"Blog post '{slug_id}' not found")
+    return render(request, 'new_main/blog_post.html',
+                  context={'title': blog['title'],
+                           'date': date,
+                           'content': mistune.html(text)})
 
 
 def contacts_view(request):

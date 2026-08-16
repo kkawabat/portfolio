@@ -187,22 +187,22 @@ def _extract_blog_info(filename, blog_posts_dir):
         with open(file_path, 'r', encoding='utf-8') as f:
             content = f.read()
         
-        # Extract title from filename (remove .md and convert to title case)
-        title = filename.replace('.md', '').replace('_', ' ').title()
-        
+        # Prefer a markdown H1 so titles can include punctuation (e.g. "Chewy thoughts: ...")
+        h1_match = re.search(r'^#\s+(.+)$', content, re.MULTILINE)
+        if h1_match:
+            title = h1_match.group(1).strip()
+        else:
+            title = filename.replace('.md', '').replace('_', ' ').title()
+
         # Try to extract date from content
         date_match = re.search(r'\| (\w+ \d+, \d+)', content)
         date_str = date_match.group(1) if date_match else None
 
         description = _extract_description(content)
 
-        # Create URL slug from filename
-        url_slug = filename.replace('.md', '').replace(' ', '-').lower()
-        # Ensure slug is not empty and contains valid characters
-        if not url_slug or not re.match(r'^[-a-zA-Z0-9_]+$', url_slug):
-            # Fallback: create a simple slug from the title
-            url_slug = re.sub(r'[^a-zA-Z0-9_-]', '-', title.lower())
-            url_slug = re.sub(r'-+', '-', url_slug).strip('-')
+        # Slug from filename; strip characters that are illegal in URLs
+        url_slug = re.sub(r'[^a-zA-Z0-9_-]', '-', filename.replace('.md', '').lower())
+        url_slug = re.sub(r'-+', '-', url_slug).strip('-')
         
         blog_info = {
             'title': title,
