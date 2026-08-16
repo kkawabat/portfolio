@@ -52,18 +52,9 @@ To add a new project:
 
 ## Adding Blog Posts
 
-Blog posts are now **automatically loaded** from the `blog_posts` folder! Just:
-
-1. **Create HTML file** in `apps/new_main/templates/blog_posts/`
-2. **Name it descriptively** (e.g., `My Blog Post Title.html`)
-3. **Include a date** in the format `| Aug 15, 2023` somewhere in the content
-4. **That's it!** The system will automatically:
-   - Extract the title from the filename
-   - Extract the date from the content
-   - Generate a URL slug
-   - Create a description from the first paragraph
-
-Example blog post file: `How to get started on web development for layman.html`
+Blog posts are markdown files in `blog_posts/` at the repo root. See
+[`blog_posts/README.md`](../blog_posts/README.md) for the file format
+(created/updated dates, H1 title, slug from filename).
 
 ## Benefits
 

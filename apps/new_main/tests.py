@@ -1,7 +1,16 @@
+from datetime import datetime
+
 from django.test import TestCase
 from django.urls import reverse
 
-from .projects_config import get_projects, get_project_tags
+from .projects_config import (
+    format_blog_date_display,
+    get_blogs,
+    get_project_tags,
+    get_projects,
+    parse_blog_dates,
+    strip_blog_date_lines,
+)
 
 
 class ProjectTagTests(TestCase):
@@ -27,3 +36,63 @@ class ProjectTagTests(TestCase):
         self.assertContains(response, 'Tilt Breakout')
         self.assertContains(response, 'Voice Stripper')
         self.assertNotContains(response, 'Other projects')
+
+
+class BlogPostTests(TestCase):
+    def test_readme_is_not_a_blog(self):
+        slugs = [blog['slug'] for blog in get_blogs()]
+        self.assertNotIn('readme', slugs)
+
+    def test_created_only_date_line(self):
+        dates = parse_blog_dates('| Aug 15, 2026\n\n# Title\n\nHello.\n')
+        self.assertEqual(dates['created'], datetime(2026, 8, 15))
+        self.assertIsNone(dates['updated'])
+        self.assertEqual(format_blog_date_display(dates), 'Aug 15, 2026')
+
+    def test_created_and_updated_date_lines(self):
+        dates = parse_blog_dates(
+            '| Aug 16, 2026\n| updated Aug 20, 2026\n\n# Title\n\nHello.\n'
+        )
+        self.assertEqual(dates['created'], datetime(2026, 8, 16))
+        self.assertEqual(dates['updated'], datetime(2026, 8, 20))
+        self.assertEqual(
+            format_blog_date_display(dates),
+            'Aug 16, 2026 · updated Aug 20, 2026',
+        )
+
+    def test_date_lines_are_stripped_from_the_body(self):
+        body = strip_blog_date_lines(
+            '| Aug 16, 2026\n| updated Aug 20, 2026\n\n# Title\n\nHello.\n'
+        )
+        self.assertEqual(body, '# Title\n\nHello.\n')
+
+    def test_later_table_rows_are_not_dates(self):
+        dates = parse_blog_dates(
+            '| Aug 16, 2026\n\n# Title\n\n| Jan 1, 2020 | not a date |\n'
+        )
+        self.assertEqual(dates['created'], datetime(2026, 8, 16))
+        self.assertIsNone(dates['updated'])
+
+    def test_existing_posts_have_created_dates_and_no_updated(self):
+        blogs = {blog['slug']: blog for blog in get_blogs()}
+        birth = blogs['chewy-thoughts-birth-rate-is-a-leisure-problem']
+        self.assertEqual(birth['date'], datetime(2026, 8, 15))
+        self.assertNotIn('updated', birth)
+
+    def test_hybrid_post_is_listed_with_created_date(self):
+        blogs = {blog['slug']: blog for blog in get_blogs()}
+        hybrid = blogs['chewy-thoughts-hybrid-cars-are-not-a-stepping-stone']
+        self.assertEqual(
+            hybrid['title'],
+            'Chewy thoughts: hybrid cars are not a stepping stone',
+        )
+        self.assertEqual(hybrid['date'], datetime(2026, 8, 16))
+        self.assertNotIn('updated', hybrid)
+
+    def test_birth_rate_post_page_shows_created_date(self):
+        response = self.client.get(
+            reverse('blog_post', args=['chewy-thoughts-birth-rate-is-a-leisure-problem'])
+        )
+        self.assertContains(response, '| Aug 15, 2026')
+        self.assertNotContains(response, 'updated')
+        self.assertNotContains(response, 'README')
