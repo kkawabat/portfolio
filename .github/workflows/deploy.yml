@@ -68,6 +68,7 @@ jobs:
             gcloud run deploy "$1" \
               --image "$2" \
               --region "${{ env.REGION }}" \
+              --cpu-throttling \
               --update-labels "managed-by=github-actions,commit-sha=${{ github.sha }}" \
               --quiet
           }

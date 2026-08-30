@@ -1,6 +1,7 @@
-# Keepalive ping so the main site rarely serves a cold start. With Cloud Run's
-# default request-based billing, a warm-but-idle instance costs nothing; this
-# only pays for ~1s of request time per ping.
+# Keepalive ping so the main site rarely serves a cold start. This only stays
+# cheap if Cloud Run is request-based (`cpu_idle = true` on the service): a
+# warm-but-idle instance then costs nothing, and we pay ~1s of request time
+# per ping. Instance-based billing (the v2 API default) bills 2 vCPU 24/7.
 resource "google_cloud_scheduler_job" "portfolio_keepalive" {
   name             = "portfolio-keepalive"
   description      = "Ping the portfolio site every 10 minutes to keep a Cloud Run instance warm"

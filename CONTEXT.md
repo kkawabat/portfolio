@@ -14,6 +14,9 @@ spanning ML, audio processing, computer vision, NLP, and device sensors.
 - **WebSockets:** Django Channels with Daphne (webcam_ruler, morse_code)
 - **Deployment:** Cloud Run on GCP, deployed via GitHub Actions
 - **Infrastructure:** Terraform in `infra/`
+- **Cloud Run billing:** request-based (`cpu_idle = true`). The v2 API defaults
+  the other way (instance-based), which with keepalive billed ~$5/day. CI
+  deploys pass `--cpu-throttling` so a later `gcloud run deploy` cannot revert it.
 - **Domain:** kankawabata.com (registrar: Namecheap, DNS pointed to Cloud Run)
 - **Container registry:** GCP Artifact Registry
 - **CI/CD auth:** Workload Identity Federation (no long-lived keys)
