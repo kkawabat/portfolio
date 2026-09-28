@@ -1,8 +1,10 @@
-from django.http import HttpResponse, JsonResponse
+from django.http import JsonResponse
 from django.shortcuts import render
 from django.template.loader import render_to_string
+from django.views.decorators.http import require_POST
 
 from apps.speech_transcriber.business_logic import upload_audio_to_s3, transcribe_file, processes_transcript, fetch_transcript
+from portfolio.hardening import MAX_AUDIO_BYTES, limit_body, ratelimit
 
 
 def index_view(request):
@@ -38,9 +40,17 @@ def sample_transcript_view(request):
     return render(request, "speech_transcriber/sample_transcript_view.html", context=processed_results)
 
 
+@require_POST
+@ratelimit('3/h')
+@limit_body(MAX_AUDIO_BYTES)
 def submit_audio(request):
+    audio = request.FILES.get('audioBlob')
+    if audio is None:
+        return JsonResponse({'error': 'No audio uploaded.'}, status=400)
+    if audio.size > MAX_AUDIO_BYTES:
+        return JsonResponse({'error': 'Audio is too large (max 4 MB).'}, status=413)
     try:
-        file_uri = upload_audio_to_s3(request.FILES['audioBlob'])
+        file_uri = upload_audio_to_s3(audio)
         transcript_uri = transcribe_file(file_uri)
         t = fetch_transcript(transcript_uri)
         result = processes_transcript(t)

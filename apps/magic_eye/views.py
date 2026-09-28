@@ -4,8 +4,11 @@ import io
 from PIL import Image
 from django.http import JsonResponse
 from django.shortcuts import render
+from django.views.decorators.http import require_POST
 from magic_eye_util.magic_eye_decoder import decode_magic_eye
 from magic_eye_util.magic_eye_generator import generate_magic_eye
+
+from portfolio.hardening import MAX_IMAGE_BYTES, limit_body, ratelimit
 
 
 def magic_eye_view(request):
@@ -16,6 +19,9 @@ def magic_eye_decode_page_view(request):
     return render(request, 'magic_eye/index.html', context={'anchor': 'deconstruct'})
 
 
+@require_POST
+@ratelimit('30/h')
+@limit_body(MAX_IMAGE_BYTES)
 def magic_eye_decode_view(request):
     try:
         file = request.FILES.get('input_image')
@@ -33,6 +39,9 @@ def magic_eye_generate_page_view(request):
     return render(request, 'magic_eye/index.html', context={'anchor': 'construct'})
 
 
+@require_POST
+@ratelimit('30/h')
+@limit_body(MAX_IMAGE_BYTES)
 def magic_eye_generate_view(request):
     try:
         t_file = request.FILES.get('texture')

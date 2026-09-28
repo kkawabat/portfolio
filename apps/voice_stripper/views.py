@@ -2,7 +2,9 @@ import json
 
 from django.http import JsonResponse
 from django.shortcuts import render
+from django.views.decorators.http import require_POST
 
+from portfolio.hardening import ratelimit
 from portfolio.worker_client import call_worker, worker_available
 
 
@@ -18,6 +20,8 @@ def app_view(request):
     return render(request, "voice_stripper/index.html", context={'anchor': 'app'})
 
 
+@require_POST
+@ratelimit('6/h')
 def strip_vocal(request):
     try:
         body_unicode = request.body.decode('utf-8')

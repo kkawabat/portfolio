@@ -17,6 +17,10 @@ spanning ML, audio processing, computer vision, NLP, and device sensors.
 - **Cloud Run billing:** request-based (`cpu_idle = true`). The v2 API defaults
   the other way (instance-based), which with keepalive billed ~$5/day. CI
   deploys pass `--cpu-throttling` so a later `gcloud run deploy` cannot revert it.
+- **Cloud Run spend cap:** Console-only kill switch (no API). Pauses new Cloud
+  Run usage at $25/month. Do not create it before 2026-09-01 or August spend
+  will take the site down; then `infra/scripts/setup-spend-cap.sh`. Lift in
+  Billing → Budgets if it trips. Does not stop the TURN VM or Artifact Registry.
 - **Domain:** kankawabata.com (registrar: Namecheap, DNS pointed to Cloud Run)
 - **Container registry:** GCP Artifact Registry
 - **CI/CD auth:** Workload Identity Federation (no long-lived keys)
@@ -69,6 +73,20 @@ multiplayer idea goes in `gamework/examples/`.
 - **AWS S3 + Transcribe** — speech_transcriber uploads audio and polls for transcription
 - **YouTube Data API** — chat_highlights fetches live chat data
 - **PyTorch CPU inference** — whistle_detector runs a Transformers model server-side
+
+## Abuse and secrets
+
+Production sets `DJANGO_DEBUG=False`. Cloud Run (`K_SERVICE`) refuses to boot
+if debug is on or if `DJANGO_SECRET_KEY` is the committed insecure fallback.
+`/admin/` and the debug toolbar exist only when `DEBUG` is on locally.
+
+The GitHub repo being public does **not** leak AWS keys, the Django secret, or
+WIF credentials — those live in Secret Manager and GitHub Actions secrets.
+It *does* publish every anonymous POST URL. The views that spend money or a
+worker (speech transcriber → AWS Transcribe; voice stripper and chat
+highlights → Cloud Run workers) are rate-limited per IP and reject oversized
+bodies before the vendor is called. Cloning the repo cannot deploy: WIF is
+bound to this repository's deploy workflow.
 
 ## Key directories
 

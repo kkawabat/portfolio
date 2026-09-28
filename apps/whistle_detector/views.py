@@ -1,12 +1,18 @@
 from django.http import JsonResponse
 from django.shortcuts import render
+from django.views.decorators.http import require_POST
 from whistle_detector.audio_processing import WhistleDetector
+
+from portfolio.hardening import MAX_AUDIO_BYTES, limit_body, ratelimit
 
 
 def whistle_detector_view(request):
     return render(request, 'whistle_detector/index.html')
 
 
+@require_POST
+@ratelimit('20/h')
+@limit_body(MAX_AUDIO_BYTES)
 def whistle_submit_view(request):
     try:
         audio_blob = request.FILES.get('audioBlob')

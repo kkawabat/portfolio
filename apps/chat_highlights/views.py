@@ -1,5 +1,7 @@
 from django.shortcuts import render
+from django.views.decorators.http import require_POST
 
+from portfolio.hardening import ratelimit
 from portfolio.worker_client import call_worker, worker_available
 
 
@@ -15,6 +17,8 @@ def app_view(request):
     return render(request, "chat_highlights/index.html", context={'anchor': 'app'})
 
 
+@require_POST
+@ratelimit('10/h', json_error=False)
 def get_history_view(request):
     try:
         youtube_url = request.POST['youtube-link']

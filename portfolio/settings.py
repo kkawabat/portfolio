@@ -3,6 +3,8 @@ import mimetypes
 import os
 from pathlib import Path
 
+from portfolio.hardening import MAX_IMAGE_BYTES, assert_cloud_run_safe
+
 load_dotenv()
 
 mimetypes.add_type("text/css", ".css", True)
@@ -18,6 +20,12 @@ SECRET_KEY = os.environ.get(
 )
 
 DEBUG = os.environ.get('DJANGO_DEBUG', 'False') == 'True'
+assert_cloud_run_safe(os.environ, debug=DEBUG, secret_key=SECRET_KEY)
+
+# Audio/image demo uploads. Larger bodies are rejected in the view before a
+# paid vendor or worker is called; this just keeps them out of memory.
+DATA_UPLOAD_MAX_MEMORY_SIZE = MAX_IMAGE_BYTES
+FILE_UPLOAD_MAX_MEMORY_SIZE = MAX_IMAGE_BYTES
 
 ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
 
