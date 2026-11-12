@@ -1,7 +1,8 @@
 <div id="content-blogs" class="fade-in-top content-div">
-    <div id='header-div2' class='project-grid'>
+    <div id='header-div2' class='project-grid'{% if open_post %} style="display: none;"{% endif %}>
         {% for blog in blogs %}
-            <div class='project-card' hx-get="{% url 'blog_post' slug_id=blog.slug %}" hx-swap="innerHTML" hx-target="#blog-div" hx-on:click="blog_toggle(true)">
+            <div class='project-card' data-url="{% url 'blog_post' slug_id=blog.slug %}" data-title="{{ blog.title }}"
+                 hx-get="{% url 'blog_post' slug_id=blog.slug %}" hx-swap="innerHTML" hx-target="#blog-div" hx-on:click="show_blog_post(this)">
                 <div class="project-card-top">
                     {% if blog.date %}<span class="project-card-date">{{blog.date|date:"M j, Y"}}</span>{% endif %}
                     <h3>{{blog.title}}</h3>
@@ -10,17 +11,21 @@
             </div>
         {% endfor %}
     </div>
-    <div id="blog-div" style="display: none;"></div>
+    <div id="blog-div"{% if not open_post %} style="display: none;"{% endif %}>
+        {% if open_post %}{% include "new_main/blog_post.html" with title=open_post.title date=open_post.date content=open_post.content %}{% endif %}
+    </div>
 </div>
 
 <script>
-function blog_toggle(toggle){
-    if (toggle) {
-        $('#header-div2').hide();
-        $('#blog-div').show();
-    } else {
-        $('#header-div2').show();
-        $('#blog-div').hide();
-    }
+function show_blog_list(){
+    $('#header-div2').show();
+    $('#blog-div').hide();
+    setLocation("{% url 'blogs' %}", $('#header-blogs').text());
+}
+
+function show_blog_post(card){
+    $('#header-div2').hide();
+    $('#blog-div').show();
+    setLocation(card.dataset.url, card.dataset.title);
 }
 </script>

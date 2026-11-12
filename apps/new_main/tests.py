@@ -96,3 +96,68 @@ class BlogPostTests(TestCase):
         self.assertContains(response, '| Aug 15, 2026')
         self.assertNotContains(response, 'updated')
         self.assertNotContains(response, 'README')
+
+
+class CanonicalUrlTests(TestCase):
+    HOMEPAGE = '<link rel="canonical" href="https://kankawabata.com/">'
+
+    def test_every_homepage_section_route_points_at_the_homepage(self):
+        for name in ['new_main', 'about', 'projects', 'blogs', 'socials', 'contacts']:
+            response = self.client.get(reverse(name))
+            self.assertContains(response, self.HOMEPAGE, msg_prefix=name)
+
+    def test_project_page_is_its_own_canonical_without_the_query_string(self):
+        response = self.client.get('/projects/morse_code/?utm_source=x')
+        self.assertContains(
+            response,
+            '<link rel="canonical" href="https://kankawabata.com/projects/morse_code/">',
+        )
+
+    def test_www_redirects_permanently_keeping_path_and_query(self):
+        with self.settings(ALLOWED_HOSTS=['www.kankawabata.com']):
+            response = self.client.get('/projects?tag=game', HTTP_HOST='www.kankawabata.com')
+        self.assertEqual(response.status_code, 301)
+        self.assertEqual(response['Location'], 'https://kankawabata.com/projects?tag=game')
+
+    def test_bare_domain_is_not_redirected(self):
+        with self.settings(ALLOWED_HOSTS=['kankawabata.com']):
+            response = self.client.get('/', HTTP_HOST='kankawabata.com')
+        self.assertEqual(response.status_code, 200)
+
+
+class BlogPostPageTests(TestCase):
+    SLUG = 'chewy-thoughts-birth-rate-is-a-leisure-problem'
+    TITLE = 'Chewy thoughts: birth rate is a leisure problem'
+
+    def test_direct_visit_gets_a_whole_page_about_the_post(self):
+        url = reverse('blog_post', args=[self.SLUG])
+        response = self.client.get(url)
+        self.assertContains(response, f'<title>{self.TITLE} · Kan Kawabata</title>')
+        self.assertContains(response, f'<link rel="canonical" href="https://kankawabata.com{url}">')
+        self.assertContains(response, '<meta name="description" content="Falling birth rates')
+        self.assertContains(response, 'privatizing leisure')
+
+    def test_card_click_gets_only_the_post(self):
+        response = self.client.get(reverse('blog_post', args=[self.SLUG]), HTTP_HX_REQUEST='true')
+        self.assertContains(response, 'privatizing leisure')
+        self.assertNotContains(response, '<title>')
+        self.assertIn('HX-Request', response['Vary'])
+
+
+class SearchEngineFileTests(TestCase):
+    def test_robots_points_at_the_sitemap(self):
+        response = self.client.get('/robots.txt')
+        self.assertContains(response, 'Sitemap: https://kankawabata.com/sitemap.xml')
+
+    def test_sitemap_lists_each_real_page_once(self):
+        body = self.client.get('/sitemap.xml').content.decode()
+        self.assertIn('<loc>https://kankawabata.com/</loc>', body)
+        self.assertIn(f'<loc>https://kankawabata.com/blogs/{BlogPostPageTests.SLUG}</loc><lastmod>2026-08-15</lastmod>', body)
+        self.assertIn('<loc>https://kankawabata.com/projects/morse_code/</loc>', body)
+        self.assertNotIn('/about', body)
+        self.assertNotIn('games.kankawabata.com', body)
+
+    def test_project_sub_routes_share_the_project_canonical_and_description(self):
+        response = self.client.get('/projects/morse_code/listen')
+        self.assertContains(response, '<link rel="canonical" href="https://kankawabata.com/projects/morse_code/">')
+        self.assertContains(response, '<meta name="description" content="Morse code translator')

@@ -1,6 +1,9 @@
 {% extends "_base.html" %}
 {% load static %}
-{% block title %}Kan Kawabata{% endblock title %}
+{% block title %}{% if open_post %}{{ open_post.title }} · {% endif %}Kan Kawabata{% endblock title %}
+{% block meta_description %}{% if open_post %}{{ open_post.description }}{% else %}{{ block.super }}{% endif %}{% endblock meta_description %}
+{# /about, /projects, /blogs, /socials and /contacts all render this same page; a blog post is its own page #}
+{% block canonical_path %}{% if open_post %}{{ request.path }}{% else %}/{% endif %}{% endblock canonical_path %}
 {% block ref %}
 
 <link rel="stylesheet" href="{% static 'vendor/font-awesome-5.0.10.min.css' %}">
@@ -23,7 +26,7 @@
     <div id="header-div1" class='fade-in-top header-div'>
         <h3 id='header-about' class="header" onclick="select_nav('about', '#header-div1');">My-self</h3>
         <h3 id='header-projects' class="header" onclick="select_nav('projects', '#header-div1');">My Projects</h3>
-        <h3 id='header-blogs' class="header" onclick="select_nav('blogs', '#header-div1'); blog_toggle(false);">My Blog</h3>
+        <h3 id='header-blogs' class="header" onclick="select_nav('blogs', '#header-div1'); show_blog_list();">My Blog</h3>
         <div style="display: flex; flex-direction: row; gap: 2em;">
         <h3 id='header-socials' class="header" onclick="select_nav('socials', '#header-div1');">My Socials</h3>
         <h3 id='header-contacts' class="header" onclick="select_nav('contacts', '#header-div1');">My Contacts</h3>
@@ -48,11 +51,17 @@
     {% if anchor %}
         headerSelected("#header-{{anchor}}", '#header-div1');
         ContentSelection("#content-{{anchor}}", true);
+        {% if not open_post %}setLocation(location.pathname, $("#header-{{anchor}}").text());{% endif %}
         if (window.location.hash) {
             var hashTarget = document.querySelector(window.location.hash);
             if (hashTarget) { hashTarget.scrollIntoView(); }
         }
     {% endif %}
+
+    // Tabs and blog posts change the URL without loading; Back must show what that URL shows.
+    window.addEventListener('popstate', function() {
+        if (location.pathname !== shownPath) { location.reload(); }
+    });
 
     function skip_animations() {
         $("#intro1a").addClass("skip-animation");

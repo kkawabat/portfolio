@@ -7,6 +7,7 @@ import os
 import re
 from datetime import datetime
 from django.conf import settings
+from django.urls import NoReverseMatch, reverse
 
 # Simple project list.
 # Entries with a 'url' field live outside this repo (e.g. GitHub Pages games
@@ -136,6 +137,19 @@ PROJECTS = [
 def get_projects():
     """Get all projects, newest first."""
     return sorted(PROJECTS, key=lambda x: x.get('date', datetime.min), reverse=True)
+
+
+def get_hosted_projects():
+    """Projects served by this site (not external cards), each with its root URL."""
+    hosted = []
+    for project in get_projects():
+        if project.get('url'):
+            continue
+        try:
+            hosted.append({**project, 'root_url': reverse(project['slug'])})
+        except NoReverseMatch:
+            continue
+    return hosted
 
 
 def get_project_tags():

@@ -1,7 +1,8 @@
 from django.contrib.staticfiles.storage import staticfiles_storage
 from django.http import HttpResponse, HttpResponseNotFound
 from django.shortcuts import render, redirect
-from django.urls import NoReverseMatch
+from django.urls import NoReverseMatch, reverse
+from django.utils.cache import patch_vary_headers
 from django.conf import settings
 import mistune
 import os
@@ -11,6 +12,7 @@ from .projects_config import (
     format_blog_date_display,
     get_blog_posts_dir,
     get_blogs,
+    get_hosted_projects,
     get_project_tags,
     get_projects,
     parse_blog_dates,
@@ -67,10 +69,37 @@ def blog_post_view(request, slug_id):
     # The H1 is the page title (already in blog['title']); don't render it twice
     text = re.sub(r'^#\s+.+\n?', '', text.lstrip(), count=1)
 
-    return render(request, 'new_main/blog_post.html',
-                  context={'title': blog['title'],
-                           'date': format_blog_date_display(dates),
-                           'content': mistune.html(text)})
+    post = {'title': blog['title'],
+            'description': blog['description'],
+            'date': format_blog_date_display(dates),
+            'content': mistune.html(text)}
+
+    # Clicking a card swaps just the post into the open homepage; visiting the
+    # URL directly (a shared link, a search result) gets the whole page.
+    if request.headers.get('HX-Request'):
+        response = render(request, 'new_main/blog_post.html', context=post)
+    else:
+        response = render(request, 'new_main/index.html',
+                          context={**_homepage_context('blogs'), 'open_post': post})
+    patch_vary_headers(response, ['HX-Request'])
+    return response
+
+
+def robots_txt(_):
+    return HttpResponse(
+        f"User-agent: *\nAllow: /\n\nSitemap: {settings.CANONICAL_ORIGIN}{reverse('sitemap')}\n",
+        content_type='text/plain',
+    )
+
+
+def sitemap_xml(request):
+    pages = [{'path': reverse('new_main'), 'lastmod': None}]
+    pages += [{'path': reverse('blog_post', args=[blog['slug']]),
+               'lastmod': blog.get('updated') or blog.get('date')}
+              for blog in get_blogs()]
+    pages += [{'path': project['root_url'], 'lastmod': None} for project in get_hosted_projects()]
+    return render(request, 'new_main/sitemap.xml', {'pages': pages},
+                  content_type='application/xml')
 
 
 def contacts_view(request):

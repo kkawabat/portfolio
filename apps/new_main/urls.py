@@ -1,10 +1,12 @@
 from django.urls import path
 
-from .views import main_view, contacts_view, projects_view, about_view, favicon, blogs_view, cv_pdf, blog_post_view, project_post_view, socials_view
+from .views import main_view, contacts_view, projects_view, about_view, favicon, blogs_view, cv_pdf, blog_post_view, project_post_view, socials_view, robots_txt, sitemap_xml
 
 urlpatterns = [
     path('', main_view, name='new_main'),
     path('favicon.ico', favicon, name='favicon'),
+    path('robots.txt', robots_txt, name='robots'),
+    path('sitemap.xml', sitemap_xml, name='sitemap'),
     path('about', about_view, name='about'),
 
     path('projects', projects_view, name='projects'),

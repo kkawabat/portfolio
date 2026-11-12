@@ -9,6 +9,8 @@
     <meta name="htmx-config" content='{"historyCacheSize": 0, "refreshOnHistoryMiss": false}'>
 
     <title>{% block title %}Kan Kawabata{% endblock title %}</title>
+    {% if current_project %}<meta name="description" content="{{ current_project.description }}">{% endif %}
+    <link rel="canonical" href="{{ canonical_origin }}{{ current_project.root_url|default:request.path }}">
     <!-- Local vendor assets for better security and performance -->
     <script src="{% static 'vendor/jquery-3.7.0.min.js' %}"></script>
     <link href="{% static 'vendor/font-awesome-5.0.10.min.css' %}" rel="stylesheet" type="text/css"/>

@@ -6,7 +6,18 @@ function select_nav(name, headerClass){
     headerSelected(header_id, headerClass)
 
     ContentSelection("#content-" +  name, true)
-    history.pushState({}, "", name)
+    setLocation("/" + name, $(header_id).text())
+}
+
+var SITE_NAME = "Kan Kawabata";
+var shownPath = location.pathname;
+
+function setLocation(path, title) {
+    if (location.pathname !== path) {
+        history.pushState({}, "", path);
+    }
+    shownPath = path;
+    document.title = title ? title.trim() + " · " + SITE_NAME : SITE_NAME;
 }
 
 function headerSelected(header_id, headerClass) {

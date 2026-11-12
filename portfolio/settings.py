@@ -29,6 +29,10 @@ FILE_UPLOAD_MAX_MEMORY_SIZE = MAX_IMAGE_BYTES
 
 ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
 
+# The one address search engines should index: www redirects here and every
+# page's <link rel="canonical"> is built from it.
+CANONICAL_ORIGIN = os.environ.get('CANONICAL_ORIGIN', 'https://kankawabata.com')
+
 # Stamped into the image by the deploy workflow; shown in the page footer so it is
 # obvious from the live site which commit is serving and when it shipped.
 BUILD_SHA = os.environ.get('GIT_SHA', 'dev')
@@ -69,6 +73,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'portfolio.middleware.WwwToCanonicalHostMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -100,6 +105,8 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'apps.new_main.context_processors.build_info',
+                'apps.new_main.context_processors.canonical_origin',
+                'apps.new_main.context_processors.current_project',
             ],
         },
     },

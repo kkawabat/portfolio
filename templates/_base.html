@@ -8,6 +8,8 @@
     <meta name="htmx-config" content='{"historyCacheSize": 0, "refreshOnHistoryMiss": false}'>
 
     <title>{% block title %}Kan Kawabata{% endblock title %}</title>
+    <meta name="description" content="{% block meta_description %}Kan Kawabata's portfolio: browser games, audio and computer-vision demos, and a blog, from an engineer with a signal processing background.{% endblock meta_description %}">
+    <link rel="canonical" href="{{ canonical_origin }}{% block canonical_path %}{{ request.path }}{% endblock canonical_path %}">
     
     <!-- Local vendor assets for better security and performance -->
     <script src="{% static 'vendor/jquery-3.7.0.min.js' %}"></script>
